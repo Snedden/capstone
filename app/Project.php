@@ -1,0 +1,60 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Project extends Model
+{
+    //
+    protected $primaryKey = 'pid';
+
+       /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name','id_user'
+      
+    ]; 
+
+    /**
+     * a project belongs to a single user
+     *
+     * @var array
+     */
+     public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    /**
+     * a Project has many scales
+     *
+     * @var array
+     */
+     public function scales()
+    {
+        return $this->hasMany('App\Scale','idScale','pid');//hasMany('model',foreingnkey,localkey)
+    }  
+
+    /**
+     * a Project has many Entities
+     *
+     * @var array
+     */
+     public function entities()
+    {
+        return $this->hasMany('App\Entitie','idEntities','pid');//hasMany('model',foreingnkey,localkey)
+    }  
+
+     /**
+     * The project can be shared by many users
+     */
+    public function sharedProjects()
+    {
+        
+        return $this->belongsToMany('App\SharedProject', 'sharedProjects', 'pid', 'iduser');//  belongsToMany('intermediate tablename','id1','id2')
+    }
+}
