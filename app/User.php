@@ -12,7 +12,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','lastname'
+        'Name', 'email', 'password','lastname'
     ];
     /**
     *change default primary key column name to 

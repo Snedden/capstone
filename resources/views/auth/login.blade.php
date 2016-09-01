@@ -55,7 +55,7 @@
                                     <i class="fa fa-btn fa-sign-in"></i> Login
                                 </button>
 
-                                <button  class="btn btn-primary">
+                                <button type="button" class="btn btn-primary">
                                     <i class="fa fa-btn fa-sign-in"></i> Guest
                                 </button>
                                
