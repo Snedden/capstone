@@ -10,11 +10,13 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Route::get('users','usersController@index');
-Route::get('users/create','usersController@create');
-//Route::delete('users/delete/{id}','usersController@delete');
-Route::get('users/delete/{id}','usersController@delete');
-Route::post('users/add','usersController@store');
+Route::get('users','usersController@index')->middleware('admin');
+Route::get('users/create','usersController@create')->middleware('admin');
+//Route::delete('users/{id}','usersController@delete');
+Route::get('users/delete/{id}','usersController@delete')->middleware('admin');
+Route::get('users/edit/{id}','usersController@edit')->middleware('admin');
+Route::post('users/edit/{id}','usersController@update')->middleware('admin');
+Route::post('users/add','usersController@store')->middleware('admin');
 
 
 Route::get('/', 'HomeController@index');

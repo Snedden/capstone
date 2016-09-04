@@ -54,5 +54,18 @@ class User extends Authenticatable
         
         return $this->belongsToMany('App\SharedProject', 'sharedProjects', 'iduser', 'pid');//  belongsToMany('intermediate tablename','id1','id2')
     }
+
+    /**
+    *Check if user is admin
+    */
+    public function isAdmin(){
+        
+        if($this->userlevel==1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     
 }
