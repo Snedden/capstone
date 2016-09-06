@@ -18,7 +18,7 @@ class CreateProjectsTable extends Migration
             $table->string('name', 100)->default('New project');
             $table->timestamps();
 
-            $table->foreign('iduser')->references('iduser')->on('users')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('iduser')->references('iduser')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
 
        

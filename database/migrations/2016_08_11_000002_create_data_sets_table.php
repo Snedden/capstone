@@ -19,7 +19,7 @@ class CreateDataSetsTable extends Migration
             $table->integer('rows')->default(0);
             $table->timestamps();
 
-            $table->foreign('iduser')->references('iduser')->on('users')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('iduser')->references('iduser')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

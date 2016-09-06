@@ -27,8 +27,8 @@ class CreateRectangleTable extends Migration
             $table->integer('idEntities')->length(10)->unsigned();
             $table->integer('idColorScale')->nullable()->length(10)->unsigned();
 
-            $table->foreign('idScale')->references('idScales')->on('Scales')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreign('idEntities')->references('idEntities')->on('Entities')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('idScale')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntities')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('idColorScale')->references('idScales')->on('Scales')->onDelete('no action')->onUpdate('no action');
         });
     }

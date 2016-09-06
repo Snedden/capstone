@@ -24,7 +24,7 @@ class CreateTextTable extends Migration
             $table->integer('opacity')->nullable()->default(100);
             $table->integer('idEntity')->length(10)->unsigned();
 
-            $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

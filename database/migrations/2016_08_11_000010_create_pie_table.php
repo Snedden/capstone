@@ -24,10 +24,10 @@ class CreatePieTable extends Migration
             $table->integer('Color')->nullable()->length(10)->unsigned();
             $table->integer('idEntity')->nullable()->length(10)->unsigned();
 
-            $table->foreign('LabelCol')->references('col_Id')->on('data_sets_columns')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('valueCol')->references('col_Id')->on('data_sets_columns')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('Color')->references('idScales')->on('Scales')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('LabelCol')->references('col_Id')->on('data_sets_columns')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('valueCol')->references('col_Id')->on('data_sets_columns')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('Color')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

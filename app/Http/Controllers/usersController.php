@@ -45,7 +45,7 @@ class usersController extends Controller
 
         // create the validation rules ------------------------
         $rules = array(
-            'name'             => 'required',                        // just a normal required validation
+            'firstname'             => 'required',                        // just a normal required validation
             'lastname'         => 'required',                        // just a normal required validation
             'email'            => 'required|email',                  // required and must be unique in the users table
             'password'         => 'required',
@@ -54,7 +54,7 @@ class usersController extends Controller
         $validationResponse=$this->validateForm($input,$rules);
 
         if($validationResponse=="passed"){
-            $user->name=$input['name'];
+            $user->name=$input['firstname'];
             $user->lastname=$input['lastname'];
             $user->password=\Hash::make($input['password']);
             $user->userlevel=isset($input['isAdmin'])?1:0;
@@ -77,7 +77,7 @@ class usersController extends Controller
 
         // create the validation rules ------------------------
         $rules = array(
-            'name'             => 'required',                        // just a normal required validation
+            'firstname'        => 'required',                        // just a normal required validation
             'lastname'         => 'required',                        // just a normal required validation
             'email'            => 'required|email|unique:users',     // required and must be unique in the users table
             'password'         => 'required',
@@ -86,14 +86,10 @@ class usersController extends Controller
         $validationResponse=$this->validateForm($input,$rules);
 
         if($validationResponse=="passed"){
-            //find if email already exist
-           /* $user=User::where('email','like',$input['email']) -> first();
-            if(!is_null($user)){
-                return 'email id already exist';
-            }*/
+         
 
             $user=new \App\User;   
-            $user->name=$input['name'];
+            $user->firstname=$input['firstname'];
             $user->email=$input['email'];
             $user->lastname=$input['lastname'];
             $user->password=\Hash::make($input['password']);

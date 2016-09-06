@@ -24,9 +24,9 @@ class CreateCircleTable extends Migration
             $table->integer('idColorScale')->nullable()->length(10)->unsigned();
             $table->integer('idEntity')->length(10)->unsigned();
 
-            $table->foreign('idScale')->references('idScales')->on('Scales')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('idColorScale')->references('idScales')->on('Scales')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('idScale')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idColorScale')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

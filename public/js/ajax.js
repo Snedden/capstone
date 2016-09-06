@@ -5,7 +5,7 @@ function ajaxCall(type,url,submitData){
             type: type,
             url: url,
             data: submitData,
-            dataType: 'json',
+            dataType: 'HTML',
             success: function (data) {
                 console.log(data);
 

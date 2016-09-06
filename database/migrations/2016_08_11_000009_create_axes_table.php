@@ -22,7 +22,7 @@ class CreateAxesTable extends Migration
             $table->integer('Thickness');
             $table->integer('idEntities')->length(10)->unsigned();
 
-            $table->foreign('idEntities')->references('idEntities')->on('Entities')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('idEntities')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

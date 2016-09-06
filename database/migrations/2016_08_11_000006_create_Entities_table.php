@@ -19,7 +19,7 @@ class CreateEntitiesTable extends Migration
             $table->integer('pid')->length(10)->unsigned();
             $table->timestamps();
 
-            $table->foreign('pid')->references('pid')->on('projects')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('pid')->references('pid')->on('projects')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

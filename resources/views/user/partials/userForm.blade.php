@@ -1,9 +1,9 @@
 
 <input type="hidden" name="_token" value="{{csrf_token()}}">	
 		
-		<div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-		    <label for="name">Firstname:</label>
-		    <input type="text" name="name" class="form-control" id="name" pattern=".{2,}" title="2 characters minimum" value="{{isset($user)?$user->Name:old('name') }}" required>
+		<div class="form-group{{ $errors->has('firstname') ? ' has-error' : '' }}">
+		    <label for="firstname">Firstname:</label>
+		    <input type="text" name="firstname" class="form-control" id="firstname" pattern=".{2,}" title="2 characters minimum" value="{{isset($user)?$user->firstname:old('firstname') }}" required>
 	  	</div>
 	  	<div class="form-group{{ $errors->has('lastname') ? ' has-error' : '' }}">
 		    <label for="lastname">Lastname:</label>

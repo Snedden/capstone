@@ -23,8 +23,8 @@ class CreateScalesTable extends Migration
             $table->integer('bandpadding')->nullable();
             $table->timestamps();
 
-            $table->foreign('pid')->references('pid')->on('projects')->onDelete('no action')->onUpdate('no action');
-            $table->foreign('col_Id')->references('col_Id')->on('data_sets_columns')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('pid')->references('pid')->on('projects')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('col_Id')->references('col_Id')->on('data_sets_columns')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

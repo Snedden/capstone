@@ -46,10 +46,14 @@
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
-                <ul style="display:none" class="nav navbar-nav">
-                    <li><a href="{{ url('/home') }}">Home</a></li>
+                @if (!Auth::guest())
+                <ul class="nav navbar-nav mainNav">
+                    <li class="active"><a id="homeAnchor" href="home">Home</a></li>
+                    @if (Auth::user()->userlevel==1)
+                        <li><a href="users">Manage users</a></li>
+                    @endif
                 </ul>
-
+                @endif
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
@@ -80,5 +84,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   
     <script src="{{asset('js/ajax.js')}}"></script>
+    <script>
+    
+    //nav menu clicked active higligheer
+    $( document ).ready(function(){
+        var pgurl = window.location.href.substr(window.location.href
+                        .lastIndexOf("/")+1);
+        if(pgurl==""){
+                $("#homeAnchor").addClass("active");
+        }
+        else{
+            $(".mainNav li ").each(function(){
+            $(this).removeClass("active");
+              
+            if($(this).children(":first").attr("href") == pgurl){
+                $(this).addClass("active");    
+            }
+              
+         })
+        }    
+       
+    });
+
+
+
+   
+    </script>
 </body>
 </html>

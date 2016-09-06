@@ -18,8 +18,11 @@ Route::get('users/edit/{id}','usersController@edit')->middleware('admin');
 Route::post('users/edit/{id}','usersController@update')->middleware('admin');
 Route::post('users/add','usersController@store')->middleware('admin');
 
+Route::post('projects/add','projectsController@create')->middleware('auth');
 
-Route::get('/', 'HomeController@index');
+
+Route::get('/home', 'HomeController@index')->middleware('auth');
+Route::get('/', 'HomeController@index')->middleware('auth');
 
 Route::auth();
 

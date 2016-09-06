@@ -19,7 +19,7 @@ class CreateChartsTable extends Migration
             $table->integer('pid');
             $table->timestamps();
 
-            $table->foreign('iduser')->references('iduser')->on('users')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('iduser')->references('iduser')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
