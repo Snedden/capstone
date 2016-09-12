@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Laravel</title>
 
@@ -48,9 +49,9 @@
                 <!-- Left Side Of Navbar -->
                 @if (!Auth::guest())
                 <ul class="nav navbar-nav mainNav">
-                    <li class="active"><a id="homeAnchor" href="home">Home</a></li>
+                    <li class="active"><a id="homeAnchor" href="{{url('/home')}}">Home</a></li>
                     @if (Auth::user()->userlevel==1)
-                        <li><a href="users">Manage users</a></li>
+                        <li><a href="{{url('/users')}}">Manage users</a></li>
                     @endif
                 </ul>
                 @endif
@@ -84,20 +85,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   
     <script src="{{asset('js/ajax.js')}}"></script>
+    <script src="{{asset('js/dashboard.js')}}"></script>
     <script>
     
     //nav menu clicked active higligheer
     $( document ).ready(function(){
         var pgurl = window.location.href.substr(window.location.href
                         .lastIndexOf("/")+1);
+
         if(pgurl==""){
                 $("#homeAnchor").addClass("active");
         }
         else{
             $(".mainNav li ").each(function(){
             $(this).removeClass("active");
-              
-            if($(this).children(":first").attr("href") == pgurl){
+            var liURL=$(this).children(":first").attr("href");
+            var liURI=liURL.substr(liURL.lastIndexOf("/")+1);
+            
+            if(liURI == pgurl){
                 $(this).addClass("active");    
             }
               

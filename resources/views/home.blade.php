@@ -43,7 +43,7 @@
         <div class="panel-body">
           <div class="list-group">
             @forelse ($projects as $project)
-              <a href="#" >{{ $project->name }}</a></br>
+              <a href={{url('projects/'.$project->pid)}}  >{{ $project->name }}</a></br>
             @empty
               <p>No projects</p>
             @endforelse

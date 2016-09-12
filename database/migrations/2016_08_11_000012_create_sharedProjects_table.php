@@ -12,10 +12,13 @@ class CreateSharedProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sharedProjects', function (Blueprint $table) {
+        Schema::create('sharedprojects', function (Blueprint $table) {
+            $table->increments('sharedProjectsid');
             $table->integer('iduser')->length(10)->unsigned();
             $table->integer('pid')->length(10)->unsigned();
             $table->timestamps();
+
+            $table->unique(['iduser', 'pid']);
 
             $table->foreign('iduser')->references('iduser')->on('users')->onDelete('no action')->onUpdate('no action');
             $table->foreign('pid')->references('pid')->on('projects')->onDelete('no action')->onUpdate('no action');
@@ -29,11 +32,11 @@ class CreateSharedProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::table('sharedProjects', function (Blueprint $table) {
+        Schema::table('sharedprojects', function (Blueprint $table) {
             $table->dropForeign(['iduser']);
             $table->dropForeign(['pid']);
         });
 
-        Schema::drop('sharedProjects');
+        Schema::drop('sharedprojects');
     }
 }
