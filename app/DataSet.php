@@ -8,7 +8,7 @@ class DataSet extends Model
 {
     //
      protected $table = 'data_sets';
-     protected $primary_key='iddata_sets';
+     protected $primaryKey='iddata_sets';
 
      protected $fillable=['iduser','path','rows'];
     
@@ -30,7 +30,7 @@ class DataSet extends Model
      */
      public function columns()
     {
-        return $this->hasMany('App\DataSetColumn','col_Id','iddata_sets');//hasMany('model',foreingnkey,localkey)
+        return $this->hasMany('App\DataSetColumn','iddata_sets','iddata_sets');//hasMany('model',foreingnkey,localkey)
     }  
 
         

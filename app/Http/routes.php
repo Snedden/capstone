@@ -24,6 +24,13 @@ Route::get('projects/{id}','projectsController@index')->middleware('auth');
 Route::post('projects/shareProject','shareProjectsController@createShareProject')->middleware('auth');
 Route::post('projects/unshareProject','shareProjectsController@deleteShareProject')->middleware('auth');
 
+Route::post('dataset/create/{pid}','datasetController@create')->middleware('auth');
+Route::post('dataset/delete','datasetController@delete')->middleware('auth');
+Route::get('dataset/columns/{iddata_sets}','datasetController@getCols')->middleware('auth');
+
+
+Route::post('datasetColumns/update','datasetColumns@updateCols')->middleware('auth');
+
 
 Route::get('/home', 'HomeController@index')->middleware('auth');
 Route::get('/', 'HomeController@index')->middleware('auth');

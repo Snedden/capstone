@@ -23,6 +23,7 @@ class CreateCircleTable extends Migration
             $table->integer('idScale')->length(10)->unsigned();
             $table->integer('idColorScale')->nullable()->length(10)->unsigned();
             $table->integer('idEntity')->length(10)->unsigned();
+            $table->timestamps();
 
             $table->foreign('idScale')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');

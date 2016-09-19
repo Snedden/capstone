@@ -17,6 +17,7 @@ class CreateDataSetsColumnsTable extends Migration
             $table->string('col_name', 100)->nullable();
             $table->string('col_type', 45)->nullable();
             $table->integer('iddata_sets')->length(10)->unsigned();
+            $table->timestamps();
 
             $table->foreign('iddata_sets')->references('iddata_sets')->on('data_sets')->onDelete('cascade')->onUpdate('cascade');
         });

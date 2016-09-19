@@ -21,6 +21,7 @@ class CreateAxesTable extends Migration
             $table->string('Stroke', 10)->default('black');
             $table->integer('Thickness');
             $table->integer('idEntities')->length(10)->unsigned();
+            $table->timestamps();
 
             $table->foreign('idEntities')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
         });

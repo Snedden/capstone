@@ -13,12 +13,12 @@ function ajaxCall(type,url,submitData,dataType,successCallBack){
             data:{data:submitData},
             dataType: dataType,
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 successCallBack(data);
 
             },
             error: function (data) {
-                console.log('Error:', data);
+                console.error('Error:', data);
             }
         });
 }

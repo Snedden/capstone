@@ -23,6 +23,7 @@ class CreateTextTable extends Migration
             $table->integer('angle')->default(0);
             $table->integer('opacity')->nullable()->default(100);
             $table->integer('idEntity')->length(10)->unsigned();
+            $table->timestamps();
 
             $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
         });

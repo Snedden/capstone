@@ -8,7 +8,7 @@ class DataSetColumn extends Model
 {
     //
     protected $table = 'data_sets_columns';
-    protected $primary_key='col_Id';
+    protected $primaryKey='col_Id';
 
     protected $fillable = [
         'col_name','col_type','iddata_sets'

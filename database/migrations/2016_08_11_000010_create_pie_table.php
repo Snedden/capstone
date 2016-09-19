@@ -23,6 +23,7 @@ class CreatePieTable extends Migration
             $table->integer('valueCol')->nullable()->length(10)->unsigned();
             $table->integer('Color')->nullable()->length(10)->unsigned();
             $table->integer('idEntity')->nullable()->length(10)->unsigned();
+            $table->timestamps();
 
             $table->foreign('LabelCol')->references('col_Id')->on('data_sets_columns')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('valueCol')->references('col_Id')->on('data_sets_columns')->onDelete('cascade')->onUpdate('cascade');

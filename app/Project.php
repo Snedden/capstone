@@ -57,4 +57,14 @@ class Project extends Model
         
         return $this->belongsToMany('App\SharedProject', 'sharedProjects', 'pid', 'iduser');//  belongsToMany('intermediate tablename','id1','id2')
     }
+
+     /**
+     * A Project has many datasets
+     *
+     * @var array
+     */
+     public function datasets()
+    {
+        return $this->hasMany('App\DataSet','pid','pid');//hasMany('model',foreingnkey,localkey)
+    } 
 }
