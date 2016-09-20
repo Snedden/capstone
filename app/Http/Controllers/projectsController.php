@@ -26,12 +26,12 @@ class projectsController extends Controller
     	$project=Project::findOrFail($pid);
     	$users=User::all();
         $sharedProjectsusers=SharedProject::where('pid',2)->get();
-        $sharedProjectsusers = DB::select( DB::raw(" select s.iduser ,u.email from sharedProjects s inner join users u on u.iduser=s.iduser where s.pid=:projectId "), array(
+        $sharedProjectsusers = DB::select( DB::raw(" select s.iduser ,u.email from sharedprojects s inner join users u on u.iduser=s.iduser where s.pid=:projectId "), array(
                      'projectId' => $pid,
                     ));
         
        
-        $nonSharedUsers = DB::select( DB::raw("SELECT iduser,email FROM users WHERE  NOT EXISTS (SELECT * FROM sharedProjects WHERE sharedProjects.iduser= users.iduser and sharedProjects.pid=:projectId)"), array(
+        $nonSharedUsers = DB::select( DB::raw("SELECT iduser,email FROM users WHERE  NOT EXISTS (SELECT * FROM sharedprojects WHERE sharedProjects.iduser= users.iduser and sharedprojects.pid=:projectId)"), array(
                      'projectId' => $pid,
                     ));
        

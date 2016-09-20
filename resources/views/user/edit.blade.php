@@ -4,7 +4,7 @@
 	<h1>Edit user </h1>
 	</hr>
 
-	<form method="POST" action="http://localhost:8888/users/edit/{{$user->iduser}}" accept-charset="UTF-8" style="width:70%;margin:0 auto">
+	<form method="POST" action="{{url('users/edit/'.$user->iduser)}}" accept-charset="UTF-8" style="width:70%;margin:0 auto">
 	
 		@include('user.partials.userForm')
 	  	

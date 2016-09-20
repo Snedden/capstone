@@ -122,10 +122,12 @@ class datasetController extends Controller
 	*Delete a dataset
 	*/
 	function delete(){
+
         $postData=$_POST['data'];
        
 		$iddata_sets=$postData['iddata_sets'];
 		$pid=$postData['pid'];
+		
 
 		DataSet::destroy($iddata_sets);
 
