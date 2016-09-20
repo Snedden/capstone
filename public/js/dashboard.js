@@ -83,8 +83,8 @@ $('#datasetModal').on('show.bs.modal', function(e) {
 
     //populate the textbox
     $(e.currentTarget).find('#datasetName').html(datasetName);
-    $(e.currentTarget).find('#closeDatasetBtn').attr('data-id',datasetId);
-    $(e.currentTarget).find('#closeDatasetBtn').attr('data-pid',pid);
+    $(e.currentTarget).find('#deleteDatasetBtn').attr('data-id',datasetId);
+    $(e.currentTarget).find('#deleteDatasetBtn').attr('data-pid',pid);
 
 
     ajaxCall('get','dataset/columns/'+datasetId,null,'json',datasetColumnCallback); 
@@ -160,7 +160,8 @@ $(document).on('click','#deleteDatasetBtn',function(){
   ajaxCall('post','dataset/delete',postData,'text',deleteDataSetCallBack); 
 });
 
-function deleteDataSetCallBack(){
+function deleteDataSetCallBack(data){
+  
   location.reload();
 }
 

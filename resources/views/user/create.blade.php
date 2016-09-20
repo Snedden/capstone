@@ -4,7 +4,7 @@
 	<h1>Create new user </h1>
 	</hr>
 
-	<form method="POST" action="http://localhost:8888/users/add" accept-charset="UTF-8" style="width:70%;margin:0 auto">
+	<form method="POST" action="{{url('users/add')}}" accept-charset="UTF-8" style="width:70%;margin:0 auto">
 	
 		@include('user.partials.userForm')
 

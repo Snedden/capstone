@@ -24,7 +24,7 @@ class usersController extends Controller
     */
     function create(){
     	
-    	return view('user\create');
+    	return view('user.create');
     }
 
     /*
@@ -32,7 +32,7 @@ class usersController extends Controller
     */
      function edit($id){
         $user=User::findOrFail($id);
-        return view('user\edit',compact('user'));
+        return view('user.edit',compact('user'));
     }
      /*
     *update user
@@ -54,7 +54,7 @@ class usersController extends Controller
         $validationResponse=$this->validateForm($input,$rules);
 
         if($validationResponse=="passed"){
-            $user->name=$input['firstname'];
+            $user->firstname=$input['firstname'];
             $user->lastname=$input['lastname'];
             $user->password=\Hash::make($input['password']);
             $user->userlevel=isset($input['isAdmin'])?1:0;

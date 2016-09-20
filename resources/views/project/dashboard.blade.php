@@ -224,7 +224,7 @@ li {
           <h4 class="modal-title">Upload file</h4>
         </div>
         <div class="modal-body">
-          <form method="POST" action="http://localhost:8888/dataset/create/{{$project->pid}}" accept-charset="UTF-8" enctype="multipart/form-data" >
+          <form method="POST" action="{{url('dataset/create/'.$project->pid)}}" accept-charset="UTF-8" enctype="multipart/form-data" >
             <input type="hidden" name="_token" value="{{csrf_token()}}">  
             <input type="file" name="csv" value="" accept=".csv" />
             <input type="submit" value="Upload File">
@@ -263,7 +263,7 @@ li {
           
         <div class="modal-footer">
           <button type="button" id="updateDatasetBtn" class="btn btn-default"  data-dismiss="modal">Update</button>
-          <button type="button" id="deleteDatasetBtn" class="btn btn-default" data-dismiss="modal">Delete</button>
+          <button type="button" id="deleteDatasetBtn" class="btn btn-default"  data-dismiss="modal">Delete</button>
         </div>
       
       </div>

@@ -19,7 +19,7 @@
     </div> -->
 
     
-    <form method="POST" action="http://localhost:8888/projects/add" accept-charset="UTF-8" style="width:70%;margin:0 auto">
+    <form method="POST" action="{{url('projects/add')}}" accept-charset="UTF-8" style="width:70%;margin:0 auto">
       <input type="hidden" name="_token" value="{{csrf_token()}}"> 
  
       <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
