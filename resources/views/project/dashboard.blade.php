@@ -64,7 +64,7 @@
 
 .column {
     float: left;
-    padding: 0 15px;
+    
     background-color:grey;
     margin:1px;
     border-color: black;
@@ -148,12 +148,14 @@ li {
         </div>
     </div>
    
-    <div class="span_7 column" style="height:500px">
-        stage
+    <div id="stageDiv" class="span_7 column" style="height:500px">
+       
     </div>
     <div class="span_4 column">
+      <h4>Info</h4>
          <div class='funcGroup'>
-          info
+          <span>Stage X :</span><span id="infoStageX">567</span><br/>
+          <span>Stage Y :</span><span id="infoStageY">457</span>
         </div>
          <div class='funcGroup'>
           entity
