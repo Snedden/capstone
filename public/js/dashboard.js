@@ -86,7 +86,7 @@ $('#datasetModal').on('show.bs.modal', function(e) {
     $(e.currentTarget).find('#deleteDatasetBtn').attr('data-id',datasetId);
     $(e.currentTarget).find('#deleteDatasetBtn').attr('data-pid',pid);
 
-
+    
     ajaxCall('get','dataset/columns/'+datasetId,null,'json',datasetColumnCallback); 
 });
 

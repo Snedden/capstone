@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+ 
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,7 +28,11 @@
         }
     </style>
 </head>
+
+
+
 <body id="app-layout">
+<!-- JavaScripts -->
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
@@ -80,20 +86,28 @@
 
     @yield('content')
 
-    <!-- JavaScripts -->
+   
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    
-
+ 
     <script src="{{asset('js/ajax.js')}}"></script>
     <script src="{{asset('js/dashboard.js')}}"></script>
 
     <script src="{{asset('js/d3.min.js')}}"></script>
     <script src="{{asset('js/scales.js')}}"></script>
+    <script src="{{asset('js/project.js')}}"></script>
+  
+
+
+    
+
     <script>
     
     //nav menu clicked active higligheer
     $( document ).ready(function(){
+        init();  //function defined in dashboard.blade.php
+
         var pgurl = window.location.href.substr(window.location.href
                         .lastIndexOf("/")+1);
 
@@ -119,5 +133,8 @@
 
    
     </script>
+
+    
+    
 </body>
 </html>

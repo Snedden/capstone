@@ -1,5 +1,18 @@
 @extends('layouts.app')
 
+
+<script>
+    
+    function init(){
+      //reading server variables
+      var svrProject=<?php echo json_encode($project); ?>;
+      var svrDataSets=<?php echo json_encode($project->datasets); ?>;
+      var project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets);
+
+    }
+   
+</script>       
+
 @section('content')
 <style>
 .usersUL {
