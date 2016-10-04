@@ -77,7 +77,9 @@ class datasetController extends Controller
 		    // DO NOT USE $_FILES['csv']['name'] WITHOUT ANY VALIDATION !!
 		    // On this example, obtain safe unique name from its binary data.
 		    $path=sha1_file($_FILES['csv']['tmp_name']);
-		    if (!move_uploaded_file(
+
+		    //server config
+		  /*  if (!move_uploaded_file(
 		        $_FILES['csv']['tmp_name'],
 		        sprintf(base_path().'/storage/%s.%s',
 		            $path,
@@ -85,7 +87,19 @@ class datasetController extends Controller
 		        )
 		    )) {
 		        throw new Exception('Failed to move uploaded file.');
+		    }*/
+
+		    //dev config
+		    if (!move_uploaded_file(
+		        $_FILES['csv']['tmp_name'],
+		        sprintf(base_path().'/public/devStorage/%s.%s',
+		            $path,
+		            $ext
+		        )
+		    )) {
+		        throw new Exception('Failed to move uploaded file.');
 		    }
+
 
 		    //everything fine,file is uploaded succesfully
 		    //save dataset
@@ -98,15 +112,20 @@ class datasetController extends Controller
 	        $dataset->rows=$rows;
 	        $dataset->save();
 
-
-	        //save dataset columns
-		    foreach ($csvAsArray[0] as $col) {
-				$datasetCol=new DataSetColumn;
-				$datasetCol->col_name=$col;
-				$datasetCol->col_type='String';
+	        for($i=0;$i<count($csvAsArray[0]);$i++ ){  
+	        	$datasetCol=new DataSetColumn;
+				$datasetCol->col_name=$csvAsArray[0][$i];  //first row is assume to be the header row
+				if(is_numeric($csvAsArray[1][$i])){        //second row is taken as value and its type is assumed for entire column
+					$datasetCol->col_type='Number';	
+				}
+				else{
+					$datasetCol->col_type='String';
+				}
 				$datasetCol->iddata_sets=$dataset->iddata_sets;
 				$datasetCol->save();
-			}
+	        }
+
+	      
 	        return redirect('projects/'.$pid); 
 
 		} catch (Exception $e) {

@@ -7,7 +7,10 @@
       //reading server variables
       var svrProject=<?php echo json_encode($project); ?>;
       var svrDataSets=<?php echo json_encode($project->datasets); ?>;
+   
+     
       var project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets);
+     
 
     }
    
@@ -142,7 +145,7 @@ li {
           <h3>Data</h3>
            <ul>
             @forelse ($project->datasets as $dataset)
-              <li class='dataset'>{{$dataset->name}} <a style="float:right;font-size:9px"href="#" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#datasetModal" data-dataset-name="{{$dataset->name}}" data-project-id="{{$project->pid}}"  data-dataset-id="{{$dataset->iddata_sets}}">edit</a>
+              <li class='dataset' id="{{$dataset->iddata_sets}}">{{$dataset->name}} <a style="float:right;font-size:9px"href="#" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#datasetModal" data-dataset-name="{{$dataset->name}}" data-project-id="{{$project->pid}}"  data-dataset-id="{{$dataset->iddata_sets}}">edit</a>
                 <ul>
                   @forelse($dataset->columns as $col)
                     <li>{{$col->col_name}}</li>
