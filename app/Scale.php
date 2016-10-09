@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Scale extends Model
 {
     //
-    protected $primary_key='idScales';
+    protected $primaryKey='idScales';
   
      /**
      * The attributes that are mass assignable.

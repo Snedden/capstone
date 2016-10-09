@@ -1,19 +1,44 @@
-function Project(pid,puid,pname,pdataSets){
+function Project(pid,puid,pname,pdataSets,pScales){
 	this.pid=pid;
 	this.pname=pname;
 	this.puid=puid;
-
+	this.dataSetLoaded=0;
+	this.NumberOfDataSets=0;
 	this.serverFetchedDatasets=pdataSets;
 	this.datasets=[];
 
 	
-
+	
 	//make and add dataset object for each entry in pdataSets
 	for(var i=0;i<pdataSets.length;i++){
-		console.log(pdataSets[i]);
+		
+		this.NumberOfDataSets+=pdataSets[i].cols;
+
 		var dataset=new Dataset(pdataSets[i].name,pdataSets[i].path,pdataSets[i].iddata_sets); //.path is just the filename not the entire path
 		this.addDataSet(dataset);
 	}
+	
+
+	//wait till all data sets are loaded through d3.csv
+	this.evt = new CustomEvent('allDataSetsLoaded');
+	
+	
+	function loadScalesDBToMem(){
+		//make and add Scale object for each entry in pScales i.e server fetch scales
+		for(var i=0;i<pScales.length;i++){
+			
+			var scale=new Scale(pScales[i].idScales,pScales[i].pid,pScales[i].scale_name,pScales[i].type,pScales[i].col_Id,pScales[i].width,pScales[i].bandpadding,pScales[i].range_from,pScales[i].range_to)
+			
+			var brokenScaleName=pScales[i].scale_name.split("_"); //pScales[i].name="datasetName_datacolumnName_scale";
+			var datasetName=brokenScaleName[0];
+			var colName=brokenScaleName[1];
+
+		
+			project.datasets[datasetName].dataCols[colName].addScale(scale);//add to global object
+
+		}
+	}
+	
 	
 
 
@@ -24,6 +49,12 @@ function Project(pid,puid,pname,pdataSets){
 	//////////////////////////////////////////
 	//Data set event listeners
 	///////////////////////////////////////////
+	////data loaded event
+	window.addEventListener('allDataSetsLoaded', function (e) {
+		loadScalesDBToMem();
+	});
+
+
 	//toggle view data columns
 	$(document).on('click','.dataset',function(){
 	  $(this).find('li').toggle();
@@ -175,6 +206,7 @@ function Project(pid,puid,pname,pdataSets){
 Project.prototype={
 		constructor:Project,
 		addDataSet:function(ds){
-			this.datasets.push(ds); 
+			var datasetName = ds.name.slice(0,-4);  //ignore .csv at the end of ds.name
+			this.datasets[datasetName]=(ds); 
 		}
 }

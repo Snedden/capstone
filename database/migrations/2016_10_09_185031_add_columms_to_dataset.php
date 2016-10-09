@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddNameAndTypeToDataset extends Migration
+class AddColummsToDataset extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddNameAndTypeToDataset extends Migration
     public function up()
     {
         //
-        Schema::table('data_sets', function($table) {
-            $table->string('name');
-            $table->string('type');
+         Schema::table('data_sets', function($table) {
+            $table->integer('cols')->length(4)->unsigned();
+           
         });
     }
 
@@ -27,9 +27,9 @@ class AddNameAndTypeToDataset extends Migration
     public function down()
     {
         //
-          Schema::table('data_sets', function($table) {
-            $table->dropColumn('name');
-            $table->dropColumn('type');
+         Schema::table('data_sets', function($table) {
+            $table->dropColumn('cols');
+            
         });
     }
 }

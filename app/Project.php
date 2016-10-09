@@ -36,7 +36,7 @@ class Project extends Model
      */
      public function scales()
     {
-        return $this->hasMany('App\Scale','idScale','pid');//hasMany('model',foreingnkey,localkey)
+        return $this->hasMany('App\Scale','pid','pid');//hasMany('model',foreingnkey,localkey)
     }  
 
     /**

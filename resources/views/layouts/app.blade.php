@@ -100,6 +100,7 @@
     <script src="{{asset('js/scales.js')}}"></script>
     <script src="{{asset('js/project.js')}}"></script>
     <script src="{{asset('js/dataset.js')}}"></script>
+    <script src="{{asset('js/scales.js')}}"></script>
   
 
 

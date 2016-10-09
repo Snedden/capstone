@@ -110,6 +110,7 @@ class datasetController extends Controller
 	        $dataset->path=$path;
 	        $dataset->type=$ext;
 	        $dataset->rows=$rows;
+	        $dataset->cols=count($csvAsArray[0]);
 	        $dataset->save();
 
 	        for($i=0;$i<count($csvAsArray[0]);$i++ ){  

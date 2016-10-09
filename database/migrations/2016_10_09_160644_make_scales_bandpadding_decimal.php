@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddNameAndTypeToDataset extends Migration
+class MakeScalesBandpaddingDecimal extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddNameAndTypeToDataset extends Migration
     public function up()
     {
         //
-        Schema::table('data_sets', function($table) {
-            $table->string('name');
-            $table->string('type');
+        Schema::table('scales', function($table) {
+           
+            $table->decimal('bandpadding', 2, 2)->change(); //scale 2 precision 2
+           
         });
     }
 
@@ -27,9 +28,6 @@ class AddNameAndTypeToDataset extends Migration
     public function down()
     {
         //
-          Schema::table('data_sets', function($table) {
-            $table->dropColumn('name');
-            $table->dropColumn('type');
-        });
+        $table->integer('bandpadding')->nullable();
     }
 }

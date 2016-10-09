@@ -3,14 +3,15 @@
 
 <script>
     
-    function init(){
+    function init(){//function in global scope
       //reading server variables
       var svrProject=<?php echo json_encode($project); ?>;
       var svrDataSets=<?php echo json_encode($project->datasets); ?>;
-   
+      var svrScales=<?php echo json_encode($project->scales); ?>;
+      
      
-      var project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets);
-     
+      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales); //global object
+      console.log('project ',project)
 
     }
    
@@ -148,7 +149,7 @@ li {
               <li class='dataset' id="{{$dataset->iddata_sets}}">{{$dataset->name}} <a style="float:right;font-size:9px"href="#" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#datasetModal" data-dataset-name="{{$dataset->name}}" data-project-id="{{$project->pid}}"  data-dataset-id="{{$dataset->iddata_sets}}">edit</a>
                 <ul>
                   @forelse($dataset->columns as $col)
-                    <li>{{$col->col_name}}</li>
+                    <li data-toggle="modal" data-dataset-name="{{$dataset->name}} "  data-target="#addScaleModal" data-datasetcol-name="{{$col->col_name}}"  id="{{$col->col_Id}}">{{$col->col_name}}</li>
                   @empty
                     <li>No columns found!</li>
                   @endforelse
@@ -160,7 +161,14 @@ li {
           </ul>  
         </div>
          <div class='funcGroup'>
-          scales
+          <h3>scales</h3>
+          <ul>
+            @forelse($project->scales as $scale)
+              <li class='scales' id="{{$scale->idScales }}">{{$scale->scale_name}}</li>
+            @empty
+              <li>No scales found!<li>
+            @endforelse
+          </ul>  
         </div>
     </div>
    
@@ -288,7 +296,105 @@ li {
  
     </div>
   </div>
-  <!-- file upload Modal End -->
+  <!-- dataset Modal End -->
+
+    <!-- addScaleModal Modal -->
+  <div class="modal fade" id="addScaleModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id='datasetName'>Add Scale</h4>
+        </div>
+        <form  id="scaleForm" method="POST" action="" accept-charset="UTF-8" class="form-horizontal">
+          <div class="modal-body">
+            <input type="hidden" name="_token" value="{{csrf_token()}}"> 
+            <input type="hidden"  id="dataColId" > 
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="dataScaleName">Name:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" required name="dataScaleName" disabled="true" id="dataScaleName"  />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="dataColtype">Type:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" name="dataColtype" required value="Linear" disabled="true" id="dataColtype"  />
+              </div>
+            </div>
+
+             <div class="form-group linearScaleInput">
+              <label class="control-label col-sm-2" for="dataColDomainFrom">Domain From:</label>
+              <div class="col-sm-10">
+                <input  class="form-control " name="dataColDomainFrom"  disabled="true" required id="dataColDomainFrom" value="12"  id="domain_from"  />
+              </div>
+            </div>
+
+             <div class="form-group linearScaleInput">
+              <label class="control-label col-sm-2" for="dataColDomainTo">Domain To:</label>
+              <div class="col-sm-10">
+                <input  class="form-control " type="number" name="dataColDomainTo"  required disabled="true"  id="dataColDomainTo"  value=560  />
+              </div>
+            </div>
+
+            <div class="form-group linearScaleInput">
+              <label class="control-label col-sm-2" for="range_from">Range From:</label>
+              <div class="col-sm-10"> 
+                <input  class="form-control " id="range_from" name="range_from" value="50" min=0 max=600 required type="number"   placeholder="start range">
+              </div>
+            </div>
+
+             <div class="form-group linearScaleInput">
+              <label class="control-label col-sm-2" for="range_to">Range To:</label>
+              <div class="col-sm-10">
+                <input  class="form-control " name="range_to" id="range_to" value="500" min=0 max=600 required type="number" onblur="validateRangeTo(this)" placeholder="end range">
+              </div>
+            </div>
+            <div class="form-group ordinalScaleInput">
+              <label class="control-label col-sm-2" for="domainOrdinal">Domain:</label>
+              <div class="col-sm-10">
+                <input  class="form-control "  disabled="true" required id="domainOrdinal" value="12"   />
+              </div>
+            </div>
+
+            <div class="form-group ordinalScaleInput">
+              <label class="control-label col-sm-2" for="scaleWidthOrdinal">Width:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" type="number" value="500" name="scaleWidthOrdinal"  min=1 required id="scaleWidthOrdinal" placeholder="scaleWidth"    />
+              </div>
+            </div>
+
+            <div class="form-group ordinalScaleInput">
+              <label class="control-label col-sm-2" for="scaleBandPaddingOrdinal">Band Padding:</label>
+              <div class="col-xs-3">
+                <input  class="form-control col-xs-3 " value=10  type="range" oninput="setOutputBandpadding(this)" min=0 max=100 required id="scaleBandPaddingOrdinal" placeholder="scaleWidth"   />
+              </div>  
+              <div class="col-xs-3">
+                <input type="text" class="form-control " id="scaleBandPaddingOrdinalOutput" disabled="true" value="">
+              </div>
+            </div>
+
+
+
+          <span style="color:red" id="ajaxFeedback"><span> 
+          </div>  
+            
+          <div class="modal-footer">
+            <button type="submit" id="addScaleBtn" class="btn btn-default"  >Add</button>
+            <button type="button"  class="btn btn-default"  data-dismiss="modal">Close</button>
+
+          </div>
+        </form>
+      
+      </div>
+ 
+    </div>
+  </div>
+  <!-- addScaleModal Modal End -->
 
 </div>
 
