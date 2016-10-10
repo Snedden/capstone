@@ -31,7 +31,7 @@ class projectsController extends Controller
                     ));
         
        
-        $nonSharedUsers = DB::select( DB::raw("SELECT iduser,email FROM users WHERE  NOT EXISTS (SELECT * FROM sharedprojects WHERE sharedProjects.iduser= users.iduser and sharedprojects.pid=:projectId)"), array(
+        $nonSharedUsers = DB::select( DB::raw("SELECT iduser,email FROM users WHERE  NOT EXISTS (SELECT * FROM sharedprojects WHERE sharedprojects.iduser= users.iduser and sharedprojects.pid=:projectId)"), array(
                      'projectId' => $pid,
                     ));
        

@@ -32,6 +32,7 @@ Route::get('dataset/columns/{iddata_sets}','datasetController@getCols')->middlew
 Route::post('datasetColumns/update','datasetColumns@updateCols')->middleware('auth');
 
 Route::post('scale/create','scalesController@create')->middleware('auth');
+Route::post('scale/delete','scalesController@delete')->middleware('auth');
 
 
 Route::get('/home', 'HomeController@index')->middleware('auth');

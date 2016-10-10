@@ -66,20 +66,58 @@ function scaleAddCallback(data){
 
 		}
 		else if(data.type==="Ordinal" || data.type==="Linear"){
-			$("#ajaxFeedback").html(data.message);
+			
+
+			//add to memory
 			var brokenScaleName=data.name.split("_"); //data.name="datasetName_datacolumnName_scale";
 			var datasetName=brokenScaleName[0];
 			var colName=brokenScaleName[1];
 
 			var scale=new Scale(data.id,data.pid,data.name,data.type,data.dataColId,data.width,data.padding,data.rangeFrom,data.rangeTo);
 			project.datasets[datasetName].dataCols[colName].addScale(scale);//add to global object
-			console.log('scale ', project)
+			console.log('scale ', project);
+
+			//add to screen
+			var scaleLi="<li class='scales' id=scale"+data.id+">"+data.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'    data-scale-id="+data.id+" data-scale-name="+data.name+">Delete</button> </li> ";
+			$("#scaleUl").append(scaleLi);
+			$("#addScaleModal").modal('hide');
 		}
 		else{
 			console.error('Invalid return type for scale save function');
 		}
 }
+//add scale end
 
+//del scale
+$(document).on('click','.scaleDelBtn',function(e){
+
+	console.log('ee ',$(this).attr('data-scale-id'));
+	var scaleId=$(this).attr('data-scale-id');
+	var scaleName=$(this).attr('data-scale-name');
+	var brokenScaleName=scaleName.split("_"); //data.name="datasetName_datacolumnName_scale";
+	var datasetName=brokenScaleName[0];
+	var colName=brokenScaleName[1];
+
+	var scaleData={
+		id:scaleId,
+		name:scaleName,
+		dataset:datasetName,
+		dataCol:colName
+	}
+
+	ajaxCall('post','scale/delete',scaleData,'json',scaleDelCallback);
+
+});
+
+function scaleDelCallback(data){
+	console.log('del callback ',data);
+	var deletedScaleId="scale"+data.id; //dom id and memory id is of format 'scale'+id 
+	//delete from screen
+    $("#"+deletedScaleId).remove();
+    //delete from memory
+    delete project.datasets[data.dataset].dataCols[data.dataCol][deletedScaleId];
+}
+//del scale end
 function validateRangeTo(input){
 
 	var rangeFrom=$("#range_from");

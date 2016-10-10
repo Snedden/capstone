@@ -17,7 +17,7 @@ class scalesController extends Controller
 	    	$scaleData=$_POST['data'];
 	    	
 	    	//validate
-	    	if($scaleData['type']=="Linear"){
+			if($scaleData['type']=="Linear"){
 	    		if(!ctype_digit($scaleData['rangeFrom'])){
 	    		$feedback['message']="Range Form should be a number";
 	    		$feedback['type']="error";
@@ -98,10 +98,15 @@ class scalesController extends Controller
 	    	return $feedback;
     	}
     
-    
-    	
-    	
-
-    	
     }
+    
+    /*
+    *delete a scale
+    */
+    function delete(){
+    	$scaleToBeDelData=$_POST['data'];
+    	Scale::destroy($scaleToBeDelData['id']);
+    	return $scaleToBeDelData;
+    }
+
 }

@@ -9,6 +9,7 @@ function ajaxCall(type,url,submitData,dataType,successCallBack){
     $.ajax({
 
             type: type,
+            //url: window.location.origin+'/projectFirst/public/'+url,
             url: window.location.origin+'/'+url,
             data:{data:submitData},
             dataType: dataType,

@@ -78,8 +78,8 @@ function Datacol(colName,colType,colData,datasetId){
 Datacol.prototype={
 	constructor:Datacol,
 	addScale:function(scale){ //scale is Scale object
-		
-		this.scales.push(scale);	
+		var scaleName="scale"+scale.scaleId;
+		this.scales[scaleName]=scale;	
 		
 		
 	}
