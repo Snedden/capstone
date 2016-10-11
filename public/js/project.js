@@ -6,6 +6,8 @@ function Project(pid,puid,pname,pdataSets,pScales){
 	this.NumberOfDataSets=0;
 	this.serverFetchedDatasets=pdataSets;
 	this.datasets=[];
+	this.dataCols=[];
+	this.scales={};
 
 	
 	
@@ -26,16 +28,16 @@ function Project(pid,puid,pname,pdataSets,pScales){
 	function loadScalesDBToMem(){
 		//make and add Scale object for each entry in pScales i.e server fetch scales
 		for(var i=0;i<pScales.length;i++){
-			
+			console.log('i ',i);
 			var scale=new Scale(pScales[i].idScales,pScales[i].pid,pScales[i].scale_name,pScales[i].type,pScales[i].col_Id,pScales[i].width,pScales[i].bandpadding,pScales[i].range_from,pScales[i].range_to)
 			
-			var brokenScaleName=pScales[i].scale_name.split("_"); //pScales[i].name="datasetName_datacolumnName_scale";
+/*			var brokenScaleName=pScales[i].scale_name.split("_"); //pScales[i].name="datasetName_datacolumnName_scale";
 			var datasetName=brokenScaleName[0];
-			var colName=brokenScaleName[1];
-
+			var colName=brokenScaleName[1];*/
+			
 		
-			project.datasets[datasetName].dataCols[colName].addScale(scale);//add to global object
-
+			//project.datasets[datasetName].dataCols[colName].addScale(scale);//add to global object
+			scale.addScale();
 		}
 	}
 	

@@ -1,6 +1,10 @@
 
 
 function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,rangeTo){
+	var brokenScaleName=name.split("_"); //pScales[i].name="datasetName_datacolumnName_scale";
+	var datasetName=brokenScaleName[0];
+	var colName=brokenScaleName[1];
+
 	this.scaleId=scaleId;
 	this.pid=pid;
 	this.name=name;
@@ -10,9 +14,29 @@ function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,range
 	this.bandPadding=bandPadding;
 	this.rangeFrom=rangeFrom;
 	this.rangeTo=rangeTo;
-	this.domainOrdinal;
-	this.domainFrom;
-	this.domainTo;
+
+	this.dataCol=project.datasets[datasetName].dataCols[colName];
+	
+	if(this.type==='Linear'){
+		this.domainFrom=d3.min(this.dataCol.data);
+		this.domainTo=d3.max(this.dataCol.data);
+		this.d3Scale=d3.scaleLinear()
+    		.domain([this.domainFrom,this.domainTo])
+    		.range([this.rangeFrom, this.rangeTo]);
+    	
+	}
+	else if(this.type==='Ordinal'){
+		this.domainOrdinal=this.dataCol.data;
+		this.d3Scale=d3.scaleBand()
+				.domain(this.domainOrdinal)
+				.range([0,this.width])
+				.padding(this.bandPadding);
+	}
+	else{
+		console.error("Invalid scale type");
+	}
+	
+	
 
     	
 }
@@ -66,21 +90,10 @@ function scaleAddCallback(data){
 
 		}
 		else if(data.type==="Ordinal" || data.type==="Linear"){
-			
-
-			//add to memory
-			var brokenScaleName=data.name.split("_"); //data.name="datasetName_datacolumnName_scale";
-			var datasetName=brokenScaleName[0];
-			var colName=brokenScaleName[1];
-
+			//create scale object
 			var scale=new Scale(data.id,data.pid,data.name,data.type,data.dataColId,data.width,data.padding,data.rangeFrom,data.rangeTo);
-			project.datasets[datasetName].dataCols[colName].addScale(scale);//add to global object
-			console.log('scale ', project);
-
-			//add to screen
-			var scaleLi="<li class='scales' id=scale"+data.id+">"+data.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'    data-scale-id="+data.id+" data-scale-name="+data.name+">Delete</button> </li> ";
-			$("#scaleUl").append(scaleLi);
-			$("#addScaleModal").modal('hide');
+			//add to global object and screen
+			scale.addScale();
 		}
 		else{
 			console.error('Invalid return type for scale save function');
@@ -91,32 +104,15 @@ function scaleAddCallback(data){
 //del scale
 $(document).on('click','.scaleDelBtn',function(e){
 
-	console.log('ee ',$(this).attr('data-scale-id'));
 	var scaleId=$(this).attr('data-scale-id');
-	var scaleName=$(this).attr('data-scale-name');
-	var brokenScaleName=scaleName.split("_"); //data.name="datasetName_datacolumnName_scale";
-	var datasetName=brokenScaleName[0];
-	var colName=brokenScaleName[1];
+	var scaleTobeDeleted='scale'+scaleId;
+	project.scales[scaleTobeDeleted].deleteScale();
 
-	var scaleData={
-		id:scaleId,
-		name:scaleName,
-		dataset:datasetName,
-		dataCol:colName
-	}
 
-	ajaxCall('post','scale/delete',scaleData,'json',scaleDelCallback);
 
 });
 
-function scaleDelCallback(data){
-	console.log('del callback ',data);
-	var deletedScaleId="scale"+data.id; //dom id and memory id is of format 'scale'+id 
-	//delete from screen
-    $("#"+deletedScaleId).remove();
-    //delete from memory
-    delete project.datasets[data.dataset].dataCols[data.dataCol][deletedScaleId];
-}
+
 //del scale end
 function validateRangeTo(input){
 
@@ -143,4 +139,35 @@ function setOutputBandpadding(rangeInput){
 	var rangeOutputEle=$("#scaleBandPaddingOrdinalOutput");
 	var outputRange=((parseInt(rangeInputEle.val())*0.01)).toFixed(2);
 	rangeOutputEle.val(outputRange);
+}
+
+Scale.prototype={
+	constructor:Scale,
+
+	addScale:function(){ //scale is Scale object
+		var scaleName="scale"+this.scaleId;
+		//add to memory
+		project.scales[scaleName]=this;
+		//add to screen
+		var scaleLi="<li class='scales' id=scale"+this.scaleId+">"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'    data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </li> ";
+		$("#scaleUl").append(scaleLi);
+		$("#addScaleModal").modal('hide');
+		
+		
+	},
+
+	deleteScale:function(){
+	
+		var scaleObject=this; //cache this as it is a lost in the call back funciton call
+		ajaxCall('post','scale/delete',this.scaleId,'text',scaleDelCallback);
+
+		function scaleDelCallback(data){
+		
+		    var scaleTobeDeleted='scale'+scaleObject.scaleId;
+		    //delete form screen
+		    $("#"+scaleTobeDeleted).remove();
+		 	//delete from memory
+		    delete project.scales[scaleTobeDeleted];
+		}
+	}
 }

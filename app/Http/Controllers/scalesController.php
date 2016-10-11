@@ -104,9 +104,9 @@ class scalesController extends Controller
     *delete a scale
     */
     function delete(){
-    	$scaleToBeDelData=$_POST['data'];
-    	Scale::destroy($scaleToBeDelData['id']);
-    	return $scaleToBeDelData;
+    	$scaleId=$_POST['data'];
+    	Scale::destroy($scaleId);
+    	return 'deleted';
     }
 
 }

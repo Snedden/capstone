@@ -48,6 +48,7 @@ Dataset.prototype={
   				//add column obect
   				dataColObj=new Datacol(colName,colType,colData,datasetId);
   				self.dataCols[colName]=dataColObj;
+
           //count the number of data sets loaded
           project.dataSetLoaded++;
           //dispatch event if all data sets are loaded
@@ -75,15 +76,7 @@ function Datacol(colName,colType,colData,datasetId){
 	
 }
 
-Datacol.prototype={
-	constructor:Datacol,
-	addScale:function(scale){ //scale is Scale object
-		var scaleName="scale"+scale.scaleId;
-		this.scales[scaleName]=scale;	
-		
-		
-	}
-}
+
 
 
 //Event listeners

@@ -163,13 +163,13 @@ li {
          <div class='funcGroup'>
           <h3>scales</h3>
           <ul id="scaleUl">
-            @forelse($project->scales as $scale)
+        <!--     @forelse($project->scales as $scale)
               <li class='scales' id="scale{{$scale->idScales }}">
                 {{$scale->scale_name}}
                 <button style="float:right;font-size:9px"  class="btn btn-xs btn-primary scaleDelBtn"    data-scale-id="{{$scale->idScales}}" data-scale-name="{{$scale->scale_name}}">Delete</button>
               </li>
             @empty
-            @endforelse
+            @endforelse -->
           </ul>  
         </div>
     </div>
