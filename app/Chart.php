@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Chart extends Model
 {
     //
-    protected $primary_key='idcharts';
+    protected $primaryKey='idcharts';
 
      protected $fillable = [
         'iduser','path','pid'

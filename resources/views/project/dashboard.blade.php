@@ -8,9 +8,10 @@
       var svrProject=<?php echo json_encode($project); ?>;
       var svrDataSets=<?php echo json_encode($project->datasets); ?>;
       var svrScales=<?php echo json_encode($project->scales); ?>;
+      var svrAxes=<?php echo json_encode($project->axes); ?>;
       
      
-      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales); //global object
+      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales,svrAxes); //global object
       console.log('project ',project)
 
     }
@@ -185,14 +186,16 @@ li {
         </div>
          <div class='funcGroup'>
            <h5><b>Add</b></h5>
-           <button data-toggle="modal" data-target="#axesModal">Axes</button>
-           <button>Rect</button>
-           <button>Circle</button>
-           <button>Pie</button>
-           <button>Text</button>
+           <button data-toggle="modal" data-target="#addAxesModal">Axes</button>
+           <button disabled="true">Rect</button>
+           <button disabled="true">Circle</button>
+           <button disabled="true">Pie</button>
+           <button disabled="true">Text</button>
         </div>
         <div class='funcGroup'>
-          groups
+          <h5><b>Groups</b></h5>
+          <ul id="groupsUl">
+          </ul>
         </div>
     </div>
     
@@ -404,7 +407,7 @@ li {
   <!-- addScaleModal Modal End -->
 
   <!-- Axes Modal -->
-  <div class="modal fade" id="axesModal" role="dialog">
+  <div class="modal fade" id="addAxesModal" role="dialog">
     <div class="modal-dialog">
     
       <!-- Modal content-->
@@ -474,7 +477,7 @@ li {
             </div>
 
           </div>  
-            
+          <span style="color:red" id="ajaxFeedback"><span>   
           <div class="modal-footer">
             <button type="submit" id="addAxesBtn" class="btn btn-default"  >Add</button>
             <button type="button"  class="btn btn-default"  data-dismiss="modal">Close</button>

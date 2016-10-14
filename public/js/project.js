@@ -1,4 +1,4 @@
-function Project(pid,puid,pname,pdataSets,pScales){
+function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	this.pid=pid;
 	this.pname=pname;
 	this.puid=puid;
@@ -8,6 +8,7 @@ function Project(pid,puid,pname,pdataSets,pScales){
 	this.datasets=[];
 	this.dataCols=[];
 	this.scales={};
+	this.axes={};
 
 	
 	
@@ -24,20 +25,28 @@ function Project(pid,puid,pname,pdataSets,pScales){
 	//wait till all data sets are loaded through d3.csv
 	this.evt = new CustomEvent('allDataSetsLoaded');
 	
-	
+	/**
+	*Loads  pScales object which is fetched form the DB to the client side of the project
+	*/
 	function loadScalesDBToMem(){
 		//make and add Scale object for each entry in pScales i.e server fetch scales
 		for(var i=0;i<pScales.length;i++){
-			console.log('i ',i);
+			
 			var scale=new Scale(pScales[i].idScales,pScales[i].pid,pScales[i].scale_name,pScales[i].type,pScales[i].col_Id,pScales[i].width,pScales[i].bandpadding,pScales[i].range_from,pScales[i].range_to)
-			
-/*			var brokenScaleName=pScales[i].scale_name.split("_"); //pScales[i].name="datasetName_datacolumnName_scale";
-			var datasetName=brokenScaleName[0];
-			var colName=brokenScaleName[1];*/
-			
-		
-			//project.datasets[datasetName].dataCols[colName].addScale(scale);//add to global object
 			scale.addScale();
+		}
+	}
+
+	/**
+	*Loads pAxes object which is fetched form the DB to the client side of the project
+	*/
+	function loadAxesDBToMem(){
+		console.log('pAxes ',pAxes);
+		for(var i=0;i<pAxes.length;i++){
+
+			var axes=new Axes(pAxes[i].idaxes,pAxes[i].name,pAxes[i].orient,pAxes[i].X_pos,pAxes[i].Y_pos,pAxes[i].idScales,pAxes[i].ticks);
+			console.log("i",i,"axes ",axes);
+			axes.addAxes();
 		}
 	}
 	
@@ -53,7 +62,8 @@ function Project(pid,puid,pname,pdataSets,pScales){
 	///////////////////////////////////////////
 	////data loaded event
 	window.addEventListener('allDataSetsLoaded', function (e) {
-		loadScalesDBToMem();
+		loadScalesDBToMem(); //load scales data
+		loadAxesDBToMem();
 	});
 
 

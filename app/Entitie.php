@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Entitie extends Model
 {
     //
-    protected $primary_key='idEntities';
+    protected $primaryKey='idEntities';
 
     protected $fillable = [
         'entity_name','entity_type','pid'

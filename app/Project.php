@@ -67,4 +67,14 @@ class Project extends Model
     {
         return $this->hasMany('App\DataSet','pid','pid');//hasMany('model',foreingnkey,localkey)
     } 
+
+    /**
+     * A Project has many axes
+     *
+     * @var array
+     */
+     public function axes()
+    {
+        return $this->hasMany('App\Axes','pid','pid');//hasMany('model',foreingnkey,localkey)
+    } 
 }

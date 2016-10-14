@@ -8,7 +8,7 @@ class Circle extends Model
 {
     //
     protected $table = 'Circle';
-    protected $primary_key='idCircle';
+    protected $primaryKey='idCircle';
 
     protected $fillable = [
         'cir_name','X_pos','Y_pos','radius','Opacity','text','idScale','idColorScale','idEntity'

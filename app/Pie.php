@@ -8,7 +8,7 @@ class Pie extends Model
 {
     //
     protected $table = 'pie';
-    protected $primary_key='idpie';
+    protected $primaryKey='idpie';
 
      /**
      * The attributes that are mass assignable.

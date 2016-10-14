@@ -1,7 +1,7 @@
 
 
 function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,rangeTo){
-	var brokenScaleName=name.split("_"); //pScales[i].name="datasetName_datacolumnName_scale";
+	var brokenScaleName=name.split("__"); //pScales[i].name="datasetName_datacolumnName_scale";
 	var datasetName=brokenScaleName[0];
 	var colName=brokenScaleName[1];
 
@@ -14,9 +14,9 @@ function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,range
 	this.bandPadding=bandPadding;
 	this.rangeFrom=rangeFrom;
 	this.rangeTo=rangeTo;
-
+	console.log("project.datasets."+datasetName+".dataCols."+colName);
 	this.dataCol=project.datasets[datasetName].dataCols[colName];
-	
+	console.log('scale', this);
 	if(this.type==='Linear'){
 		this.domainFrom=d3.min(this.dataCol.data);
 		this.domainTo=d3.max(this.dataCol.data);
@@ -92,8 +92,8 @@ function scaleAddCallback(data){
 		else if(data.type==="Ordinal" || data.type==="Linear"){
 			//create scale object
 			var scale=new Scale(data.id,data.pid,data.name,data.type,data.dataColId,data.width,data.padding,data.rangeFrom,data.rangeTo);
-			//add to global object and screen
-			scale.addScale();
+			scale.addScale();				//add to global object and screen
+			$("#addScaleModal").modal('hide');//close modal dialog
 		}
 		else{
 			console.error('Invalid return type for scale save function');
@@ -151,7 +151,7 @@ Scale.prototype={
 		//add to screen
 		var scaleLi="<li class='scales' id=scale"+this.scaleId+">"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'    data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </li> ";
 		$("#scaleUl").append(scaleLi);
-		$("#addScaleModal").modal('hide');
+		
 		
 		
 	},

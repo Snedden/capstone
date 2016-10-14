@@ -8,7 +8,7 @@ class Text extends Model
 {
     //
     protected $table = 'text';
-    protected $primary_key='idtext';
+    protected $primaryKey='idtext';
 
     /**
      * The attributes that are mass assignable.

@@ -93,7 +93,7 @@ $('#addScaleModal').on('show.bs.modal', function(e) {
     var dataColId=$(e.relatedTarget).attr("id");
     var datasetColObj=project.datasets[datasetName].dataCols[datasetCol];
     var scaleType=(datasetColObj.type==="Number"?"Linear":"Ordinal");
-    var scaleName=datasetName+"_"+datasetColObj.name+"_scale";
+    var scaleName=datasetName+"__"+datasetColObj.name+"__scale"; //two underscore as delimeters to mitigate just incase if column name have underscores
     var ordinalDomain="";
 
     var ordinalRangeInput=document.getElementById('scaleBandPaddingOrdinal');
