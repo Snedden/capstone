@@ -10,6 +10,7 @@ use Auth;
 use App\Project;
 use App\User;
 use App\SharedProject;
+use App\Scale;
 use DB;
 
 
@@ -25,7 +26,7 @@ class projectsController extends Controller
     function index($pid){
     	$project=Project::findOrFail($pid);
     	$users=User::all();
-        $sharedProjectsusers=SharedProject::where('pid',2)->get();
+        $sharedProjectsusers=SharedProject::where('pid',$pid)->get();
         $sharedProjectsusers = DB::select( DB::raw(" select s.iduser ,u.email from sharedprojects s inner join users u on u.iduser=s.iduser where s.pid=:projectId "), array(
                      'projectId' => $pid,
                     ));

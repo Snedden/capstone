@@ -143,7 +143,7 @@ li {
   <div class="row clearfix">
     <div class="span_4 column">
         <div class='funcGroup'>
-          <h3>Data</h3>
+          <h5><b>Data</b></h5>
            <ul>
             @forelse ($project->datasets as $dataset)
               <li class='dataset' id="{{$dataset->iddata_sets}}">{{$dataset->name}} <a style="float:right;font-size:9px"href="#" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#datasetModal" data-dataset-name="{{$dataset->name}}" data-project-id="{{$project->pid}}"  data-dataset-id="{{$dataset->iddata_sets}}">edit</a>
@@ -161,7 +161,7 @@ li {
           </ul>  
         </div>
          <div class='funcGroup'>
-          <h3>scales</h3>
+          <h5><b>scales</b></h5>
           <ul id="scaleUl">
         <!--     @forelse($project->scales as $scale)
               <li class='scales' id="scale{{$scale->idScales }}">
@@ -178,13 +178,18 @@ li {
        
     </div>
     <div class="span_4 column">
-      <h4>Info</h4>
-         <div class='funcGroup'>
+      <div class='funcGroup'>
+         <h5><b>Info</b></h5>
           <span>Stage X :</span><span id="infoStageX">567</span><br/>
           <span>Stage Y :</span><span id="infoStageY">457</span>
         </div>
          <div class='funcGroup'>
-          entity
+           <h5><b>Add</b></h5>
+           <button data-toggle="modal" data-target="#axesModal">Axes</button>
+           <button>Rect</button>
+           <button>Circle</button>
+           <button>Pie</button>
+           <button>Text</button>
         </div>
         <div class='funcGroup'>
           groups
@@ -397,6 +402,89 @@ li {
     </div>
   </div>
   <!-- addScaleModal Modal End -->
+
+  <!-- Axes Modal -->
+  <div class="modal fade" id="axesModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id='datasetName'>Add Axes</h4>
+        </div>
+        <form  id="axesForm" method="POST" action="" accept-charset="UTF-8" class="form-horizontal">
+          <div class="modal-body">
+           
+            <input type="hidden" name="_token" value="{{csrf_token()}}"> 
+            
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="axesName" >Name:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" required name="axesName" placeholder="Axes Name"  id="axesName"  />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="axesScale">Scale:</label>
+              <div class="col-sm-10">
+                <select name="axesScale" id="axesScale" required>
+                  <option value="">select</option>
+                  @forelse ($project->scales as $scale)
+                    <option value="{{$scale->idScales}}">{{$scale->scale_name}}</option>
+                  @empty
+                      
+                  @endforelse
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="axesOrient">Orient:</label>
+              <div class="col-sm-10">
+                <select name="axesOrient" id="axesOrient">
+                <option value="Bottom">Bottom</option>
+                  <option value="Top">Top</option>
+                  <option value="Right">Right</option>
+                  <option value="Left">Left</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="axesX">X:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" type="number"  required name="axesX" placeholder="X position" id="axesX"  />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="axesY" >Y:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" type="number"  required name="axesY" placeholder="Y position"  id="axesY"  />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="axesTicks">Ticks:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" required type="number" placeholder="number of ticks" min=1 max=30 name="axesTicks"  id="axesTicks"  />
+              </div>
+            </div>
+
+          </div>  
+            
+          <div class="modal-footer">
+            <button type="submit" id="addAxesBtn" class="btn btn-default"  >Add</button>
+            <button type="button"  class="btn btn-default"  data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+ 
+    </div>
+  </div>
+  <!-- Axes Modal End -->
 
 </div>
 
