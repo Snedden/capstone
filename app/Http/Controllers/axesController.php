@@ -69,7 +69,7 @@ class axesController extends Controller
             //return saved axes to front end
             $feedback['id']=$axes->idaxes;
             $feedback['name']=$axes->name;
-            $feedback['scale']=$axes->idScales;
+            $feedback['scaleId']=$axes->idScales;
             $feedback['orient']=$axes->orient;
             $feedback['xPos']=$axes->X_pos;
             $feedback['yPos']=$axes->Y_pos;

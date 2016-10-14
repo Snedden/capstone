@@ -9,8 +9,10 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	this.dataCols=[];
 	this.scales={};
 	this.axes={};
+	this.stage=setStageScales(); //set scales and axis of the stage;
 
-	
+	//wait till all data sets are loaded through d3.csv
+	this.evt = new CustomEvent('allDataSetsLoaded');
 	
 	//make and add dataset object for each entry in pdataSets
 	for(var i=0;i<pdataSets.length;i++){
@@ -21,12 +23,8 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 		this.addDataSet(dataset);
 	}
 	
-
-	//wait till all data sets are loaded through d3.csv
-	this.evt = new CustomEvent('allDataSetsLoaded');
-	
 	/**
-	*Loads  pScales object which is fetched form the DB to the client side of the project
+	*@desc: Loads  pScales object which is fetched form the DB to the client side of the project
 	*/
 	function loadScalesDBToMem(){
 		//make and add Scale object for each entry in pScales i.e server fetch scales
@@ -38,7 +36,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	}
 
 	/**
-	*Loads pAxes object which is fetched form the DB to the client side of the project
+	*@desc:Loads pAxes object which is fetched form the DB to the client side of the project
 	*/
 	function loadAxesDBToMem(){
 		console.log('pAxes ',pAxes);
@@ -49,12 +47,60 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 			axes.addAxes();
 		}
 	}
+
+	/**
+	*@desc:sets stage for the project
+	*@returns:stage html dom object
+	*/
+	function setStageScales(){
+	
+		var stageWidth=$("#stageDiv").width();
+		var stageHeight=$("#stageDiv").height();
+		var stage=d3.select("#stageDiv").append("svg").attr("width",stageWidth).attr("height",stageHeight);
+
+		var paddingLeft=30;
+		var paddingBot=20;
+
+		//X axis
+		var stageXScale=d3.scaleLinear()
+						.domain([0,stageWidth])
+						.range([0,stageWidth]);
+		var stageXAxis = d3.axisBottom(stageXScale)
+						.ticks(20);
+		stage.append("g")
+        	.attr("class", "axis")
+            .attr("transform", "translate("+paddingLeft+","+(stageHeight-paddingBot)+")")
+            .call(stageXAxis);
+
+        //Y axis  
+        var stageYScale=d3.scaleLinear()
+						.domain([0,stageHeight])
+						.range([stageHeight,0]);
+		var stageYAxis = d3.axisLeft(stageYScale)
+		.ticks(20);
+		stage.append("g")
+        	.attr("class", "axis")
+            .attr("transform", "translate("+paddingLeft+","+(-paddingBot)+")")
+            .call(stageYAxis); 
+
+
+        // On mouse move track position with respect to stage scale
+        stage.on("mousemove", function() {
+          var coords = d3.mouse(this);
+          console.log('X:', coords[0], 'Y: ',coords[1]);
+          //console.log("X:",(stageXScale.invert(coords[0]))-(paddingLeft),"Y:",(stageYScale.invert(coords[1]))-(paddingBot));
+          $("#infoStageX").html(Math.round((stageXScale.invert(coords[0]))-(paddingLeft))); //invert doesn't make a diff here as range and domain are the same
+          $("#infoStageY").html(Math.round((stageYScale.invert(coords[1]))-(paddingBot)));	//invert doesn't make a diff here as range and domain are the same
+         });  
+        
+        return stage;     			
+    }
 	
 	
 
 
 
-	setStageScales(); //set scales and axis of the stage
+	
 
 
 	//////////////////////////////////////////
@@ -145,10 +191,6 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	  console.log(data);
 	}
 
-
-
-
-
 	//delete dataset button click
 	$(document).on('click','#deleteDatasetBtn',function(){
 	  console.log($(this).attr('data-id'));
@@ -168,51 +210,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 
 
      
-	/////////////////////////////////////////////////
-	//Set the scales and axix of the stage of the project
-	//////////////////////////////////
-	function setStageScales(){
-	
-		var stageWidth=$("#stageDiv").width();
-		var stageHeight=$("#stageDiv").height();
-		var stage=d3.select("#stageDiv").append("svg").attr("width",stageWidth).attr("height",stageHeight);
 
-		var paddingLeft=30;
-		var paddingBot=20;
-
-		//X axis
-		var stageXScale=d3.scaleLinear()
-						.domain([0,stageWidth])
-						.range([0,stageWidth]);
-		var stageXAxis = d3.axisBottom(stageXScale)
-						.ticks(20);
-		stage.append("g")
-        	.attr("class", "axis")
-            .attr("transform", "translate("+paddingLeft+","+(stageHeight-paddingBot)+")")
-            .call(stageXAxis);
-
-        //Y axis  
-        var stageYScale=d3.scaleLinear()
-						.domain([0,stageHeight])
-						.range([stageHeight,0]);
-		var stageYAxis = d3.axisLeft(stageYScale)
-		.ticks(20);
-		stage.append("g")
-        	.attr("class", "axis")
-            .attr("transform", "translate("+paddingLeft+","+(-paddingBot)+")")
-            .call(stageYAxis); 
-
-
-        // On mouse move track position with respect to stage scale
-        stage.on("mousemove", function() {
-          var coords = d3.mouse(this);
-          //console.log("X:",(stageXScale.invert(coords[0]))-(paddingLeft),"Y:",(stageYScale.invert(coords[1]))-(paddingBot));
-          $("#infoStageX").html(Math.round((stageXScale.invert(coords[0]))-(paddingLeft)));
-          $("#infoStageY").html(Math.round((stageYScale.invert(coords[1]))-(paddingBot)));	
-         });  
-        
-             			
-    }
 }
 
 Project.prototype={

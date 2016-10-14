@@ -6,6 +6,13 @@ function Axes(id,name,orient,xPos,yPos,scaleId,ticks){
 	this.yPos=yPos;
 	this.scaleId=scaleId;
 	this.ticks=ticks;
+	console.log('sclaeid ',scaleId);
+	var associatedScaleName="scale"+scaleId;
+	this.associatedScale=project.scales[associatedScaleName];
+	
+	this.d3Axes=d3.axisBottom(this.associatedScale.d3Scale)
+		.ticks(this.ticks);
+	
 }
 
 
@@ -62,7 +69,11 @@ Axes.prototype={
 		project.axes[axesName]=this;
 		//add to screen
 		var groupLi="<li class='groupItem' id=axes"+this.id+">"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button> </li> ";
-		$("#groupsUl").append(groupLi);
+		$("#groupsUl").append(groupLi);  		 //add to list
+		project.stage.append("g")                //add to stage 
+        	.attr("class", "axis")
+            .attr("transform", "translate("+this.xPos+","+(-this.yPos)+")")
+            .call(this.d3Axes); 
 
 
 	},
@@ -73,7 +84,8 @@ Axes.prototype={
 		function axesDelCallback(data){
 			var axesTobeDeleted='axes'+axesObject.id;
 		    //delete form screen
-		    $("#"+axesTobeDeleted).remove();
+		    $("#"+axesTobeDeleted).remove();    
+
 		 	//delete from memory
 		    delete project.axes[axesTobeDeleted];
 		}
