@@ -35,6 +35,7 @@ Route::post('scale/create','scalesController@create')->middleware('auth');
 Route::post('scale/delete','scalesController@delete')->middleware('auth');
 
 Route::post('axes/create','axesController@create')->middleware('auth');
+Route::post('axes/delete','axesController@delete')->middleware('auth');
 
 Route::get('/home', 'HomeController@index')->middleware('auth');
 Route::get('/', 'HomeController@index')->middleware('auth');

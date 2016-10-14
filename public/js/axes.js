@@ -40,6 +40,19 @@ function axesAddCallback(data){
 	axes.addAxes(); //add to screen and memory
 	$("#addAxesModal").modal('hide');//close add axes modal
 }
+//add axes end
+
+//delete axes
+//del scale
+$(document).on('click','.axesDelBtn',function(e){
+
+	var axesId=$(this).attr('data-axes-id');
+	var axesTobeDeleted='axes'+axesId;
+	project.axes[axesTobeDeleted].deleteAxes();
+
+
+
+});
 
 Axes.prototype={
 	constructor:Axes,
@@ -48,9 +61,21 @@ Axes.prototype={
 		//add to memory
 		project.axes[axesName]=this;
 		//add to screen
-		var groupLi="<li class='groupItem' id=groupItem_axes_+"+this.id+">"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button> </li> ";
+		var groupLi="<li class='groupItem' id=axes"+this.id+">"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button> </li> ";
 		$("#groupsUl").append(groupLi);
 
 
+	},
+	deleteAxes:function(){
+		var axesObject=this; //cache this as it is a lost in the call back funciton call
+		ajaxCall('post','axes/delete',this.id,'text',axesDelCallback);
+
+		function axesDelCallback(data){
+			var axesTobeDeleted='axes'+axesObject.id;
+		    //delete form screen
+		    $("#"+axesTobeDeleted).remove();
+		 	//delete from memory
+		    delete project.axes[axesTobeDeleted];
+		}
 	}
 }
