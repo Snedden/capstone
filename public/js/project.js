@@ -1,4 +1,11 @@
 function Project(pid,puid,pname,pdataSets,pScales,pAxes){
+	this.stageMarginLeft=30;
+	this.stageMarginBot=30;
+	this.stageWidth=$("#stageDiv").width();
+	this.stageHeight=$("#stageDiv").height();
+	this.stageBorder=1; //stage border 1 pixel
+	var self=this;
+
 	this.pid=pid;
 	this.pname=pname;
 	this.puid=puid;
@@ -9,10 +16,25 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	this.dataCols=[];
 	this.scales={};
 	this.axes={};
-	this.stage=setStageScales(); //set scales and axis of the stage;
+	//set in setStageScales
+	this.stage;
+	this.stageXScale;
+	this.stageYScale;
+	this.setStageScales(); //set scales and axis of the stage;
+
 
 	//wait till all data sets are loaded through d3.csv
 	this.evt = new CustomEvent('allDataSetsLoaded');
+
+    // On mouse move track position with respect to stage scale
+    this.stage.on("mousemove", function() {
+      var coords = d3.mouse(this);
+       $("#infoStageX").html(Math.round(self.stageXScale(coords[0])-self.stageMarginLeft)); //invert doesn't make a diff here as range and domain are the same
+      $("#infoStageY").html(Math.round(self.stageYScale(coords[1])-self.stageMarginBot));	//invert doesn't make a diff here as range and domain are the same
+      //console.log("X:",(stageXScale.invert(coords[0]))-(paddingLeft),"Y:",(stageYScale.invert(coords[1]))-(paddingBot));
+     /* $("#infoStageX").html(Math.round((self.stageXScale.invert(coords[0]))-(self.stageMarginLeft))); //invert doesn't make a diff here as range and domain are the same
+      $("#infoStageY").html(Math.round((self.stageYScale.invert(coords[1]))-(self.stageMarginBot)));	//invert doesn't make a diff here as range and domain are the same*/
+     }); 
 	
 	//make and add dataset object for each entry in pdataSets
 	for(var i=0;i<pdataSets.length;i++){
@@ -29,7 +51,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	function loadScalesDBToMem(){
 		//make and add Scale object for each entry in pScales i.e server fetch scales
 		for(var i=0;i<pScales.length;i++){
-			
+			console.log("scalei ",i);
 			var scale=new Scale(pScales[i].idScales,pScales[i].pid,pScales[i].scale_name,pScales[i].type,pScales[i].col_Id,pScales[i].width,pScales[i].bandpadding,pScales[i].range_from,pScales[i].range_to)
 			scale.addScale();
 		}
@@ -48,53 +70,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 		}
 	}
 
-	/**
-	*@desc:sets stage for the project
-	*@returns:stage html dom object
-	*/
-	function setStageScales(){
-	
-		var stageWidth=$("#stageDiv").width();
-		var stageHeight=$("#stageDiv").height();
-		var stage=d3.select("#stageDiv").append("svg").attr("width",stageWidth).attr("height",stageHeight);
 
-		var paddingLeft=30;
-		var paddingBot=20;
-
-		//X axis
-		var stageXScale=d3.scaleLinear()
-						.domain([0,stageWidth])
-						.range([0,stageWidth]);
-		var stageXAxis = d3.axisBottom(stageXScale)
-						.ticks(20);
-		stage.append("g")
-        	.attr("class", "axis")
-            .attr("transform", "translate("+paddingLeft+","+(stageHeight-paddingBot)+")")
-            .call(stageXAxis);
-
-        //Y axis  
-        var stageYScale=d3.scaleLinear()
-						.domain([0,stageHeight])
-						.range([stageHeight,0]);
-		var stageYAxis = d3.axisLeft(stageYScale)
-		.ticks(20);
-		stage.append("g")
-        	.attr("class", "axis")
-            .attr("transform", "translate("+paddingLeft+","+(-paddingBot)+")")
-            .call(stageYAxis); 
-
-
-        // On mouse move track position with respect to stage scale
-        stage.on("mousemove", function() {
-          var coords = d3.mouse(this);
-          console.log('X:', coords[0], 'Y: ',coords[1]);
-          //console.log("X:",(stageXScale.invert(coords[0]))-(paddingLeft),"Y:",(stageYScale.invert(coords[1]))-(paddingBot));
-          $("#infoStageX").html(Math.round((stageXScale.invert(coords[0]))-(paddingLeft))); //invert doesn't make a diff here as range and domain are the same
-          $("#infoStageY").html(Math.round((stageYScale.invert(coords[1]))-(paddingBot)));	//invert doesn't make a diff here as range and domain are the same
-         });  
-        
-        return stage;     			
-    }
 	
 	
 
@@ -208,7 +184,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	}
 
 
-
+	///Data set event listeners end
      
 
 }
@@ -218,5 +194,63 @@ Project.prototype={
 		addDataSet:function(ds){
 			var datasetName = ds.name.slice(0,-4);  //ignore .csv at the end of ds.name
 			this.datasets[datasetName]=(ds); 
+		},
+		setStageScales:function(){
+			
+
+			//set project stage
+			this.stage=d3.select("#stageDiv").append("svg").attr("width",this.stageWidth).attr("height",this.stageHeight);
+
+			//Set project scale
+			//Xscale
+			this.stageXScale=d3.scaleLinear()            
+							.domain([0,this.stageWidth])
+							.range([0,this.stageWidth]);
+							
+			var stageXAxis = d3.axisBottom(this.stageXScale)   	//let axis be private
+							.ticks(20);
+			
+
+	        //Y scale  
+	        this.stageYScale=d3.scaleLinear()
+							.domain([this.stageHeight,0])
+							.range([0,this.stageHeight]);
+
+			var stageYAxis = d3.axisLeft(this.stageYScale)
+			.ticks(20);
+
+			///Add to screen
+			//YAxis    
+			this.stage.append("g")
+	        	.attr("class", "axis")
+	        	.attr("transform", "translate("+this.getAxisX(0)+","+this.getAxisY(0,"Left")+")")
+	            .call(stageYAxis); 
+			//XAxis
+			this.stage.append("g")
+	        	.attr("class", "axis")
+	            .attr("transform", "translate("+this.getAxisX(0)+","+this.getAxisY(0,"Bottom")+")")
+	           	.call(stageXAxis);
+
+		},
+		getAxisX:function(axisX){   
+			var stageX=parseInt(axisX)+this.stageMarginLeft;
+			return stageX;
+		},
+		getAxisY:function(axisY,axisOrient){
+			var stageY;
+			//differently oriented axis have different origin point and y start from top in svg
+			if(axisOrient==="Top" || axisOrient==="Bottom"){
+				//console.log(parseInt(axisY),"+",this.stageHeight,"-",this.stageMarginBot);
+				stageY=this.stageHeight-parseInt(axisY)-this.stageMarginBot;
+				return stageY;
+			}
+			else if(axisOrient==="Left" || axisOrient==="Right"){
+				stageY=-(parseInt(axisY)+this.stageMarginBot+(2*this.stageBorder));
+				return stageY;
+			}
+			else{
+				console.error("invalid axis orient");
+			}
+			
 		}
 }
