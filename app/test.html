@@ -1,0 +1,65 @@
+<html>
+<head>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.7/d3.min.js"></script>
+</head>
+<body>
+	<div id="svgDiv">
+	</div>
+</body>
+<script>
+	var svg=d3.select("#svgDiv").append("svg").attr("width",700).attr("height",700);
+	var domain=['A',
+'B',
+'V',
+'V',
+'F',
+'G',
+'H',
+'Z',
+'X',
+'C',
+'V',
+'B',
+'N',
+'M',
+'A',
+'S',
+'D',
+'H',
+'K',
+'L',
+'Q',
+'W',
+'E',
+'T',
+'Y',
+'U',
+'I',
+'O',
+'P',
+'E',
+'Y',
+'Q'
+];
+
+var scale1=d3.scaleBand()
+				.domain(domain)
+				.range([0,500])
+				.padding(0.12);
+
+var axis1 = d3.axisBottom(scale1)   	//let axis be private
+							.ticks(40);		
+var axis2 = d3.axisLeft(scale1)   	//let axis be private
+	.ticks(40);	
+svg.append("g")
+	.attr("class", "axis")
+	.attr("transform", "translate("+50+","+50+")")
+	.call(axis1);
+
+svg.append("g")
+	.attr("class", "axis")
+	.attr("transform", "translate("+50+","+50+")")
+	.call(axis2);	
+
+</script>
+</html>

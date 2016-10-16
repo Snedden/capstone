@@ -6,25 +6,40 @@ function Axes(id,name,orient,xPos,yPos,scaleId,ticks){
 	this.yPos=yPos;
 	this.scaleId=scaleId;
 	this.ticks=ticks;
-	console.log('sclaeid ',scaleId);
+
+
+	console.log('ticks ',this.ticks);
+
+	
 	var associatedScaleName="scale"+scaleId;
 	this.associatedScale=project.scales[associatedScaleName];
+	//assuming domain is the length of the associated scale
+	if(this.associatedScale.type==="Linear"){
+		this.length=this.associatedScale.rangeTo-this.associatedScale.rangeFrom;
+	}
+	else if(this.associatedScale.type==="Ordinal"){
+		this.length=this.associatedScale.width;
+	}
+	else{
+		console.error("Invalid scale type");
+	}
+	
 	
 	switch(this.orient){
 		case "Left":
-			this.d3Axes=d3.axisLeft(this.associatedScale.d3Scale)
+			this.d3Axes=d3.axisLeft(this.associatedScale.d3ScaleVertical)
 				.ticks(this.ticks);
 		break;
 		case "Right":
-			this.d3Axes=d3.axisRight(this.associatedScale.d3Scale)
+			this.d3Axes=d3.axisRight(this.associatedScale.d3ScaleVertical)
 				.ticks(this.ticks);
 		break;
 		case "Bottom":
-			this.d3Axes=d3.axisBottom(this.associatedScale.d3Scale)
+			this.d3Axes=d3.axisBottom(this.associatedScale.d3ScaleLateral)
 				.ticks(this.ticks);
 		break;
 		case "Top":
-			this.d3Axes=d3.axisTop(this.associatedScale.d3Scale)
+			this.d3Axes=d3.axisTop(this.associatedScale.d3ScaleLateral)
 				.ticks(this.ticks);
 		break
 		default:
@@ -85,6 +100,7 @@ Axes.prototype={
 	addAxes:function(){
 		var axesName="axes"+this.id;
 		var d3AxisId="d3Axes"+this.id;
+		console.debug('rf',this);
 		//add to memory
 		project.axes[axesName]=this;
 		//add to screen
@@ -93,7 +109,7 @@ Axes.prototype={
 		project.stage.append("g")                	//add to stage 
         	.attr("class", "axis")
         	.attr("id",d3AxisId)
-            .attr("transform", "translate("+project.getAxisX(this.xPos)+","+project.getAxisY(this.yPos,this.orient)+")")
+            .attr("transform", "translate("+project.getAxisX(this.xPos,this.orient,this.associatedScale.rangeFrom)+","+project.getAxisY(this.yPos,this.orient,this.associatedScale.rangeFrom,this.length)+")")
             .call(this.d3Axes); 
 
 

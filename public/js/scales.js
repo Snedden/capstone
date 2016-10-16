@@ -12,22 +12,44 @@ function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,range
 	this.dataColId=dataColId;
 	this.width=width;
 	this.bandPadding=bandPadding;
-	this.rangeFrom=rangeFrom;
-	this.rangeTo=rangeTo;
+	if(rangeFrom){
+		this.rangeFrom=parseInt(rangeFrom);
+	}
+	//in case of ordinal scales
+	else{
+		this.rangeFrom=0;
+	}
+	if(rangeTo){
+		this.rangeTo=parseInt(rangeTo);	
+	}
+	//in case of ordinal sclaes
+	else{
+		this.rangeTo=0;
+	}
+	
 	console.log("project.datasets."+datasetName+".dataCols."+colName);
 	this.dataCol=project.datasets[datasetName].dataCols[colName];
 	console.log('scale', this);
 	if(this.type==='Linear'){
-		this.domainFrom=d3.min(this.dataCol.data);
-		this.domainTo=d3.max(this.dataCol.data);
-		this.d3Scale=d3.scaleLinear()
-    		.domain([this.domainFrom,this.domainTo])
-    		.range([this.rangeFrom, this.rangeTo]);
-    	
+		this.domainFrom=parseInt(d3.min(this.dataCol.data));
+		this.domainTo=parseInt(d3.max(this.dataCol.data));
+
+		
+		this.d3ScaleLateral=d3.scaleLinear()
+			.domain([this.domainFrom,this.domainTo])
+			.range([this.rangeFrom, this.rangeTo]);
+		
+		//Y axis is inverted in svg
+		this.d3ScaleVertical=d3.scaleLinear()
+			.domain([this.domainFrom,this.domainTo])
+			.range([this.rangeTo,this.rangeFrom]);
+		
 	}
 	else if(this.type==='Ordinal'){
 		this.domainOrdinal=this.dataCol.data;
-		this.d3Scale=d3.scaleBand()
+
+
+		this.d3ScaleLateral=this.d3ScaleVertical=d3.scaleBand()
 				.domain(this.domainOrdinal)
 				.range([0,this.width])
 				.padding(this.bandPadding);
@@ -149,8 +171,14 @@ Scale.prototype={
 		//add to memory
 		project.scales[scaleName]=this;
 		//add to screen
-		var scaleLi="<li class='scales' id=scale"+this.scaleId+">"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'    data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </li> ";
-		$("#scaleUl").append(scaleLi);
+
+		//scale  list in main screen
+		var scaleLiM="<li class='scales' id=scale"+this.scaleId+"Li>"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'    data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </li> ";
+		$("#scaleUl").append(scaleLiM);
+		//scale list in add scale modal
+		var scaleOpA="<option id=scale"+this.scaleId+"Op value="+this.scaleId+">"+this.name+"</option>";
+		$("#axesScale").append(scaleOpA);
+
 		
 		
 		
@@ -165,7 +193,8 @@ Scale.prototype={
 		
 		    var scaleTobeDeleted='scale'+scaleObject.scaleId;
 		    //delete form screen
-		    $("#"+scaleTobeDeleted).remove();
+		    $("#"+scaleTobeDeleted+'Li').remove(); //list item
+		    $("#"+scaleTobeDeleted+'Op').remove(); //add scale option
 		 	//delete from memory
 		    delete project.scales[scaleTobeDeleted];
 		}

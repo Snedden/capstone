@@ -51,7 +51,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	function loadScalesDBToMem(){
 		//make and add Scale object for each entry in pScales i.e server fetch scales
 		for(var i=0;i<pScales.length;i++){
-			console.log("scalei ",i);
+			console.log("scalei ",i,pScales);
 			var scale=new Scale(pScales[i].idScales,pScales[i].pid,pScales[i].scale_name,pScales[i].type,pScales[i].col_Id,pScales[i].width,pScales[i].bandpadding,pScales[i].range_from,pScales[i].range_to)
 			scale.addScale();
 		}
@@ -223,29 +223,39 @@ Project.prototype={
 			//YAxis    
 			this.stage.append("g")
 	        	.attr("class", "axis")
-	        	.attr("transform", "translate("+this.getAxisX(0)+","+this.getAxisY(0,"Left")+")")
+	        	.attr("transform", "translate("+this.getAxisX(0,"Left",0)+","+this.getAxisY(0,"Left",0,this.stageHeight)+")")
 	            .call(stageYAxis); 
 			//XAxis
 			this.stage.append("g")
 	        	.attr("class", "axis")
-	            .attr("transform", "translate("+this.getAxisX(0)+","+this.getAxisY(0,"Bottom")+")")
+	            .attr("transform", "translate("+this.getAxisX(0,"Bottom",0)+","+this.getAxisY(0,"Bottom",0,this.stageWidth)+")")
 	           	.call(stageXAxis);
 
 		},
-		getAxisX:function(axisX){   
-			var stageX=parseInt(axisX)+this.stageMarginLeft;
+		getAxisX:function(axisX,axisOrient,rangeFrom){
+			if(axisOrient==="Left" || axisOrient==="Right"){
+				var stageX=parseInt(axisX)+this.stageMarginLeft;  			//no need to compensate for vertical axis
+			}
+			else if(axisOrient==="Bottom" || axisOrient==="Top"){
+				var stageX=parseInt(axisX)+this.stageMarginLeft-rangeFrom;  //axes is offeset with the rangeFrom by d3 so we compensate here
+			} 
+			else{
+				console.error("invalid axis orient");
+			}  
+			
 			return stageX;
 		},
-		getAxisY:function(axisY,axisOrient){
+		getAxisY:function(axisY,axisOrient,rangeFrom,axisLength){
 			var stageY;
 			//differently oriented axis have different origin point and y start from top in svg
 			if(axisOrient==="Top" || axisOrient==="Bottom"){
-				//console.log(parseInt(axisY),"+",this.stageHeight,"-",this.stageMarginBot);
+				
 				stageY=this.stageHeight-parseInt(axisY)-this.stageMarginBot;
 				return stageY;
 			}
 			else if(axisOrient==="Left" || axisOrient==="Right"){
-				stageY=-(parseInt(axisY)+this.stageMarginBot+(2*this.stageBorder));
+				stageY=this.stageHeight-parseInt(axisY)-axisLength-this.stageMarginBot-rangeFrom;//stage height- Y -scaleLenth(since origin is at topleft not botleft) -rangeFrom to cmpensate for d3s offset
+				//stageY=-(parseInt(axisY)+this.stageMarginBot+(2*this.stageBorder));
 				return stageY;
 			}
 			else{

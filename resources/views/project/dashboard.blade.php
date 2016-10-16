@@ -434,11 +434,11 @@ li {
               <div class="col-sm-10">
                 <select name="axesScale" id="axesScale" required>
                   <option value="">select</option>
-                  @forelse ($project->scales as $scale)
+                <!--   @forelse ($project->scales as $scale)
                     <option value="{{$scale->idScales}}">{{$scale->scale_name}}</option>
                   @empty
                       
-                  @endforelse
+                  @endforelse -->
                 </select>
               </div>
             </div>
