@@ -222,12 +222,12 @@ Project.prototype={
 			///Add to screen
 			//YAxis    
 			this.stage.append("g")
-	        	.attr("class", "axis")
+	        	.attr("class", "axis stageAxis")
 	        	.attr("transform", "translate("+this.getAxisX(0,"Left",0)+","+this.getAxisY(0,"Left",0,this.stageHeight)+")")
 	            .call(stageYAxis); 
 			//XAxis
 			this.stage.append("g")
-	        	.attr("class", "axis")
+	        	.attr("class", "axis stageAxis")
 	            .attr("transform", "translate("+this.getAxisX(0,"Bottom",0)+","+this.getAxisY(0,"Bottom",0,this.stageWidth)+")")
 	           	.call(stageXAxis);
 

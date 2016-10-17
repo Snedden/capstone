@@ -2,8 +2,8 @@
 
 function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,rangeTo){
 	var brokenScaleName=name.split("__"); //pScales[i].name="datasetName_datacolumnName_scale";
-	var datasetName=brokenScaleName[0];
-	var colName=brokenScaleName[1];
+	this.datasetName=brokenScaleName[0];
+	this.colName=brokenScaleName[1];
 
 	this.scaleId=scaleId;
 	this.pid=pid;
@@ -28,8 +28,8 @@ function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,range
 		this.rangeTo=0;
 	}
 	
-	console.log("project.datasets."+datasetName+".dataCols."+colName);
-	this.dataCol=project.datasets[datasetName].dataCols[colName];
+
+	this.dataCol=project.datasets[this.datasetName].dataCols[this.colName];
 	console.log('scale', this);
 	if(this.type==='Linear'){
 		this.domainFrom=parseInt(d3.min(this.dataCol.data));
@@ -126,7 +126,9 @@ function scaleAddCallback(data){
 
 //del scale
 $(document).on('click','.scaleDelBtn',function(e){
-
+	if( ! confirm("Delete scale? Deleting a scale would also delete associated entities") ){
+           return false;
+    }
 	var scaleId=$(this).attr('data-scale-id');
 	var scaleTobeDeleted='scale'+scaleId;
 	project.scales[scaleTobeDeleted].deleteScale();
@@ -174,7 +176,7 @@ Scale.prototype={
 		//add to screen
 
 		//scale  list in main screen
-		var scaleLiM="<li class='scales' id=scale"+this.scaleId+"Li>"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'    data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </li> ";
+		var scaleLiM="<li class='scales' data-scale-id="+this.scaleId+" data-toggle='modal' data-action='update'  data-target='#addScaleModal' data-datasetcol-name="+this.colName+" data-dataset-name="+this.datasetName+".csv   id=scale"+this.scaleId+"Li>"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'     data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </li> ";
 		$("#scaleUl").append(scaleLiM);
 		//scale list in add scale modal
 		var scaleOpA="<option id=scale"+this.scaleId+"Op value="+this.scaleId+">"+this.name+"</option>";

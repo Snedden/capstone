@@ -121,16 +121,13 @@ li {
   display: none;
 }
 
-.axis path {
+.stageAxis path {
   shape-rendering: crispEdges;
   stroke: #000FF0;
 }
 
-.axis line {
 
-}
-
-.axis .minor line {
+.stageAxis .minor line {
   stroke: #777;
   stroke-dasharray: 2,2;
 }
@@ -164,7 +161,7 @@ li {
               <li class='dataset' id="{{$dataset->iddata_sets}}">{{$dataset->name}} <a style="float:right;font-size:9px"href="#" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#datasetModal" data-dataset-name="{{$dataset->name}}" data-project-id="{{$project->pid}}"  data-dataset-id="{{$dataset->iddata_sets}}">edit</a>
                 <ul>
                   @forelse($dataset->columns as $col)
-                    <li data-toggle="modal" data-dataset-name="{{$dataset->name}} "  data-target="#addScaleModal" data-datasetcol-name="{{$col->col_name}}"  id="{{$col->col_Id}}">{{$col->col_name}}</li>
+                    <li data-toggle="modal" data-dataset-name="{{$dataset->name}}"  data-target="#addScaleModal" data-datasetcol-name="{{$col->col_name}}" data-action='add'  id="{{$col->col_Id}}">{{$col->col_name}}</li>
                   @empty
                     <li>No columns found!</li>
                   @endforelse
