@@ -11,8 +11,8 @@ function Axes(id,name,orient,xPos,yPos,scaleId,ticks){
 	console.log('ticks ',this.ticks);
 
 	
-	var associatedScaleName="scale"+scaleId;
-	this.associatedScale=project.scales[associatedScaleName];
+	this.associatedScaleName="scale"+scaleId;
+	this.associatedScale=project.scales[this.associatedScaleName];
 	//assuming domain is the length of the associated scale
 	if(this.associatedScale.type==="Linear"){
 		this.length=this.associatedScale.rangeTo-this.associatedScale.rangeFrom;
@@ -103,6 +103,8 @@ Axes.prototype={
 		console.debug('rf',this);
 		//add to memory
 		project.axes[axesName]=this;
+
+		project.scales[this.associatedScaleName].axes[axesName]={id:this.id};    //add axes to the associated scale    
 		//add to screen
 		var groupLi="<li class='groupItem' id=axes"+this.id+">"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button> </li> ";
 		$("#groupsUl").append(groupLi);  		 	//add to list
@@ -114,7 +116,7 @@ Axes.prototype={
 
 
 	},
-	deleteAxes:function(){
+	deleteAxes:function(baseScaleDeleted){
 		var axesObject=this; 						//cache this as it is a lost in the call back funciton call
 		ajaxCall('post','axes/delete',this.id,'text',axesDelCallback);
 
@@ -127,7 +129,12 @@ Axes.prototype={
 
 
 		 	//delete from memory
-		    delete project.axes[axesTobeDeleted];
+		    delete project.axes[axesTobeDeleted];                              //delete axes object
+		   	//if not deleting after deleting project.scales[axesObject.associatedScaleName] object
+		    if(!baseScaleDeleted){
+		    	delete project.scales[axesObject.associatedScaleName].axes[axesTobeDeleted]; //delete in the axes in associated scale
+		    }
+		    
 		}
 	}
 }

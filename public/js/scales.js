@@ -12,6 +12,7 @@ function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,range
 	this.dataColId=dataColId;
 	this.width=width;
 	this.bandPadding=bandPadding;
+	this.axes={};
 	if(rangeFrom){
 		this.rangeFrom=parseInt(rangeFrom);
 	}
@@ -187,6 +188,7 @@ Scale.prototype={
 	deleteScale:function(){
 	
 		var scaleObject=this; //cache this as it is a lost in the call back funciton call
+		var axisId,axisToBeDeleted;
 		ajaxCall('post','scale/delete',this.scaleId,'text',scaleDelCallback);
 
 		function scaleDelCallback(data){
@@ -196,7 +198,17 @@ Scale.prototype={
 		    $("#"+scaleTobeDeleted+'Li').remove(); //list item
 		    $("#"+scaleTobeDeleted+'Op').remove(); //add scale option
 		 	//delete from memory
+
+		 	//delte all associate axis
+		 	for(var key in project.scales[scaleTobeDeleted].axes){
+     			axisId=project.scales[scaleTobeDeleted].axes[key].id;
+     			axisToBeDeleted="axes"+axisId;
+     			project.axes[axisToBeDeleted].deleteAxes(true);
+			}
+		 	//delete scale object
 		    delete project.scales[scaleTobeDeleted];
+
+		    //delet
 		}
 	}
 }

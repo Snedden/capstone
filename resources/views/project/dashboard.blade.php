@@ -121,6 +121,20 @@ li {
   display: none;
 }
 
+.axis path {
+  shape-rendering: crispEdges;
+  stroke: #000FF0;
+}
+
+.axis line {
+
+}
+
+.axis .minor line {
+  stroke: #777;
+  stroke-dasharray: 2,2;
+}
+
 
 
 </style>
