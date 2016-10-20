@@ -189,6 +189,16 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 
 }
 
+
+//takes range input 0 to 100 and converts to 0 to 1 output and populates an  outputID ele
+function setOutput(rangeInput,outputID){
+	var rangeInputEle=$(rangeInput);
+	var rangeOutputEle=$("#"+outputID);
+	var outputRange=((parseInt(rangeInputEle.val())*0.01)).toFixed(2);
+	rangeOutputEle.val(outputRange);
+}
+
+
 Project.prototype={
 		constructor:Project,
 		addDataSet:function(ds){

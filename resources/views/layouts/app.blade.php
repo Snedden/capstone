@@ -99,6 +99,7 @@
     <script src="{{asset('js/d3.min.js')}}"></script>
     <script src="{{asset('js/axes.js')}}"></script>
     <script src="{{asset('js/scales.js')}}"></script>
+    <script src="{{asset('js/rectangle.js')}}"></script>
     <script src="{{asset('js/project.js')}}"></script>
     <script src="{{asset('js/dataset.js')}}"></script>
     

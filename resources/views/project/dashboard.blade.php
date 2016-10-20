@@ -132,6 +132,10 @@ li {
   stroke-dasharray: 2,2;
 }
 
+.form-horizontal .control-label {
+  padding-top: 0;
+}
+
 
 
 </style>
@@ -198,7 +202,7 @@ li {
          <div class='funcGroup'>
            <h5><b>Add</b></h5>
            <button data-toggle="modal" data-target="#addAxesModal">Axes</button>
-           <button disabled="true">Rect</button>
+           <button data-toggle="modal" data-target="#addRectModal">Rect</button>
            <button disabled="true">Circle</button>
            <button disabled="true">Pie</button>
            <button disabled="true">Text</button>
@@ -392,7 +396,7 @@ li {
             <div class="form-group ordinalScaleInput">
               <label class="control-label col-sm-2" for="scaleBandPaddingOrdinal">Band Padding:</label>
               <div class="col-xs-3">
-                <input  class="form-control col-xs-3 " value=10  type="range" oninput="setOutputBandpadding(this)" min=0 max=100 required id="scaleBandPaddingOrdinal" placeholder="scaleWidth"   />
+                <input  class="form-control col-xs-3 " value=10  type="range" oninput="setOutput(this,'scaleBandPaddingOrdinalOutput')" min=0 max=100 required id="scaleBandPaddingOrdinal" placeholder="scaleWidth"   />
               </div>  
               <div class="col-xs-3">
                 <input type="text" class="form-control " id="scaleBandPaddingOrdinalOutput" disabled="true" value="">
@@ -445,11 +449,7 @@ li {
               <div class="col-sm-10">
                 <select name="axesScale" id="axesScale" required>
                   <option value="">select</option>
-                <!--   @forelse ($project->scales as $scale)
-                    <option value="{{$scale->idScales}}">{{$scale->scale_name}}</option>
-                  @empty
-                      
-                  @endforelse -->
+                <!--  populated in addscale prototype -->
                 </select>
               </div>
             </div>
@@ -499,6 +499,145 @@ li {
     </div>
   </div>
   <!-- Axes Modal End -->
+
+   <!-- Rect Modal    -->
+  <div class="modal fade" id="addRectModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id='datasetName'>Add Rect</h4>
+        </div>
+        <form  id="rectForm" method="POST" action="" accept-charset="UTF-8" class="form-horizontal">
+          <div class="modal-body">
+           
+            <input type="hidden" name="_token" value="{{csrf_token()}}"> 
+            
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="rectName" >Name:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" required name="rectName" placeholder="Rectangle Name"  id="rectName"  />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="rectDataset">Dataset:</label>
+              <div class="col-sm-10">
+                <select name="rectDataset" id="rectDataset">
+                  <option value="">select</option>
+                  @forelse ($project->datasets as $dataset)
+                     @forelse($dataset->columns as $col)
+                      <option value="{{$col->col_Id}}">{{$col->col_name}}</option>
+                     @empty
+                     @endforelse
+                  @empty
+                  @endforelse   
+
+                  
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="rectHeight">Height:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="rectHeight" placeholder="" id="rectHeight"  />
+              </div>
+              <label class="control-label col-sm-3" for="rectHeightAxis">Height Axis:</label>
+               <div class="col-sm-3">
+                <select name="rectHeightAxis" id="rectHeightAxis" required>
+                  <option value="-1">select</option> <!-- -1 means not axis associated -->
+                </select>
+              </div>
+            </div>
+
+             <div class="form-group">
+              <label class="control-label col-sm-2" for="rectWidth">Width:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="rectWidth" placeholder="" id="rectWidth"  />
+              </div>
+              <label class="control-label col-sm-3" for="rectWidthAxis">Height Axis:</label>
+               <div class="col-sm-3">
+                <select name="rectWidthAxis" id="rectWidthAxis" required>
+                  <option value="-1">select</option> <!-- -1 means not axis associated -->
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="rectX">X:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="rectX" placeholder="" id="rectX"  />
+              </div>
+              <label class="control-label col-sm-3" for="rectXAxis">X Axis:</label>
+               <div class="col-sm-3">
+                <select name="rectXAxis" id="rectXAxis" required>
+                  <option value="-1">select</option> <!-- -1 means not axis associated -->
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="rectY">Y:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="rectY" placeholder="" id="rectY"  />
+              </div>
+              <label class="control-label col-sm-3" for="rectYAxis">Y Axis:</label>
+               <div class="col-sm-3">
+                <select name="rectYAxis" id="rectYAxis" required>
+                  <option value="-1">select</option> <!-- -1 means not axis associated -->
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="rectXOffset">Offset X:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" value=0 required type="number" placeholder="Offset to X" min=1 max=30 name="rectXOffset"  id="rectXOffset"  />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="rectYOffset">Offset Y:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" required type="number" value=0 placeholder="Offset to Y" min=1 max=30 name="rectYOffset"  id="rectYOffset"  />
+              </div>
+            </div>
+
+             <div class="form-group">
+              <label class="control-label col-sm-2" for="rectColor">Color</label>
+              <div class="col-sm-2">
+                <input  class="form-control" required type="color" placeholder="Color" min=1 max=30 name="rectColor"  id="rectYOffset"  />
+              </div>
+            </div>
+
+            <div class="form-group ">
+              <label class="control-label col-sm-2" for="rectOpacityOutput">Opacity:</label>
+              <div class="col-xs-3">
+                <input  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'rectOpacityOutput')" min=0 max=100 required id="rectOpacityInput" placeholder="Opacity"   />
+              </div>  
+              <div class="col-xs-3">
+                <input type="text" class="form-control " id="rectOpacityOutput" disabled="true" value="1">
+              </div>
+            </div>
+
+
+
+          </div>  
+          <span style="color:red" id="ajaxFeedback"><span>   
+          <div class="modal-footer">
+            <button type="submit" id="addAxesBtn" class="btn btn-default"  >Add</button>
+            <button type="button"  class="btn btn-default"  data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+ 
+    </div>
+  </div>
+  <!-- Rect Modal End -->
 
 </div>
 
