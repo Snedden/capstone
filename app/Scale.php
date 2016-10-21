@@ -24,7 +24,7 @@ class Scale extends Model
      *
      * @var array
      */
-     public function project()
+    public function project()
     {
         return $this->belongsTo('App\Project','pid');//belongsTo(model,foreignkey)
     }
@@ -37,6 +37,16 @@ class Scale extends Model
      public function column()
     {
         return $this->hasOne('App\DataSetColumn','pid');//belongsTo(model,foreignkey)
+    }
+
+        /**
+     * a scale has many axis
+     *
+     * @var array
+     */
+    public function axis()
+    {
+        return $this->hasMany('App\Axes','idScales', 'idScales');
     }
     
 }

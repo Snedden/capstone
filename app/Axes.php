@@ -11,18 +11,18 @@ class Axes extends Model
     protected $primaryKey='idaxes';
 
         protected $fillable = [
-        'name','orient','X_pos','Y_pos','Stroke','Thickness','idEntities'
+        'name','orient','X_pos','Y_pos','Stroke','Thickness','idScales'
       
     ]; 
 
      /**
-     * a Axes belongs to a entity
+     * a Axes belongs to a scale
      *
      * @var array
      */
-     public function baseEntity()
+     public function scale()
     {
-        return $this->belongsTo('App\Entitie','idEntities');//belongsTo(model,foreignkey)
+        return $this->belongsTo('App\scale','idScales');//belongsTo(model,foreignkey)
     }
 
 

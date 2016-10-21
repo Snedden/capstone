@@ -26,6 +26,8 @@
   margin: 0;
 }
 
+
+
 .usersUL li a {
  
   margin-top: -1px; /* Prevent double borders */
@@ -134,6 +136,10 @@ li {
 
 .form-horizontal .control-label {
   padding-top: 0;
+}
+
+.rectSelect{
+  display: none;
 }
 
 
@@ -527,12 +533,9 @@ li {
               <label class="control-label col-sm-2" for="rectDataset">Dataset:</label>
               <div class="col-sm-10">
                 <select name="rectDataset" id="rectDataset">
-                  <option value="">select</option>
+                  <option value="">No dataset</option>
                   @forelse ($project->datasets as $dataset)
-                     @forelse($dataset->columns as $col)
-                      <option value="{{$col->col_Id}}">{{$col->col_name}}</option>
-                     @empty
-                     @endforelse
+                    <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
                   @empty
                   @endforelse   
 
@@ -546,22 +549,22 @@ li {
               <div class="col-sm-2">
                 <input  class="form-control" type="number"  required name="rectHeight" placeholder="" id="rectHeight"  />
               </div>
-              <label class="control-label col-sm-3" for="rectHeightAxis">Height Axis:</label>
-               <div class="col-sm-3">
-                <select name="rectHeightAxis" id="rectHeightAxis" required>
+              <label class="control-label col-sm-3 rectSelect" for="rectHeightAxis">Height Axis:</label>
+               <div class="col-sm-3 rectSelect">
+                <select name="rectHeightAxis" class="rectAxisSelect" id="rectHeightAxis" required>
                   <option value="-1">select</option> <!-- -1 means not axis associated -->
                 </select>
               </div>
             </div>
 
              <div class="form-group">
-              <label class="control-label col-sm-2" for="rectWidth">Width:</label>
+              <label class="control-label col-sm-2 " for="rectWidth">Width:</label>
               <div class="col-sm-2">
                 <input  class="form-control" type="number"  required name="rectWidth" placeholder="" id="rectWidth"  />
               </div>
-              <label class="control-label col-sm-3" for="rectWidthAxis">Height Axis:</label>
-               <div class="col-sm-3">
-                <select name="rectWidthAxis" id="rectWidthAxis" required>
+              <label class="control-label col-sm-3 rectSelect" for="rectWidthAxis">Height Axis:</label>
+               <div class="col-sm-3 rectSelect">
+                <select name="rectWidthAxis" class="rectAxisSelect" id="rectWidthAxis" required>
                   <option value="-1">select</option> <!-- -1 means not axis associated -->
                 </select>
               </div>
@@ -572,22 +575,22 @@ li {
               <div class="col-sm-2">
                 <input  class="form-control" type="number"  required name="rectX" placeholder="" id="rectX"  />
               </div>
-              <label class="control-label col-sm-3" for="rectXAxis">X Axis:</label>
-               <div class="col-sm-3">
-                <select name="rectXAxis" id="rectXAxis" required>
+              <label class="control-label col-sm-3 rectSelect" for="rectXAxis">X Axis:</label>
+               <div class="col-sm-3 rectSelect">
+                <select name="rectXAxis" class="rectAxisSelect" id="rectXAxis" required>
                   <option value="-1">select</option> <!-- -1 means not axis associated -->
                 </select>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="control-label col-sm-2" for="rectY">Y:</label>
+              <label class="control-label col-sm-2 " for="rectY">Y:</label>
               <div class="col-sm-2">
                 <input  class="form-control" type="number"  required name="rectY" placeholder="" id="rectY"  />
               </div>
-              <label class="control-label col-sm-3" for="rectYAxis">Y Axis:</label>
-               <div class="col-sm-3">
-                <select name="rectYAxis" id="rectYAxis" required>
+              <label class="control-label col-sm-3 rectSelect" for="rectYAxis">Y Axis:</label>
+               <div class="col-sm-3 rectSelect">
+                <select name="rectYAxis" id="rectYAxis" class="rectAxisSelect" required>
                   <option value="-1">select</option> <!-- -1 means not axis associated -->
                 </select>
               </div>
