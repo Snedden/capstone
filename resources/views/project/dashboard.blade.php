@@ -115,8 +115,10 @@ ul {
 
 
 
-li {
+.groupItem  {
   cursor:pointer;
+  display:inline-block;
+  width:75%;
 }
 
 .dataset li{
@@ -185,13 +187,7 @@ li {
          <div class='funcGroup'>
           <h5><b>scales</b></h5>
           <ul id="scaleUl">
-        <!--     @forelse($project->scales as $scale)
-              <li class='scales' id="scale{{$scale->idScales }}">
-                {{$scale->scale_name}}
-                <button style="float:right;font-size:9px"  class="btn btn-xs btn-primary scaleDelBtn"    data-scale-id="{{$scale->idScales}}" data-scale-name="{{$scale->scale_name}}">Delete</button>
-              </li>
-            @empty
-            @endforelse -->
+      
           </ul>  
         </div>
     </div>
@@ -520,7 +516,7 @@ li {
           <div class="modal-body">
            
             <input type="hidden" name="_token" value="{{csrf_token()}}"> 
-            
+            <input type="hidden"  id="rectId" >  
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="rectName" >Name:</label>
@@ -599,21 +595,21 @@ li {
             <div class="form-group">
               <label class="control-label col-sm-2" for="rectXOffset">Offset X:</label>
               <div class="col-sm-10">
-                <input  class="form-control" value=0 required type="number" placeholder="Offset to X" min=1 max=30 name="rectXOffset"  id="rectXOffset"  />
+                <input  class="form-control" value=0 required type="number" placeholder="Offset to X"  name="rectXOffset"  id="rectXOffset"  />
               </div>
             </div>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="rectYOffset">Offset Y:</label>
               <div class="col-sm-10">
-                <input  class="form-control" required type="number" value=0 placeholder="Offset to Y" min=1 max=30 name="rectYOffset"  id="rectYOffset"  />
+                <input  class="form-control" required type="number" value=0 placeholder="Offset to Y" name="rectYOffset"  id="rectYOffset"  />
               </div>
             </div>
 
              <div class="form-group">
               <label class="control-label col-sm-2" for="rectColor">Color</label>
               <div class="col-sm-2">
-                <input  class="form-control" required type="color" placeholder="Color" min=1 max=30 name="rectColor"  id="rectColor"  />
+                <input  class="form-control" required type="color" placeholder="Color"  name="rectColor"  id="rectColor"  />
               </div>
             </div>
 

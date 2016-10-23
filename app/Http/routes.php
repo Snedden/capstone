@@ -41,6 +41,7 @@ Route::post('axes/delete','axesController@delete')->middleware('auth');
 
 Route::post('rect/create','rectController@create')->middleware('auth');
 Route::post('rect/delete','rectController@delete')->middleware('auth');
+Route::post('rect/update/{id}','rectController@update')->middleware('auth');
 
 Route::get('/home', 'HomeController@index')->middleware('auth');
 Route::get('/', 'HomeController@index')->middleware('auth');

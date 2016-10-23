@@ -263,7 +263,7 @@ Scale.prototype={
 		//add to screen
 
 		//scale  list in main screen
-		var scaleLiM="<li class='scales' data-scale-id="+this.scaleId+" data-toggle='modal' data-action='update'  data-target='#addScaleModal' data-datasetcol-name="+this.colName+" data-dataset-name="+this.datasetName+".csv   id=scale"+this.scaleId+"Li>"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'     data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </li> ";
+		var scaleLiM="<div id=scale"+this.scaleId+"Li><li class='scales groupItem' data-scale-id="+this.scaleId+" data-toggle='modal' data-action='update'  data-target='#addScaleModal' data-datasetcol-name="+this.colName+" data-dataset-name="+this.datasetName+".csv   >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'     data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </div> ";
 		$("#scaleUl").append(scaleLiM);
 		//scale list in add scale modal
 		var scaleOpA="<option id=scale"+this.scaleId+"Op value="+this.scaleId+">"+this.name+"</option>";

@@ -1,15 +1,18 @@
-function Rectangle(name,width,height,xPos,yPos,color,opacity,id){
+function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY){
 	
 	this.id=id;	
 	this.name=name;
 	this.width=width;
 	this.height=height;
 	this.xPos=xPos;
+	this.offsetX=offsetX;
 	this.yPos=yPos;
+	this.offsetY=offsetY
 	this.color=color;
 	this.opacity=opacity;
 	this.originX=0;     //origin is in percent; (0 ,0) is deafault; (100,0) shift X 100 percent of width (50,50) center the origin and so on..
 	this.originY=100;   //origin is in percent 
+	this.axes={}		//related axes
 
 	
 }
@@ -27,9 +30,10 @@ Rectangle.prototype={
 
 		//add to memory
 		project.rect[rectName]=this;
+		project.rectNum++;
 
 		//add to screen
-		groupLi="<li class='groupItem' id=rect"+this.id+">"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button> </li> ";
+		groupLi="<div id=rect"+this.id+"><li data-toggle='modal' data-target='#addRectModal' class='groupItem' data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button>  </div>";
 		$("#groupsUl").append(groupLi);  		 	//add to list
 		//////////add to stage 
 		project.stage.append("g")                	
@@ -67,6 +71,39 @@ Rectangle.prototype={
 		  	
 		    
 		}
+	},
+	updateRect:function(){
+		//console.log("rect ",data);
+		var groupLi;  //list item in group list
+		var originXShift=this.width*(this.originX/100);
+		var originYShift=this.height*(this.originY/100);
+		var d3RectId="d3Rect"+this.id;
+		var rectName="rect"+this.id;
+		
+
+		//update to memory
+		project.rect[rectName]=this;
+		
+		//update to screen
+		groupLi="<li data-toggle='modal' data-target='#addRectModal' class='groupItem' data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button> ";
+		$("#rect"+this.id).html(groupLi);  		 	//update  list item
+		//////////add to stage 
+
+		
+
+		//update attributes
+		d3.select("#"+d3RectId)
+			.html("")  //remove previous rect
+			 	.append("rect") //add new rect
+				.attr("width", this.width)
+				.attr("height", this.height)
+				.attr("fill",this.color)
+				.attr("fill-opacity",this.opacity);
+		//tranform to ORIGIN 	first
+		d3.select("#"+d3RectId)
+			.attr("transform", "translate("+(project.getStageX(this.xPos)-originXShift)+","+(project.getStageY(this.yPos)-originYShift)+")");
+
+						
 	}
 
 }
@@ -89,7 +126,7 @@ function setOutputOpacity(rangeInput){
 //add rect btn clicked
 $("#addRectBtn").click(function(){
 	var rectData={
-		name:'rectangle',
+		name:'rectangle'+(project.rectNum+1),
 		width:150,
 		height:100,
 		xPos:500,
@@ -97,13 +134,14 @@ $("#addRectBtn").click(function(){
 		xOffset:0,
 		yOffset:0,
 		color:'#D3D3D3',
-		opacity:0.9,
+		opacity:100,
 		pid:project.pid
 	};
 	ajaxCall('post','rect/create',rectData,'json',addRectCallback);
 
 	function addRectCallback(data){
-		var rect=new Rectangle(data.name,data.width,data.height,data.xPos,data.yPos,data.color,data.opacity,data.id);
+		console.debug('opacity ',data.opacity);
+		var rect=new Rectangle(data.name,data.width,data.height,data.xPos,data.yPos,data.color,data.opacity,data.id,data.offsetX,data.offsetY);
 		rect.addRect();	
 	}
 });
@@ -124,6 +162,8 @@ $(document).on('click','.rectDelBtn',function(e){
 $("#rectForm").submit(function(e){
 	e.preventDefault();
 	e.stopImmediatePropagation();
+	var rectId=$("#rectId").val();
+
 	var rectData={
 		name:$("#rectName").val(),
 		width:$("#rectWidth").val(),
@@ -137,23 +177,40 @@ $("#rectForm").submit(function(e){
 		xOffset:$("#rectXOffset").val(),
 		yOffset:$("#rectYOffset").val(),
 		color:$("#rectColor").val(),
-		opacity:$("#rectOpacityOutput").val(),
+		opacity:$("#rectOpacityInput").val(),
 		pid:project.pid
 	};
 
-	ajaxCall('post','rect/create',rectData,'json',updateRectCallback);
-	//console.debug("rectData ", rectData);
+	ajaxCall('post','rect/update/'+rectId,rectData,'json',updateRectCallback);
+	$("#addRectModal").modal('hide');//close modal dialog
+	
 });
 
 function updateRectCallback(data){
-	console.log("rect ",data);
-
+	//console.log("rect ",data);
+	var updatedRect=new Rectangle(data.name,data.width,data.height,data.xPos,data.yPos,data.color,data.opacity,data.id,data.offsetX,data.offsetY);
+	updatedRect.updateRect();
 
 }
 ///////////////////modal events
 //add rect modle open
 $('#addRectModal').on('show.bs.modal', function(e) {
-	console.log('rect');
+	var rectId = $(e.relatedTarget).data('rectid');
+	var rectName='rect'+rectId;
+	var rectObj=project.rect[rectName];
+	$("#rectId").val(rectId);           					//to be referenced in update clicked
+
+	console.log('rect', rectObj);
+
+	//populate the textbox
+    $(e.currentTarget).find('#rectName').val(rectObj.name);
+    $(e.currentTarget).find('#rectHeight').val(rectObj.height);
+    $(e.currentTarget).find('#rectWidth').val(rectObj.width);
+    $(e.currentTarget).find('#rectX').val(rectObj.xPos);
+    $(e.currentTarget).find('#rectY').val(rectObj.yPos);
+    $(e.currentTarget).find('#rectColor').val(rectObj.color);
+    $(e.currentTarget).find('#rectOpacityInput').val(rectObj.opacity);
+    $(e.currentTarget).find('#rectOpacityOutput').val(rectObj.opacity);
 });
 /////////////////change events
 //rectAxis select is changed

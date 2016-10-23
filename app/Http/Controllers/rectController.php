@@ -44,16 +44,39 @@ class rectController extends Controller
 	   	}
 
 
-   }
+   	}
 
-    /**
-    *delete the rect from storage
-    */
-    public function delete(){
-    	return $_POST;
-        $rectId=$_POST['data'];
-        Rect::destroy($axesId);
-        return 'deleted';
-    }
+   	/*
+   	*update and rectangle with id $id
+   	*/
+   	public function update($id){
+   		$rectData=$_POST['data'];
+
+   		$rect=Rectangle::findOrFail($id);
+   		$rect->rect_name=$rectData['name'];
+   		$rect->Opacity=$rectData['opacity'];
+   		$rect->color=$rectData['color'];
+   		$rect->pid=$rectData['pid'];
+   		$rect->X_pos=$rectData['xPos'];
+   		$rect->Offset_X=$rectData['xOffset'];
+   		$rect->Y_pos=$rectData['yPos'];
+   		$rect->Offset_Y=$rectData['yOffset'];
+   		$rect->Height=$rectData['height'];
+   		$rect->Width=$rectData['width'];
+
+   		$rect->save();
+   		$rectData['id']=$rect->idRectangle; //add the id of just inserted row
+   		return $rectData;
+   	}
+
+	/**
+	*delete the rect from storage
+	*/
+	public function delete(){
+
+	    $rectId=$_POST['data'];
+	    Rectangle::destroy($rectId);
+	    return 'deleted';
+	}
    		
 }

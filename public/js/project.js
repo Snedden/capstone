@@ -17,6 +17,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
 	this.scales={};
 	this.axes={};
 	this.rect={};
+	this.rectNum=0;
 	//set in setStageScales
 	this.stage;
 	this.stageXScale;

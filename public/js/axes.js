@@ -106,7 +106,7 @@ Axes.prototype={
 
 		project.scales[this.associatedScaleName].axes[axesName]={id:this.id};    //add axes to the associated scale    
 		//add to screen
-		var groupLi="<li class='groupItem' id=axes"+this.id+">"+this.name+"<button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button> </li> ";
+		var groupLi="<li class='groupItem' id=axes"+this.id+">"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button>  ";
 		$("#groupsUl").append(groupLi);  		 	//add to list
 		project.stage.append("g")                	//add to stage 
         	.attr("class", "axis")
