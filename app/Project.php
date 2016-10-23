@@ -77,4 +77,14 @@ class Project extends Model
     {
         return $this->hasMany('App\Axes','pid','pid');//hasMany('model',foreingnkey,localkey)
     } 
+
+    /**
+     * A Project has many rect
+     *
+     * @var array
+     */
+     public function rects()
+    {
+        return $this->hasMany('App\Rectangle','pid','pid');//hasMany('model',foreingnkey,localkey)
+    } 
 }

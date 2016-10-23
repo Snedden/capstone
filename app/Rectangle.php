@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rectangle extends Model
 {
-    //
+    protected $table = 'Rectangle';
+    protected $primaryKey='idRectangle';
      /**
      * The attributes that are mass assignable.
      *
@@ -28,6 +29,14 @@ class Rectangle extends Model
     }
 
  
-    protected $table = 'Rectangle';
-    protected $primary_key='idRectangle';
+   
+     /**
+     * a rect belongs to a scale
+     *
+     * @var array
+     */
+     public function project()
+    {
+        return $this->belongsTo('App\Project','pid');//belongsTo(model,foreignkey)
+    }
 }

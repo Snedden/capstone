@@ -9,10 +9,10 @@
       var svrDataSets=<?php echo json_encode($project->datasets); ?>;
       var svrScales=<?php echo json_encode($project->scales); ?>;
       var svrAxes=<?php echo json_encode($project->axes); ?>;
-      
+      var svrRects=<?php echo json_encode($project->rects) ?>;
      
-      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales,svrAxes); //global object
-      console.log('project ',project)
+      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales,svrAxes,svrRects); //global object
+      
 
     }
    
@@ -208,7 +208,7 @@ li {
          <div class='funcGroup'>
            <h5><b>Add</b></h5>
            <button data-toggle="modal" data-target="#addAxesModal">Axes</button>
-           <button data-toggle="modal" data-target="#addRectModal">Rect</button>
+           <button id="addRectBtn">Rect</button>
            <button disabled="true">Circle</button>
            <button disabled="true">Pie</button>
            <button disabled="true">Text</button>
@@ -551,8 +551,8 @@ li {
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectHeightAxis">Height Axis:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectHeightAxis" class="rectAxisSelect" id="rectHeightAxis" required>
-                  <option value="-1">select</option> <!-- -1 means not axis associated -->
+                <select name="rectHeightAxis" class="rectAxisSelect" data-assinputid="rectHeight" id="rectHeightAxis" >
+                   <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
             </div>
@@ -564,8 +564,8 @@ li {
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectWidthAxis">Height Axis:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectWidthAxis" class="rectAxisSelect" id="rectWidthAxis" required>
-                  <option value="-1">select</option> <!-- -1 means not axis associated -->
+                <select name="rectWidthAxis" class="rectAxisSelect" data-assinputid="rectWidth" id="rectWidthAxis" >
+                   <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
             </div>
@@ -577,8 +577,8 @@ li {
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectXAxis">X Axis:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectXAxis" class="rectAxisSelect" id="rectXAxis" required>
-                  <option value="-1">select</option> <!-- -1 means not axis associated -->
+                <select name="rectXAxis" class="rectAxisSelect" id="rectXAxis" data-assinputid="rectX" >
+                   <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
             </div>
@@ -590,8 +590,8 @@ li {
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectYAxis">Y Axis:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectYAxis" id="rectYAxis" class="rectAxisSelect" required>
-                  <option value="-1">select</option> <!-- -1 means not axis associated -->
+                <select name="rectYAxis" id="rectYAxis" class="rectAxisSelect" data-assinputid="rectY" >
+                   <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
             </div>
@@ -613,7 +613,7 @@ li {
              <div class="form-group">
               <label class="control-label col-sm-2" for="rectColor">Color</label>
               <div class="col-sm-2">
-                <input  class="form-control" required type="color" placeholder="Color" min=1 max=30 name="rectColor"  id="rectYOffset"  />
+                <input  class="form-control" required type="color" placeholder="Color" min=1 max=30 name="rectColor"  id="rectColor"  />
               </div>
             </div>
 
@@ -632,7 +632,7 @@ li {
           </div>  
           <span style="color:red" id="ajaxFeedback"><span>   
           <div class="modal-footer">
-            <button type="submit" id="addAxesBtn" class="btn btn-default"  >Add</button>
+            <button type="submit" id="updateRectBtn" class="btn btn-default"  >Update</button>
             <button type="button"  class="btn btn-default"  data-dismiss="modal">Close</button>
           </div>
         </form>

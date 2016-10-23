@@ -1,4 +1,4 @@
-function Project(pid,puid,pname,pdataSets,pScales,pAxes){
+function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
 	this.stageMarginLeft=30;
 	this.stageMarginBot=30;
 	this.stageWidth=$("#stageDiv").width();
@@ -16,6 +16,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	this.dataCols=[];
 	this.scales={};
 	this.axes={};
+	this.rect={};
 	//set in setStageScales
 	this.stage;
 	this.stageXScale;
@@ -23,15 +24,22 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	this.setStageScales(); //set scales and axis of the stage;
 
 
+	this.getStageX=function(xPos){
+		
+		return Math.round(this.stageXScale(xPos)+this.stageMarginLeft);
+	};
+	this.getStageY=function(yPos){
+		return Math.round(this.stageYScale(yPos)-this.stageMarginBot);
+	};
 	//wait till all data sets are loaded through d3.csv
 	this.evt = new CustomEvent('allDataSetsLoaded');
-
+    
     // On mouse move track position with respect to stage scale
     this.stage.on("mousemove", function() {
       var coords = d3.mouse(this);
-       $("#infoStageX").html(Math.round(self.stageXScale(coords[0])-self.stageMarginLeft)); //invert doesn't make a diff here as range and domain are the same
-      $("#infoStageY").html(Math.round(self.stageYScale(coords[1])-self.stageMarginBot));	//invert doesn't make a diff here as range and domain are the same
-      //console.log("X:",(stageXScale.invert(coords[0]))-(paddingLeft),"Y:",(stageYScale.invert(coords[1]))-(paddingBot));
+      $("#infoStageX").html(self.getStageX(coords[0])-2*(self.stageMarginLeft)); //invert doesn't make a diff here as range and domain are the same
+      $("#infoStageY").html(self.getStageY(coords[1]));	//invert doesn't make a diff here as range and domain are the same
+      //console.log("X:",(self.stageXScale(coords[0])),"Y:",(self.stageYScale.invert(coords[1])));
      /* $("#infoStageX").html(Math.round((self.stageXScale.invert(coords[0]))-(self.stageMarginLeft))); //invert doesn't make a diff here as range and domain are the same
       $("#infoStageY").html(Math.round((self.stageYScale.invert(coords[1]))-(self.stageMarginBot)));	//invert doesn't make a diff here as range and domain are the same*/
      }); 
@@ -61,12 +69,25 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	*@desc:Loads pAxes object which is fetched form the DB to the client side of the project
 	*/
 	function loadAxesDBToMem(){
-		console.log('pAxes ',pAxes);
+		//console.log('pAxes ',pAxes);
 		for(var i=0;i<pAxes.length;i++){
 
 			var axes=new Axes(pAxes[i].idaxes,pAxes[i].name,pAxes[i].orient,pAxes[i].X_pos,pAxes[i].Y_pos,pAxes[i].idScales,pAxes[i].ticks);
-			console.log("i",i,"axes ",axes);
+			//console.log("i",i,"axes ",axes);
 			axes.addAxes();
+		}
+	}
+
+	/**
+	*@desc:Loads rect object which are fetched form the DB to the client side of the project
+	*/
+	function loadRectsDBToMem(){
+		console.log('pRects ',pRects);
+		for(var i=0;i<pRects.length;i++){
+
+			var rect=new Rectangle(pRects[i].rect_name,pRects[i].Width,pRects[i].Height,pRects[i].X_pos,pRects[i].Y_pos,pRects[i].Color,pRects[i].Opacity,pRects[i].idRectangle);
+			//console.log("i",i,"axes ",axes);
+			rect.addRect();
 		}
 	}
 
@@ -85,7 +106,8 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes){
 	////data loaded event
 	window.addEventListener('allDataSetsLoaded', function (e) {
 		loadScalesDBToMem(); //load scales data
-		loadAxesDBToMem();
+		loadAxesDBToMem();//load axes
+		loadRectsDBToMem();//load rect
 	});
 
 

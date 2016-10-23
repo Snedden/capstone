@@ -56,7 +56,7 @@ $("#axesForm").submit(function(e){
 	e.stopImmediatePropagation();
 	var axesData={
 		name:$("#axesName").val(),
-		scale:$("#axesScale").val(),
+		dataset:$("#rectDataset").val(),
 		orient:$("#axesOrient").val(),
 		xPos:$("#axesX").val(),
 		yPos:$("#axesY").val(),
@@ -69,11 +69,11 @@ $("#axesForm").submit(function(e){
 });
 
 function axesAddCallback(data){
-	console.log("axes callback ",data);
-		if(data.type==="error"){
-			$("#ajaxFeedback").html(data.message);
+	//console.log("axes callback ",data);
+	if(data.type==="error"){
+		$("#ajaxFeedback").html(data.message);
 
-		}
+	}
 	
 	$("#ajaxFeedback").html(data.message);
 	//add axes
