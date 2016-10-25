@@ -1,4 +1,4 @@
-function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY){
+function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,id_dataset){
 	
 	this.id=id;	
 	this.name=name;
@@ -13,7 +13,7 @@ function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY)
 	this.originX=0;     //origin is in percent; (0 ,0) is deafault; (100,0) shift X 100 percent of width (50,50) center the origin and so on..
 	this.originY=100;   //origin is in percent 
 	this.axes={}		//related axes
-
+	this.id_dataset=id_dataset;
 	
 }
 
@@ -89,20 +89,25 @@ Rectangle.prototype={
 		$("#rect"+this.id).html(groupLi);  		 	//update  list item
 		//////////add to stage 
 
+		//temporary ,need to change later
+		if(this.id_dataset){
+			//don't do anything
+		}
+		else{
+			//update attributes
+			d3.select("#"+d3RectId)
+				.html("")  //remove previous rect
+				 	.append("rect") //add new rect
+					.attr("width", this.width)
+					.attr("height", this.height)
+					.attr("fill",this.color)
+					.attr("fill-opacity",this.opacity);
+			//tranform to ORIGIN 	first
+			d3.select("#"+d3RectId)
+				.attr("transform", "translate("+(project.getStageX(this.xPos)-originXShift)+","+(project.getStageY(this.yPos)-originYShift)+")");
+
+		}
 		
-
-		//update attributes
-		d3.select("#"+d3RectId)
-			.html("")  //remove previous rect
-			 	.append("rect") //add new rect
-				.attr("width", this.width)
-				.attr("height", this.height)
-				.attr("fill",this.color)
-				.attr("fill-opacity",this.opacity);
-		//tranform to ORIGIN 	first
-		d3.select("#"+d3RectId)
-			.attr("transform", "translate("+(project.getStageX(this.xPos)-originXShift)+","+(project.getStageY(this.yPos)-originYShift)+")");
-
 						
 	}
 
@@ -167,18 +172,19 @@ $("#rectForm").submit(function(e){
 	var rectData={
 		name:$("#rectName").val(),
 		width:$("#rectWidth").val(),
-		widthAxes:$("#rectWidthAxis").val(),
+		widthScale:$("#rectWidthScale").val(),
 		height:$("#rectHeight").val(),
-		heightAxes:$("#rectHeightAxis").val(),
+		heightScale:$("#rectHeightScale").val(),
 		xPos:$("#rectX").val(),
-		xPosAxes:$("#rectXAxis").val(),
+		xPosScale:$("#rectXScale").val(),
 		yPos:$("#rectY").val(),
-		yPosAxes:$("#rectYAxis").val(),
+		yPosScale:$("#rectYScale").val(),
 		xOffset:$("#rectXOffset").val(),
 		yOffset:$("#rectYOffset").val(),
 		color:$("#rectColor").val(),
 		opacity:$("#rectOpacityInput").val(),
-		pid:project.pid
+		pid:project.pid,
+		dataset:$("#rectDataset").val()
 	};
 
 	ajaxCall('post','rect/update/'+rectId,rectData,'json',updateRectCallback);
@@ -188,7 +194,7 @@ $("#rectForm").submit(function(e){
 
 function updateRectCallback(data){
 	//console.log("rect ",data);
-	var updatedRect=new Rectangle(data.name,data.width,data.height,data.xPos,data.yPos,data.color,data.opacity,data.id,data.offsetX,data.offsetY);
+	var updatedRect=new Rectangle(data.name,data.width,data.height,data.xPos,data.yPos,data.color,data.opacity,data.id,data.offsetX,data.offsetY,data.dataset);
 	updatedRect.updateRect();
 
 }
@@ -211,23 +217,27 @@ $('#addRectModal').on('show.bs.modal', function(e) {
     $(e.currentTarget).find('#rectColor').val(rectObj.color);
     $(e.currentTarget).find('#rectOpacityInput').val(rectObj.opacity);
     $(e.currentTarget).find('#rectOpacityOutput').val(rectObj.opacity);
+    $(e.currentTarget).find('#rectDataset').val(rectObj.id_dataset);
 });
 /////////////////change events
-//rectAxis select is changed
-$(document).on('change','.rectAxisSelect',function(){
+//rectScale select is changed
+$(document).on('change','.rectScaleSelect',function(){
 	var data=$(this).data();
+
 	console.log('val ',$(this).val());
 	if($(this).val()===""){
 		//$("#"+data.assinputid).val("");
 		console.log('disabled');
 		$("#"+data.assinputid).prop("disabled",false);
 		$("#"+data.assinputid).prop('required',true);
+
 		$(this).prop('required',false);
 	}
 	else{
-		//$("#"+data.assinputid).val();
+		//$("#"+data.assinputid).val('');
 		$("#"+data.assinputid).prop("disabled",true);
 		$("#"+data.assinputid).prop('required',false);
+		$("#"+data.assinputid).html('');
 		$(this).prop('required',true);	
 	}
 });
@@ -244,26 +254,26 @@ $(document).on('change', '#rectDataset', function() {
 		$(".rectSelect").hide();
 	}
 	else{
-		ajaxCall('get','dataset/axis/'+selectedDataset.val(),'','json',getAxesCallback);
+		ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
 		$(".rectSelect").show();
 	}
 
-	function getAxesCallback(data){
+	function getScalesCallback(data){
 		//remove previous
-		$('.rectAxisSelect').html('');
+		$('.rectScaleSelect').html('');
 
 		//add new
 		for(var i=0;i<data.length;i++){
 			//add header once
 			if(i===0){
-				$('.rectAxisSelect').append($('<option>', { 
+				$('.rectScaleSelect').append($('<option>', { 
 			        value:'',
-			        text : 'No axis' 
+			        text : 'No scale' 
 			    }));
 			}
-		    $('.rectAxisSelect').append($('<option>', { 
-		        value: data[i].idaxes,
-		        text : data[i].name 
+		    $('.rectScaleSelect').append($('<option>', { 
+		        value: data[i].idScales,
+		        text : data[i].scale_name 
 		    }));
 
 		}

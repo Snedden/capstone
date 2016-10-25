@@ -545,9 +545,9 @@ ul {
               <div class="col-sm-2">
                 <input  class="form-control" type="number"  required name="rectHeight" placeholder="" id="rectHeight"  />
               </div>
-              <label class="control-label col-sm-3 rectSelect" for="rectHeightAxis">Height Axis:</label>
+              <label class="control-label col-sm-3 rectSelect" for="rectHeightScale">Height Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectHeightAxis" class="rectAxisSelect" data-assinputid="rectHeight" id="rectHeightAxis" >
+                <select name="rectHeightScale" class="rectScaleSelect" data-assinputid="rectHeight" id="rectHeightScale" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
@@ -558,9 +558,9 @@ ul {
               <div class="col-sm-2">
                 <input  class="form-control" type="number"  required name="rectWidth" placeholder="" id="rectWidth"  />
               </div>
-              <label class="control-label col-sm-3 rectSelect" for="rectWidthAxis">Height Axis:</label>
+              <label class="control-label col-sm-3 rectSelect" for="rectWidthScale">Width Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectWidthAxis" class="rectAxisSelect" data-assinputid="rectWidth" id="rectWidthAxis" >
+                <select name="rectWidthScale" class="rectScaleSelect" data-assinputid="rectWidth" id="rectWidthScale" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
@@ -571,9 +571,9 @@ ul {
               <div class="col-sm-2">
                 <input  class="form-control" type="number"  required name="rectX" placeholder="" id="rectX"  />
               </div>
-              <label class="control-label col-sm-3 rectSelect" for="rectXAxis">X Axis:</label>
+              <label class="control-label col-sm-3 rectSelect" for="rectXScale">X Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectXAxis" class="rectAxisSelect" id="rectXAxis" data-assinputid="rectX" >
+                <select name="rectXScale" class="rectScaleSelect" id="rectXScale" data-assinputid="rectX" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
@@ -584,9 +584,9 @@ ul {
               <div class="col-sm-2">
                 <input  class="form-control" type="number"  required name="rectY" placeholder="" id="rectY"  />
               </div>
-              <label class="control-label col-sm-3 rectSelect" for="rectYAxis">Y Axis:</label>
+              <label class="control-label col-sm-3 rectSelect" for="rectYScale">Y Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectYAxis" id="rectYAxis" class="rectAxisSelect" data-assinputid="rectY" >
+                <select name="rectYScale" id="rectYScale" class="rectScaleSelect" data-assinputid="rectY" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>

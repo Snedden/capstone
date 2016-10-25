@@ -57,12 +57,46 @@ class rectController extends Controller
    		$rect->Opacity=$rectData['opacity'];
    		$rect->color=$rectData['color'];
    		$rect->pid=$rectData['pid'];
-   		$rect->X_pos=$rectData['xPos'];
    		$rect->Offset_X=$rectData['xOffset'];
-   		$rect->Y_pos=$rectData['yPos'];
    		$rect->Offset_Y=$rectData['yOffset'];
-   		$rect->Height=$rectData['height'];
-   		$rect->Width=$rectData['width'];
+   		$rect->iddata_sets=$rectData['dataset'];
+   		
+   		//check if corresponding scales are selected
+   		if($rectData['widthScale']!=""){
+   			$rect->Width=null;					
+   			$rect->widthScale=$rectData['widthScale'];
+   		}
+   		else{
+   			$rect->Width=$rectData['width'];
+   			$rect->widthScale=null;
+   		}
+
+   		if($rectData['heightScale']!=""){
+   			$rect->Height=null;
+   			$rect->heightScale=$rectData['heightScale'];
+   		}
+   		else{
+   			$rect->Height=$rectData['height'];
+   			$rect->heightScale=null;
+   		}
+
+   		if($rectData['xPosScale']!=""){
+   			$rect->X_pos=null;
+   			$rect->XScale=$rectData['xPosScale'];
+   		}
+   		else{
+   			$rect->X_pos=$rectData['xPos'];
+   			$rect->XScale=null;
+   		}
+
+   		if($rectData['yPosScale']!=""){
+   			$rect->Y_pos=null;
+   			$rect->YScale=$rectData['yPosScale'];
+   		}
+   		else{
+   			$rect->Y_pos=$rectData['yPos'];
+   			$rect->YScale=null;
+   		}
 
    		$rect->save();
    		$rectData['id']=$rect->idRectangle; //add the id of just inserted row

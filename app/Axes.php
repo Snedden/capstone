@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Axes extends Model
 {
     //
-    protected $table = 'Axes';
+    protected $table = 'axes';
     protected $primaryKey='idaxes';
 
         protected $fillable = [

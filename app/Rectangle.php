@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rectangle extends Model
 {
-    protected $table = 'Rectangle';
+    protected $table = 'rectangle';
     protected $primaryKey='idRectangle';
      /**
      * The attributes that are mass assignable.
@@ -39,4 +39,6 @@ class Rectangle extends Model
     {
         return $this->belongsTo('App\Project','pid');//belongsTo(model,foreignkey)
     }
+
+ 
 }

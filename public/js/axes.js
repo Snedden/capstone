@@ -56,7 +56,7 @@ $("#axesForm").submit(function(e){
 	e.stopImmediatePropagation();
 	var axesData={
 		name:$("#axesName").val(),
-		dataset:$("#rectDataset").val(),
+		scale:$("#axesScale").val(),
 		orient:$("#axesOrient").val(),
 		xPos:$("#axesX").val(),
 		yPos:$("#axesY").val(),

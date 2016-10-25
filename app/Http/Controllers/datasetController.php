@@ -168,9 +168,9 @@ class datasetController extends Controller
 	/*
 	*Get axis of the columns of the dataset  with id @param :id
 	*/
-	function getAxis($id){
+	function getScales($id){
 
-		$axis=DB::select("select idaxes,name from axes where idScales in(select idScales from scales where col_Id in (select col_Id from data_sets_columns where iddata_sets=? ))",[$id]);
+		$axis=DB::select("select idScales,scale_name from scales where col_Id in (select col_Id from data_sets_columns where iddata_sets=? )",[$id]);
 		
 		return json_encode($axis);
 	}
