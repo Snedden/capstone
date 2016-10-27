@@ -1,4 +1,11 @@
-function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,id_dataset){
+function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,id_dataset,widthScale,heightScale,xPosScale,yPosScale){
+	var XScaleName;
+	var YScaleName="scale"+yPosScale;
+	var widthScaleName="scale"+widthScale;
+	var heightScaleName="scale"+heightScale;
+
+	
+	
 	
 	this.id=id;	
 	this.name=name;
@@ -12,8 +19,37 @@ function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,
 	this.opacity=opacity;
 	this.originX=0;     //origin is in percent; (0 ,0) is deafault; (100,0) shift X 100 percent of width (50,50) center the origin and so on..
 	this.originY=100;   //origin is in percent 
-	this.axes={}		//related axes
 	this.id_dataset=id_dataset;
+
+	if(xPosScale){
+		XScaleName="scale"+xPosScale;
+		this.xPosScale=project.scales[XScaleName];
+		this.rawData=project.datasets[this.xPosScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+	}
+	if(yPosScale){
+		YScaleName="scale"+yPosScale;
+		this.yPosScale=project.scales[YScaleName];
+		this.rawData=project.datasets[this.yPosScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+	}
+	if(widthScale){
+		widthScaleName="scale"+widthPosScale;
+		this.widthScale=project.scales[widthScaleName];
+		this.rawData=project.datasets[this.widthScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+	}
+	if(heightScale){
+		heightScaleName="scale"+heightScale;
+		this.heightScale=project.scales[heightScaleName];
+		this.rawData=project.datasets[this.heightScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+	}
+	
+	
+
+	if(this.widthScale!=""||this.heightScale!=""||this.xPosScale!=""||this.yPosScale!=""){
+		this.basicRect=false;
+	}		
+    else{
+    	this.basicRect=true;
+    }
 	
 }
 
@@ -79,9 +115,11 @@ Rectangle.prototype={
 		var originYShift=this.height*(this.originY/100);
 		var d3RectId="d3Rect"+this.id;
 		var rectName="rect"+this.id;
+		var self;
 		
 
 		//update to memory
+		self=this;
 		project.rect[rectName]=this;
 		
 		//update to screen
@@ -90,8 +128,20 @@ Rectangle.prototype={
 		//////////add to stage 
 
 		//temporary ,need to change later
-		if(this.id_dataset){
-			//don't do anything
+		if(!this.basicRect){
+			//update attributes
+			d3.select("#"+d3RectId)
+				.html("")  //remove previous rect
+				.data(this.rawData)
+    			.enter().append("rect") //add new rect
+				 	.attr("width", this.width)
+					.attr("height", this.height)
+					.attr("fill",this.color)
+					.attr("fill-opacity",this.opacity)
+					.attr("x", function(d) { return self.xPosScale.d3ScaleLateral(d[self.xPosScale.colName]); })
+					.attr("y", (project.getStageY(this.yPos)-originYShift));
+
+
 		}
 		else{
 			//update attributes
@@ -193,8 +243,9 @@ $("#rectForm").submit(function(e){
 });
 
 function updateRectCallback(data){
-	//console.log("rect ",data);
-	var updatedRect=new Rectangle(data.name,data.width,data.height,data.xPos,data.yPos,data.color,data.opacity,data.id,data.offsetX,data.offsetY,data.dataset);
+	console.log("rect ",data);
+	var updatedRect=new Rectangle(data.name,data.width,data.height,data.xPos,data.yPos,data.color,data.opacity,data.id,data.offsetX,data.offsetY,data.dataset,data.widthScale,data.heightScale,data.xPosScale,data.yPosScale);
+	
 	updatedRect.updateRect();
 
 }

@@ -59,7 +59,13 @@ class rectController extends Controller
    		$rect->pid=$rectData['pid'];
    		$rect->Offset_X=$rectData['xOffset'];
    		$rect->Offset_Y=$rectData['yOffset'];
-   		$rect->iddata_sets=$rectData['dataset'];
+   		if(strlen($rectData['dataset'])==0){
+   			$rect->iddata_sets=null;
+   		}
+   		else{
+   			$rect->iddata_sets=$rectData['dataset'];
+   		}
+   		
    		
    		//check if corresponding scales are selected
    		if($rectData['widthScale']!=""){
