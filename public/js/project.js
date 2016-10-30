@@ -86,7 +86,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
 		console.log('pRects ',pRects);
 		for(var i=0;i<pRects.length;i++){
 
-			var rect=new Rectangle(pRects[i].rect_name,pRects[i].Width,pRects[i].Height,pRects[i].X_pos,pRects[i].Y_pos,pRects[i].Color,pRects[i].Opacity,pRects[i].idRectangle);
+			var rect=new Rectangle(pRects[i].rect_name,pRects[i].Width,pRects[i].Height,pRects[i].X_pos,pRects[i].Y_pos,pRects[i].Color,pRects[i].Opacity,pRects[i].idRectangle,pRects[i].Offset_X,pRects[i].Offset_Y,pRects[i].iddata_sets,pRects[i].widthScale,pRects[i].heightScale,pRects[i].XScale,pRects[i].YScale);
 			//console.log("i",i,"axes ",axes);
 			rect.addRect();
 		}

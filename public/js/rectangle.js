@@ -20,6 +20,10 @@ function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,
 	this.originX=0;     //origin is in percent; (0 ,0) is deafault; (100,0) shift X 100 percent of width (50,50) center the origin and so on..
 	this.originY=100;   //origin is in percent 
 	this.id_dataset=id_dataset;
+	this.widthScaleId=widthScale;
+	this.heightScaleId=heightScale;
+	this.xPosScaleId=xPosScale;
+	this.yPosScaleId=yPosScale;
 
 	if(xPosScale){
 		XScaleName="scale"+xPosScale;
@@ -41,15 +45,15 @@ function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,
 		this.heightScale=project.scales[heightScaleName];
 		this.rawData=project.datasets[this.heightScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
+
+	this.originXShift=this.width*(this.originX/100);
+	this.originYShift=this.height*(this.originY/100);
+	this.rectName="rect"+this.id;
+	this.d3RectId="d3Rect"+this.id;
 	
 	
 
-	if(this.widthScale!=""||this.heightScale!=""||this.xPosScale!=""||this.yPosScale!=""){
-		this.basicRect=false;
-	}		
-    else{
-    	this.basicRect=true;
-    }
+
 	
 }
 
@@ -58,14 +62,11 @@ Rectangle.prototype={
 	addRect:function(){
 		//console.log("rect ",data);
 		var groupLi;  //list item in group list
-		var originXShift=this.width*(this.originX/100);
-		var originYShift=this.height*(this.originY/100);
-		var d3RectId="d3Rect"+this.id;
-		var rectName="rect"+this.id;
+	
 		
 
 		//add to memory
-		project.rect[rectName]=this;
+		project.rect[this.rectName]=this;
 		project.rectNum++;
 
 		//add to screen
@@ -74,17 +75,18 @@ Rectangle.prototype={
 		//////////add to stage 
 		project.stage.append("g")                	
 						.attr("class", "rect")
-	        			.attr("id",d3RectId)
-						.append("rect")
-						.attr("x", (project.getStageX(0)-originXShift))         ///////////////add to origin first
-						.attr("y", (project.getStageY(0)-originYShift))
-						.attr("width", this.width)
-						.attr("height", this.height)
-						.attr("fill",this.color)
-						.attr("fill-opacity",this.opacity);
-		//tranform to x and y
-		d3.select("#"+d3RectId)
-			.attr("transform", "translate("+this.xPos+",-"+this.yPos+")");	
+	        			.attr("id",this.d3RectId);
+		if(!this.isBasic()){
+			//update attributes
+			this.drawLinkedRect();
+
+
+		}
+		else{
+			//update attributes
+			this.drawBasicRect();	
+		}
+
 		
 
 
@@ -111,55 +113,87 @@ Rectangle.prototype={
 	updateRect:function(){
 		//console.log("rect ",data);
 		var groupLi;  //list item in group list
-		var originXShift=this.width*(this.originX/100);
-		var originYShift=this.height*(this.originY/100);
-		var d3RectId="d3Rect"+this.id;
-		var rectName="rect"+this.id;
-		var self;
-		
 
 		//update to memory
-		self=this;
-		project.rect[rectName]=this;
+		
+		project.rect[this.rectName]=this;
 		
 		//update to screen
 		groupLi="<li data-toggle='modal' data-target='#addRectModal' class='groupItem' data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button> ";
 		$("#rect"+this.id).html(groupLi);  		 	//update  list item
 		//////////add to stage 
-
-		//temporary ,need to change later
-		if(!this.basicRect){
+		//remove previous rect
+		d3.select("#"+this.d3RectId)
+				.remove();
+		//add new group			
+		project.stage.append("g")                	
+						.attr("class", "rect")
+	        			.attr("id",this.d3RectId);		  
+		if(!this.isBasic()){
 			//update attributes
-			d3.select("#"+d3RectId)
-				.html("")  //remove previous rect
-				.data(this.rawData)
-    			.enter().append("rect") //add new rect
-				 	.attr("width", this.width)
-					.attr("height", this.height)
-					.attr("fill",this.color)
-					.attr("fill-opacity",this.opacity)
-					.attr("x", function(d) { return self.xPosScale.d3ScaleLateral(d[self.xPosScale.colName]); })
-					.attr("y", (project.getStageY(this.yPos)-originYShift));
+			this.drawLinkedRect();
 
 
 		}
 		else{
 			//update attributes
-			d3.select("#"+d3RectId)
-				.html("")  //remove previous rect
-				 	.append("rect") //add new rect
-					.attr("width", this.width)
-					.attr("height", this.height)
-					.attr("fill",this.color)
-					.attr("fill-opacity",this.opacity);
-			//tranform to ORIGIN 	first
-			d3.select("#"+d3RectId)
-				.attr("transform", "translate("+(project.getStageX(this.xPos)-originXShift)+","+(project.getStageY(this.yPos)-originYShift)+")");
-
+			this.drawBasicRect();	
 		}
 		
 						
+	},
+	isBasic:function(){
+		if(!this.widthScale&&!this.heightScale&&!this.xPosScale&&!this.yPosScale){
+			return true;
+		}		
+	    else{
+	    	return false;
+	    }
+	},
+	drawBasicRect:function(){
+		//update attributes
+			d3.select("#"+this.d3RectId)
+				.append("rect") //add new rect
+				.attr("width", this.width)
+				.attr("height", this.height)
+				.attr("fill",this.color)
+				.attr("fill-opacity",(0.01*this.opacity));
+			//tranform to X and Y 	
+			d3.select("#"+this.d3RectId)
+				.attr("transform", "translate("+(project.getStageX(this.xPos)-this.originXShift)+","+(project.getStageY(this.yPos)-this.originYShift)+")");
+	},
+	drawLinkedRect:function(){
+		var self=this;
+		d3.select("#"+this.d3RectId)
+				.html("")  //remove previous rect
+				.selectAll(".bar")
+				.data(this.rawData)
+    			.enter().append("rect") //add new rect
+				 	.attr("width", this.width)
+				 	.attr("class", "bar")
+					.attr("height", this.height)
+					.attr("fill",this.color)
+					.attr("fill-opacity",(0.01*this.opacity))
+					.attr("x", function(d) { 
+						if(self.xPosScale){
+							return self.xPosScale.d3ScaleLateral(d[self.xPosScale.colName]);
+						}
+						else{
+							return null;
+						} })
+					.attr("y",function(d) { 
+						if(self.yPosScale){
+							return -(self.yPosScale.d3ScaleLateral(d[self.yPosScale.colName]));
+						}
+						else{
+							return null;
+						} });
+		//tranform to X and Y 	
+			d3.select("#"+this.d3RectId)
+				.attr("transform", "translate("+(project.getStageX(this.xPos)-this.originXShift)+","+(project.getStageY(this.yPos)-this.originYShift)+")");			
 	}
+
+
 
 }
 
@@ -269,10 +303,57 @@ $('#addRectModal').on('show.bs.modal', function(e) {
     $(e.currentTarget).find('#rectOpacityInput').val(rectObj.opacity);
     $(e.currentTarget).find('#rectOpacityOutput').val(rectObj.opacity);
     $(e.currentTarget).find('#rectDataset').val(rectObj.id_dataset);
+    
+   
+
+    //a data select is changed
+	$(document).on('change', '#rectDataset', function() {
+		var selectedDataset=$(this);
+
+		//console.log('rectDs',selectedDataset.val(), selectedDataset);
+
+		//if no dataset selected toggle
+		if(selectedDataset.val()===""){
+			
+			$(".rectSelect").hide();
+		}
+		else{
+			ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
+			$(".rectSelect").show();
+		}
+
+		function getScalesCallback(data){
+			//remove previous
+			$('.rectScaleSelect').html('');
+
+			//add new
+			for(var i=0;i<data.length;i++){
+				//add header once
+				if(i===0){
+					$('.rectScaleSelect').append($('<option>', { 
+				        value:'',
+				        text : 'No scale' 
+				    }));
+				}
+			    $('.rectScaleSelect').append($('<option>', { 
+			        value: data[i].idScales,
+			        text : data[i].scale_name 
+			    }));
+
+			}
+			$(e.currentTarget).find('#rectWidthScale').val(rectObj.widthScaleId);
+		    $(e.currentTarget).find('#rectHeightScale').val(rectObj.heightScaleId);
+		    $(e.currentTarget).find('#rectXScale').val(rectObj.xPosScaleId);
+		    $(e.currentTarget).find('#rectYScale').val(rectObj.yPosScaleId);
+		   
+		    
+		}
+	});
+	$(e.currentTarget).find('#rectDataset').trigger("change"); 
 });
 /////////////////change events
 //rectScale select is changed
-$(document).on('change','.rectScaleSelect',function(){
+$(document).on('change','.rectLengths',function(){
 	var data=$(this).data();
 
 	console.log('val ',$(this).val());
@@ -293,40 +374,3 @@ $(document).on('change','.rectScaleSelect',function(){
 	}
 });
 
-//a data select is changed
-$(document).on('change', '#rectDataset', function() {
-	var selectedDataset=$(this);
-    
-	//console.log('rectDs',selectedDataset.val(), selectedDataset);
-
-	//if no dataset selected toggle
-	if(selectedDataset.val()===""){
-		
-		$(".rectSelect").hide();
-	}
-	else{
-		ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
-		$(".rectSelect").show();
-	}
-
-	function getScalesCallback(data){
-		//remove previous
-		$('.rectScaleSelect').html('');
-
-		//add new
-		for(var i=0;i<data.length;i++){
-			//add header once
-			if(i===0){
-				$('.rectScaleSelect').append($('<option>', { 
-			        value:'',
-			        text : 'No scale' 
-			    }));
-			}
-		    $('.rectScaleSelect').append($('<option>', { 
-		        value: data[i].idScales,
-		        text : data[i].scale_name 
-		    }));
-
-		}
-	}
-}); 

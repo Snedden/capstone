@@ -547,7 +547,7 @@ ul {
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectHeightScale">Height Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectHeightScale" class="rectScaleSelect" data-assinputid="rectHeight" id="rectHeightScale" >
+                <select name="rectHeightScale" class="rectScaleSelect rectLengths" data-assinputid="rectHeight" id="rectHeightScale" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
@@ -560,7 +560,7 @@ ul {
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectWidthScale">Width Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectWidthScale" class="rectScaleSelect" data-assinputid="rectWidth" id="rectWidthScale" >
+                <select name="rectWidthScale" class="rectScaleSelect rectLengths" data-assinputid="rectWidth" id="rectWidthScale" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
@@ -573,7 +573,7 @@ ul {
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectXScale">X Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectXScale" class="rectScaleSelect" id="rectXScale" data-assinputid="rectX" >
+                <select name="rectXScale" class="rectScaleSelect " id="rectXScale" data-assinputid="rectX" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>

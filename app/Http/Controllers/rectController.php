@@ -59,6 +59,8 @@ class rectController extends Controller
    		$rect->pid=$rectData['pid'];
    		$rect->Offset_X=$rectData['xOffset'];
    		$rect->Offset_Y=$rectData['yOffset'];
+   		$rect->X_pos=$rectData['xPos'];
+   		$rect->Y_pos=$rectData['yPos'];
    		if(strlen($rectData['dataset'])==0){
    			$rect->iddata_sets=null;
    		}
@@ -85,24 +87,22 @@ class rectController extends Controller
    			$rect->Height=$rectData['height'];
    			$rect->heightScale=null;
    		}
-
-   		if($rectData['xPosScale']!=""){
-   			$rect->X_pos=null;
-   			$rect->XScale=$rectData['xPosScale'];
+   		if($rectData['xPosScale']==""){
+   			$rect->XScale=null;	
    		}
    		else{
-   			$rect->X_pos=$rectData['xPos'];
-   			$rect->XScale=null;
+   			$rect->XScale=$rectData['xPosScale'];	
    		}
-
-   		if($rectData['yPosScale']!=""){
-   			$rect->Y_pos=null;
-   			$rect->YScale=$rectData['yPosScale'];
+		
+		if($rectData['yPosScale']==""){
+   			$rect->YScale=null;	
    		}
    		else{
-   			$rect->Y_pos=$rectData['yPos'];
-   			$rect->YScale=null;
+   			$rect->YScale=$rectData['yPosScale'];	
    		}
+   		
+   			
+   		
 
    		$rect->save();
    		$rectData['id']=$rect->idRectangle; //add the id of just inserted row
