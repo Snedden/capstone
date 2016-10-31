@@ -51,7 +51,7 @@ class rectController extends Controller
    	*/
    	public function update($id){
    		$rectData=$_POST['data'];
-
+         
    		$rect=Rectangle::findOrFail($id);
    		$rect->rect_name=$rectData['name'];
    		$rect->Opacity=$rectData['opacity'];

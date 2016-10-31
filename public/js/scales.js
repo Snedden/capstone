@@ -30,69 +30,35 @@ function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,range
 	
 
 	this.dataCol=project.datasets[this.datasetName].dataCols[this.colName];
-	console.log('scale', this);
-	if(this.type==='Linear'){
-		this.domainFrom=parseInt(d3.min(this.dataCol.data));
-		this.domainTo=parseInt(d3.max(this.dataCol.data));
+	this.setScales();
 
-		
-		this.d3ScaleLateral=d3.scaleLinear()
-			.domain([this.domainFrom,this.domainTo])
-			.range([this.rangeFrom, this.rangeTo]);
-		
-		//Y axis is inverted in svg
-		this.d3ScaleVertical=d3.scaleLinear()
-			.domain([this.domainFrom,this.domainTo])
-			.range([this.rangeTo,this.rangeFrom]);
-		
-	}
-	else if(this.type==='Ordinal'){
-		this.domainOrdinal=this.dataCol.data;
-
-
-		this.d3ScaleLateral=this.d3ScaleVertical=d3.scaleBand()
-				.domain(this.domainOrdinal)
-				.range([0,this.width])
-				.padding(this.bandPadding);
-	}
-	else{
-		console.error("Invalid scale type");
-	}
-	
-	
-
-    	
 }
 
 //add scale
 $("#scaleForm").submit(function(e){
-	
+	var action=$("#addScaleBtn").html();
+
 	var scaleName=$("#dataScaleName").val();
 	var scaleType=$("#dataColtype").val();
 	var dataColId=$("#dataColId").val();
 	var scaleWidth=$("#scaleWidthOrdinal").val();
 	var bandPadding=$("#scaleBandPaddingOrdinalOutput").val();
-	var scaleData;
-	if(scaleType==="Linear"){
-		scaleData={
+	var scaleId=$("#scaleId").val();
+	var scaleData={
+			id:scaleId,
 			pid:project.pid,
 			name:scaleName,
 			type:scaleType,
 			dataColId:dataColId,
-			rangeFrom:$("#range_from").val(),
-			rangeTo:$("#range_to").val()
-		};
+			};
+	if(scaleType==="Linear"){
+		scaleData.rangeFrom=$("#range_from").val();
+		scaleData.rangeTo=$("#range_to").val();
+		
 	}
 	else if(scaleType==="Ordinal"){
-		scaleData={
-			pid:project.pid,
-			name:scaleName,
-			type:scaleType,
-			dataColId:dataColId,
-			width:scaleWidth,
-			padding:bandPadding
-		};
-		
+		scaleData.width=scaleWidth;
+		scaleData.padding=bandPadding;
 	}
 	else{
 		console.error("unexpected scale type");
@@ -101,7 +67,17 @@ $("#scaleForm").submit(function(e){
 	
 	e.preventDefault();
 	e.stopImmediatePropagation();
-	ajaxCall('post','scale/create',scaleData,'json',scaleAddCallback); 
+	if(action==="Add"){
+		ajaxCall('post','scale/create',scaleData,'json',scaleAddCallback);
+	}
+	else if(action==="Update"){
+		console.log(action);
+		ajaxCall('post','scale/update',scaleData,'json',scaleUpdateCallback);
+	}
+	else{
+		console.error('Invalid action type ',action);
+	}
+	 
 	
 
 });
@@ -123,6 +99,12 @@ function scaleAddCallback(data){
 		}
 }
 //add scale end
+
+function scaleUpdateCallback(data){
+		var scaleName='scale'+data.id;
+		project.scales[scaleName].updateScale(data);				//update to global object and screen
+		$("#addScaleModal").modal('hide');//close modal dialog
+}
 
 //del scale
 $(document).on('click','.scaleDelBtn',function(e){
@@ -200,42 +182,35 @@ $('#addScaleModal').on('show.bs.modal', function(e) {
     }
     //add or update scale
     if(action==="add"){
-      //enable them back
+/*      //enable them back
       $(e.currentTarget).find("#addScaleBtn").prop("disabled",false);
       $(e.currentTarget).find("#range_from").prop("disabled",false);
       $(e.currentTarget).find("#range_to").prop("disabled",false);
       $(e.currentTarget).find("#scaleBandPaddingOrdinal").prop("disabled",false);
-      $(e.currentTarget).find("#scaleWidthOrdinal").prop("disabled",false);
+      $(e.currentTarget).find("#scaleWidthOrdinal").prop("disabled",false);*/
 
       $(e.currentTarget).find("#addScaleBtn").html("Add");
     }
     else if(action==="update"){
-      //disable them for now
-      $(e.currentTarget).find("#addScaleBtn").prop("disabled",true);
-      $(e.currentTarget).find("#range_from").prop("disabled",true);
-      $(e.currentTarget).find("#range_to").prop("disabled",true);
-      $(e.currentTarget).find("#scaleBandPaddingOrdinal").prop("disabled",true);
-      $(e.currentTarget).find("#scaleWidthOrdinal").prop("disabled",true);
 
-      scaleId=$(e.relatedTarget).data('scale-id');
-      scaleName="scale"+scaleId;
-      scaleObj=project.scales[scaleName];
-      if(scaleType==="Linear"){
-        $(e.currentTarget).find("#range_from").val(scaleObj.rangeFrom);
-        $(e.currentTarget).find("#range_from").val(scaleObj.rangeFrom);
-      }
-      else if(scaleType==="Ordinal"){
-        $(e.currentTarget).find("#scaleWidthOrdinal").val(scaleObj.width);
-        $(e.currentTarget).find("#scaleBandPaddingOrdinal").val(scaleObj.padding);
-      }
+		scaleId=$(e.relatedTarget).data('scale-id');
+      	scaleName="scale"+scaleId;
+      	scaleObj=project.scales[scaleName];
+	      if(scaleType==="Linear"){
+	        $(e.currentTarget).find("#range_from").val(scaleObj.rangeFrom);
+	        $(e.currentTarget).find("#range_from").val(scaleObj.rangeFrom);
+	      }
+	      else if(scaleType==="Ordinal"){
+	        $(e.currentTarget).find("#scaleWidthOrdinal").val(scaleObj.width);
+	        $(e.currentTarget).find("#scaleBandPaddingOrdinal").val(scaleObj.padding);
+	      }
       
-      
-      $(e.currentTarget).find("#addScaleBtn").html("Update");
+      	$(e.currentTarget).find("#addScaleBtn").html("Update");
+      	$(e.currentTarget).find("#scaleBandPaddingOrdinal").val(scaleObj.bandPadding);
+    	$(e.currentTarget).find("#scaleBandPaddingOrdinalOutput").val(scaleObj.bandPadding);
+    	$(e.currentTarget).find("#scaleId").val(scaleId);
 
-
-
-
-    }
+	}
     else{
       console.error("invalid action type in addScaleModal");
     }
@@ -273,6 +248,60 @@ Scale.prototype={
 		
 		
 	},
+	updateScale:function(data){
+		var scaleTobeUpdated='scale'+this.scaleId;
+		var axisToBeUpdated,axisId,rectData;
+		//update scale
+		if(this.type==="Linear"){
+			this.rangeFrom=data.rangeFrom;
+			this.rangeTo=data.rangeTo;
+		}
+		else if(this.type==="Ordinal"){
+			this.bandPadding=data.padding;
+			this.width=data.width;
+		}
+		else{
+			console.error("invalid scaleType");
+		}
+		this.setScales();
+
+		//update all associate axis
+	 	for(var key in project.scales[scaleTobeUpdated].axes){
+ 			axisId=project.scales[scaleTobeUpdated].axes[key].id;
+ 			axisToBeUpdated="axes"+axisId;
+ 			project.axes[axisToBeUpdated].updateAxesScale(this);
+		}
+
+		//update associated  rect
+		
+		for (var key in project.rect){
+			rectChange=false;
+			if((project.rect[key].widthScaleId==this.scaleId)||(project.rect[key].heightScaleId==this.scaleId)||(project.rect[key].xPosScaleId==this.scaleId)||(project.rect[key].yPosScaleId==this.scaleId)){ // double == on purpose as RHS is num and LHS is string
+				rectData={
+					name:project.rect[key].name,
+					width:project.rect[key].width,
+					widthScale:project.rect[key].widthScaleId,
+					height:project.rect[key].height,
+					heightScale:project.rect[key].heightScaleId,
+					xPos:project.rect[key].xPos,
+					xPosScale:project.rect[key].xPosScaleId,
+					yPos:project.rect[key].yPos,
+					yPosScale:project.rect[key].yPosScaleId,
+					xOffset:project.rect[key].offsetX,
+					yOffset:project.rect[key].offsetY,
+					color:project.rect[key].color,
+					opacity:project.rect[key].opacity,
+					pid:project.pid,
+					dataset:project.rect[key].id_dataset
+				};
+
+				ajaxCall('post','rect/update/'+project.rect[key].id,rectData,'json',updateRectCallback);
+			}
+		
+			
+		}
+		
+	},
 
 	deleteScale:function(){
 	
@@ -281,7 +310,7 @@ Scale.prototype={
 		ajaxCall('post','scale/delete',this.scaleId,'text',scaleDelCallback);
 
 		function scaleDelCallback(data){
-		
+			var rectChange;
 		    var scaleTobeDeleted='scale'+scaleObject.scaleId;
 		    //delete form screen
 		    $("#"+scaleTobeDeleted+'Li').remove(); //list item
@@ -294,10 +323,87 @@ Scale.prototype={
      			axisToBeDeleted="axes"+axisId;
      			project.axes[axisToBeDeleted].deleteAxes(true);
 			}
+
+			//update rectangle associted with to-be-deleted scale
+			for (var key in project.rect){
+				rectChange=false;
+				if(project.rect[key].widthScaleId==scaleObject.scaleId){ // double == on purpose as RHS is num and LHS is string
+					project.rect[key].widthScaleId=null;
+					project.rect[key].widthScaleName=null;
+					rectChange=true;
+				}
+				if(project.rect[key].heightScaleId==scaleObject.scaleId){
+					project.rect[key].heightScaleId=null;
+					project.rect[key].heightScaleName=null;
+					rectChange=true;
+				}
+				if(project.rect[key].xPosScaleId==scaleObject.scaleId){
+					project.rect[key].xPosScaleId=null;
+					project.rect[key].XScaleName=null;
+					rectChange=true;
+				}
+				if(project.rect[key].yPosScaleId==scaleObject.scaleId){
+					project.rect[key].yPosScaleId=null;
+					project.rect[key].YScaleName=null;
+					rectChange=true;
+				}
+				//update rect
+				if(rectChange){
+					var rectData={
+					name:project.rect[key].name,
+					width:project.rect[key].width,
+					widthScale:project.rect[key].widthScaleId,
+					height:project.rect[key].height,
+					heightScale:project.rect[key].heightScaleId,
+					xPos:project.rect[key].xPos,
+					xPosScale:project.rect[key].xPosScaleId,
+					yPos:project.rect[key].yPos,
+					yPosScale:project.rect[key].yPosScaleId,
+					xOffset:project.rect[key].offsetX,
+					yOffset:project.rect[key].offsetY,
+					color:project.rect[key].color,
+					opacity:project.rect[key].opacity,
+					pid:project.pid,
+					dataset:project.rect[key].id_dataset
+					};
+
+					ajaxCall('post','rect/update/'+project.rect[key].id,rectData,'json',updateRectCallback);
+				}
+			}
 		 	//delete scale object
 		    delete project.scales[scaleTobeDeleted];
 
 		    //delet
+		}
+	},
+
+	setScales:function(){
+		if(this.type==='Linear'){
+			this.domainFrom=parseInt(d3.min(this.dataCol.data));
+			this.domainTo=parseInt(d3.max(this.dataCol.data));
+
+			
+			this.d3ScaleLateral=d3.scaleLinear()
+				.domain([this.domainFrom,this.domainTo])
+				.range([this.rangeFrom, this.rangeTo]);
+			
+			//Y axis is inverted in svg
+			this.d3ScaleVertical=d3.scaleLinear()
+				.domain([this.domainFrom,this.domainTo])
+				.range([this.rangeTo,this.rangeFrom]);
+			
+		}
+		else if(this.type==='Ordinal'){
+			this.domainOrdinal=this.dataCol.data;
+
+
+			this.d3ScaleLateral=this.d3ScaleVertical=d3.scaleBand()
+					.domain(this.domainOrdinal)
+					.range([0,this.width])
+					.padding(this.bandPadding);
+		}
+		else{
+			console.error("Invalid scale type");
 		}
 	}
 }

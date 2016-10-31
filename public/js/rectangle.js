@@ -1,5 +1,5 @@
 function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,id_dataset,widthScale,heightScale,xPosScale,yPosScale){
-	var XScaleName;
+	var XScaleName="scale"+xPosScale;
 	var YScaleName="scale"+yPosScale;
 	var widthScaleName="scale"+widthScale;
 	var heightScaleName="scale"+heightScale;
@@ -18,7 +18,7 @@ function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,
 	this.color=color;
 	this.opacity=opacity;
 	this.originX=0;     //origin is in percent; (0 ,0) is deafault; (100,0) shift X 100 percent of width (50,50) center the origin and so on..
-	this.originY=100;   //origin is in percent 
+	this.originY=0;   //origin is in percent 
 	this.id_dataset=id_dataset;
 	this.widthScaleId=widthScale;
 	this.heightScaleId=heightScale;
@@ -119,7 +119,7 @@ Rectangle.prototype={
 		project.rect[this.rectName]=this;
 		
 		//update to screen
-		groupLi="<li data-toggle='modal' data-target='#addRectModal' class='groupItem' data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button> ";
+		groupLi="<div id=rect"+this.id+"><li data-toggle='modal' data-target='#addRectModal' class='groupItem' data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button></div> ";
 		$("#rect"+this.id).html(groupLi);  		 	//update  list item
 		//////////add to stage 
 		//remove previous rect
@@ -160,7 +160,7 @@ Rectangle.prototype={
 				.attr("fill-opacity",(0.01*this.opacity));
 			//tranform to X and Y 	
 			d3.select("#"+this.d3RectId)
-				.attr("transform", "translate("+(project.getStageX(this.xPos)-this.originXShift)+","+(project.getStageY(this.yPos)-this.originYShift)+")");
+				.attr("transform", "scale(1,-1) translate("+(project.getStageX(this.xPos)-this.originXShift)+","+-(project.getStageY(this.yPos)-this.originYShift)+")");
 	},
 	drawLinkedRect:function(){
 		var self=this;
@@ -169,9 +169,27 @@ Rectangle.prototype={
 				.selectAll(".bar")
 				.data(this.rawData)
     			.enter().append("rect") //add new rect
-				 	.attr("width", this.width)
+				 	.attr("width", function(){
+				 		if(self.xPosScale){
+				 			return self.xPosScale.d3ScaleLateral.bandwidth();
+				 			
+				 		}
+				 		else{
+				 			return self.width;
+				 		}
+				 	})
 				 	.attr("class", "bar")
-					.attr("height", this.height)
+					.attr("height", function(d,i){
+						if(self.heightScale){
+							return   self.heightScale.d3ScaleLateral(d[self.heightScale.colName]) - project.stageMarginBot - self.yPos;   //since the bot is excluded from height,think about it can't explain
+						}
+				 		if(self.yPosScale){
+				 			return self.yPosScale.d3ScaleVertical.bandwidth();
+				 		}
+				 		else{
+				 			return self.height;
+				 		}
+				 	})
 					.attr("fill",this.color)
 					.attr("fill-opacity",(0.01*this.opacity))
 					.attr("x", function(d) { 
@@ -183,14 +201,17 @@ Rectangle.prototype={
 						} })
 					.attr("y",function(d) { 
 						if(self.yPosScale){
-							return -(self.yPosScale.d3ScaleLateral(d[self.yPosScale.colName]));
+							return (self.yPosScale.d3ScaleLateral(d[self.yPosScale.colName]));
 						}
 						else{
 							return null;
 						} });
 		//tranform to X and Y 	
-			d3.select("#"+this.d3RectId)
-				.attr("transform", "translate("+(project.getStageX(this.xPos)-this.originXShift)+","+(project.getStageY(this.yPos)-this.originYShift)+")");			
+/*			d3.select("#"+this.d3RectId)
+				.attr("transform", "translate("+(project.getStageX(this.xPos)-this.originXShift)+","+(project.getStageY(this.yPos)-this.originYShift)+")");*/
+						d3.select("#"+this.d3RectId)
+				.attr("transform", "scale(1,-1) translate("+(project.getStageX(this.xPos)-this.originXShift)+","+-(project.getStageY(this.yPos)-this.originYShift)+")");	 //scale(1,-)			
+
 	}
 
 
@@ -278,7 +299,7 @@ $("#rectForm").submit(function(e){
 
 function updateRectCallback(data){
 	console.log("rect ",data);
-	var updatedRect=new Rectangle(data.name,data.width,data.height,data.xPos,data.yPos,data.color,data.opacity,data.id,data.offsetX,data.offsetY,data.dataset,data.widthScale,data.heightScale,data.xPosScale,data.yPosScale);
+	var updatedRect=new Rectangle(data.name,data.width,data.height,data.xPos,data.yPos,data.color,data.opacity,data.id,data.xOffset,data.yOffset,data.dataset,data.widthScale,data.heightScale,data.xPosScale,data.yPosScale);
 	
 	updatedRect.updateRect();
 

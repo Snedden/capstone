@@ -93,6 +93,7 @@ class scalesController extends Controller
 	    	
     	}
     	catch(Exception $e) {
+
     		$feedback['message']=$e->getMessage();
     		$feedback['type']="error";
 	    	return $feedback;
@@ -107,6 +108,48 @@ class scalesController extends Controller
     	$scaleId=$_POST['data'];
     	Scale::destroy($scaleId);
     	return 'deleted';
+    }
+
+    /*
+    *update an scale
+    */
+    function update(){
+    	try{
+    		$scaleData=$_POST['data'];
+
+    		//update to database
+	    	$scale=Scale::findOrFail($scaleData['id']);
+	    
+	    	if($scaleData['type']=="Linear"){
+	    		$scale->range_from=$scaleData['rangeFrom'];
+	    		$scale->range_to=$scaleData['rangeTo'];
+	    	}
+	    	else if($scaleData['type']=="Ordinal"){
+	    		$scale->width=$scaleData['width'];
+	    		$scale->bandpadding=$scaleData['padding'];
+	    	}
+	    	else{
+	    		throw new Exception('Scale type invalid');
+	    	}
+
+	    	$scale->save();
+	    	
+    		$feedback['id']=$scale->idScales;
+    		$feedback['name']=$scale->scale_name;
+    		$feedback['pid']=$scale->pid;
+	    	$feedback['dataColId']=$scale->col_Id;
+	    	$feedback['type']=$scale->type;
+	    	$feedback['rangeFrom']=$scale->range_from;
+	    	$feedback['rangeTo']=$scale->range_to;
+	    	$feedback['width']=$scale->width;
+	    	$feedback['padding']=$scale->bandpadding;
+	    	return $feedback;
+    	}
+    	catch(Exception $e) {
+    		$feedback['message']=$e->getMessage();
+    		$feedback['type']="error";
+	    	return $feedback;
+    	}
     }
 
 }

@@ -34,6 +34,7 @@ Route::post('datasetColumns/update','datasetColumns@updateCols')->middleware('au
 
 
 Route::post('scale/create','scalesController@create')->middleware('auth');
+Route::post('scale/update','scalesController@update')->middleware('auth');
 Route::post('scale/delete','scalesController@delete')->middleware('auth');
 
 Route::post('axes/create','axesController@create')->middleware('auth');

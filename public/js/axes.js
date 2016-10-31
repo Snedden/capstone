@@ -6,6 +6,7 @@ function Axes(id,name,orient,xPos,yPos,scaleId,ticks){
 	this.yPos=yPos;
 	this.scaleId=scaleId;
 	this.ticks=ticks;
+	this.d3AxisId="d3Axes"+this.id;
 
 
 	console.log('ticks ',this.ticks);
@@ -24,27 +25,8 @@ function Axes(id,name,orient,xPos,yPos,scaleId,ticks){
 		console.error("Invalid scale type");
 	}
 	
-	
-	switch(this.orient){
-		case "Left":
-			this.d3Axes=d3.axisLeft(this.associatedScale.d3ScaleVertical)
-				.ticks(this.ticks);
-		break;
-		case "Right":
-			this.d3Axes=d3.axisRight(this.associatedScale.d3ScaleVertical)
-				.ticks(this.ticks);
-		break;
-		case "Bottom":
-			this.d3Axes=d3.axisBottom(this.associatedScale.d3ScaleLateral)
-				.ticks(this.ticks);
-		break;
-		case "Top":
-			this.d3Axes=d3.axisTop(this.associatedScale.d3ScaleLateral)
-				.ticks(this.ticks);
-		break
-		default:
-			console.error("Invalid axis orient");
-	}
+	this.setAxes();
+
 
 	
 }
@@ -99,22 +81,45 @@ Axes.prototype={
 	constructor:Axes,
 	addAxes:function(){
 		var axesName="axes"+this.id;
-		var d3AxisId="d3Axes"+this.id;
+		
 		console.debug('rf',this);
 		//add to memory
 		project.axes[axesName]=this;
 
 		project.scales[this.associatedScaleName].axes[axesName]={id:this.id};    //add axes to the associated scale    
 		//add to screen
-		var groupLi="<li class='groupItem' id=axes"+this.id+">"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button>  ";
+		var groupLi="<div id=axes"+this.id+"><li class='groupItem' id=axes"+this.id+">"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button></div>  ";
 		$("#groupsUl").append(groupLi);  		 	//add to list
 		project.stage.append("g")                	//add to stage 
         	.attr("class", "axis")
-        	.attr("id",d3AxisId)
-            .attr("transform", "translate("+project.getAxisX(this.xPos,this.orient,this.associatedScale.rangeFrom)+","+project.getAxisY(this.yPos,this.orient,this.associatedScale.rangeFrom,this.length)+")")
+        	.attr("id",this.d3AxisId)
+            .attr("transform", "translate("+project.getAxisX(this.xPos,this.orient,this.associatedScale.rangeFrom)+" ,"+project.getAxisY(this.yPos,this.orient,this.associatedScale.rangeFrom,this.length)+")")
             .call(this.d3Axes); 
 
 
+	},
+	updateAxesScale:function(scale){
+		//read updated scale values
+		this.associatedScale=project.scales[this.associatedScaleName]; 
+		//assuming domain is the length of the associated scale
+		if(this.associatedScale.type==="Linear"){
+			this.length=this.associatedScale.rangeTo-this.associatedScale.rangeFrom;
+		}
+		else if(this.associatedScale.type==="Ordinal"){
+			this.length=this.associatedScale.width;
+		}
+		else{
+			console.error("Invalid scale type");
+		}
+		this.setAxes();
+
+		d3.select("#"+this.d3AxisId)				//remove previous from stage
+				.remove();
+		project.stage.append("g")                	//update in stage 
+        	.attr("class", "axis")
+        	.attr("id",this.d3AxisId)
+            .attr("transform", "translate("+project.getAxisX(this.xPos,this.orient,this.associatedScale.rangeFrom)+","+project.getAxisY(this.yPos,this.orient,this.associatedScale.rangeFrom,this.length)+")")
+            .call(this.d3Axes); 
 	},
 	deleteAxes:function(baseScaleDeleted){
 		var axesObject=this; 						//cache this as it is a lost in the call back funciton call
@@ -135,6 +140,28 @@ Axes.prototype={
 		    	delete project.scales[axesObject.associatedScaleName].axes[axesTobeDeleted]; //delete in the axes in associated scale
 		    }
 		    
+		}
+	},
+	setAxes:function(){
+		switch(this.orient){
+			case "Left":
+				this.d3Axes=d3.axisLeft(this.associatedScale.d3ScaleVertical)
+					.ticks(this.ticks);
+			break;
+			case "Right":
+				this.d3Axes=d3.axisRight(this.associatedScale.d3ScaleVertical)
+					.ticks(this.ticks);
+			break;
+			case "Bottom":
+				this.d3Axes=d3.axisBottom(this.associatedScale.d3ScaleLateral)
+					.ticks(this.ticks);
+			break;
+			case "Top":
+				this.d3Axes=d3.axisTop(this.associatedScale.d3ScaleLateral)
+					.ticks(this.ticks);
+			break
+			default:
+				console.error("Invalid axis orient");
 		}
 	}
 }

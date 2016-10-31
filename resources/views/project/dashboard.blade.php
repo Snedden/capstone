@@ -338,7 +338,8 @@ ul {
         <form  id="scaleForm" method="POST" action="" accept-charset="UTF-8" class="form-horizontal">
           <div class="modal-body">
             <input type="hidden" name="_token" value="{{csrf_token()}}"> 
-            <input type="hidden"  id="dataColId" > 
+            <input type="hidden"  id="dataColId" >
+            <input type="hidden"  id="scaleId" >  
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="dataScaleName">Name:</label>
