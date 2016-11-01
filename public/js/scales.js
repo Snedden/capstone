@@ -206,7 +206,7 @@ $('#addScaleModal').on('show.bs.modal', function(e) {
 	      }
       
       	$(e.currentTarget).find("#addScaleBtn").html("Update");
-      	$(e.currentTarget).find("#scaleBandPaddingOrdinal").val(scaleObj.bandPadding);
+      	$(e.currentTarget).find("#scaleBandPaddingOrdinal").val(scaleObj.bandPadding*100);
     	$(e.currentTarget).find("#scaleBandPaddingOrdinalOutput").val(scaleObj.bandPadding);
     	$(e.currentTarget).find("#scaleId").val(scaleId);
 
@@ -395,11 +395,14 @@ Scale.prototype={
 		}
 		else if(this.type==='Ordinal'){
 			this.domainOrdinal=this.dataCol.data;
-
-
-			this.d3ScaleLateral=this.d3ScaleVertical=d3.scaleBand()
+			this.d3ScaleLateral=d3.scaleBand()
 					.domain(this.domainOrdinal)
 					.range([0,this.width])
+					.padding(this.bandPadding);
+
+			this.d3ScaleVertical=d3.scaleBand()
+					.domain(this.domainOrdinal)
+					.range([this.width,0])
 					.padding(this.bandPadding);
 		}
 		else{

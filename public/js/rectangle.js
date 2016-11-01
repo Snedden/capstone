@@ -36,7 +36,7 @@ function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,
 		this.rawData=project.datasets[this.yPosScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
 	if(widthScale){
-		widthScaleName="scale"+widthPosScale;
+		widthScaleName="scale"+widthScale;
 		this.widthScale=project.scales[widthScaleName];
 		this.rawData=project.datasets[this.widthScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
@@ -169,7 +169,10 @@ Rectangle.prototype={
 				.selectAll(".bar")
 				.data(this.rawData)
     			.enter().append("rect") //add new rect
-				 	.attr("width", function(){
+				 	.attr("width", function(d){
+				 		if(self.widthScale){
+							return   self.widthScale.d3ScaleLateral(d[self.widthScale.colName]);   
+						}
 				 		if(self.xPosScale){
 				 			return self.xPosScale.d3ScaleLateral.bandwidth();
 				 			
@@ -181,7 +184,7 @@ Rectangle.prototype={
 				 	.attr("class", "bar")
 					.attr("height", function(d,i){
 						if(self.heightScale){
-							return   self.heightScale.d3ScaleLateral(d[self.heightScale.colName]) - project.stageMarginBot - self.yPos;   //since the bot is excluded from height,think about it can't explain
+							return   self.heightScale.d3ScaleLateral(d[self.heightScale.colName]) ;   //since the bot is excluded from height,think about it can't explain
 						}
 				 		if(self.yPosScale){
 				 			return self.yPosScale.d3ScaleVertical.bandwidth();

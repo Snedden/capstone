@@ -372,7 +372,7 @@ ul {
             <div class="form-group linearScaleInput">
               <label class="control-label col-sm-2" for="range_from">Range From:</label>
               <div class="col-sm-10"> 
-                <input  class="form-control " id="range_from" name="range_from" value="50" min=0 max=600 required type="number"   placeholder="start range">
+                <input  class="form-control " id="range_from" name="range_from" disabled="true" value="0" min=0 max=600 required type="number"   placeholder="start range">
               </div>
             </div>
 
