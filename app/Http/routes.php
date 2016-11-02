@@ -39,6 +39,7 @@ Route::post('scale/delete','scalesController@delete')->middleware('auth');
 
 Route::post('axes/create','axesController@create')->middleware('auth');
 Route::post('axes/delete','axesController@delete')->middleware('auth');
+Route::post('axes/update','axesController@update')->middleware('auth');
 
 Route::post('rect/create','rectController@create')->middleware('auth');
 Route::post('rect/delete','rectController@delete')->middleware('auth');

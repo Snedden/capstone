@@ -182,14 +182,7 @@ $('#addScaleModal').on('show.bs.modal', function(e) {
     }
     //add or update scale
     if(action==="add"){
-/*      //enable them back
-      $(e.currentTarget).find("#addScaleBtn").prop("disabled",false);
-      $(e.currentTarget).find("#range_from").prop("disabled",false);
-      $(e.currentTarget).find("#range_to").prop("disabled",false);
-      $(e.currentTarget).find("#scaleBandPaddingOrdinal").prop("disabled",false);
-      $(e.currentTarget).find("#scaleWidthOrdinal").prop("disabled",false);*/
-
-      $(e.currentTarget).find("#addScaleBtn").html("Add");
+		$(e.currentTarget).find("#addScaleBtn").html("Add");
     }
     else if(action==="update"){
 

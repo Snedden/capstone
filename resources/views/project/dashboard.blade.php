@@ -435,6 +435,7 @@ ul {
           <h4 class="modal-title" id='datasetName'>Add Axes</h4>
         </div>
         <form  id="axesForm" method="POST" action="" accept-charset="UTF-8" class="form-horizontal">
+          <input type="hidden"  id="axesId" />  
           <div class="modal-body">
            
             <input type="hidden" name="_token" value="{{csrf_token()}}"> 

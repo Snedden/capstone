@@ -29,31 +29,13 @@ class axesController extends Controller
         $axesData=$_POST['data'];
         try{
             //validate
-            if(!ctype_digit($axesData['xPos'])){
-                $feedback['message']="X pos should be a number";
+            if(!$this->validateAxes($axesData)){
+                $feedback['message']="There was an validation error in the server";
                 $feedback['type']="error";
                 
                 return $feedback;
             }
-            else if(!ctype_digit($axesData['yPos'])){
-                $feedback['message']="Y pos should be a number";
-                $feedback['type']="error";
-                
-                return $feedback;
-            }
-            else if(!ctype_digit($axesData['ticks'])){
-                $feedback['message']="ticks should be a number";
-                $feedback['type']="error";
-                
-                return $feedback;
-            }
-            else if(!ctype_digit($axesData['scale'])){
-                $feedback['message']="invalid scale";
-                $feedback['type']="error";
-                
-                return $feedback;
-            }
-            //validated
+       
 
             $axes=new Axes();
             $axes->name=$axesData['name'];
@@ -96,6 +78,72 @@ class axesController extends Controller
         $axesId=$_POST['data'];
         Axes::destroy($axesId);
         return 'deleted';
+    }
+
+    /**
+    *update the axes in storage
+    */
+    public function update(){
+        $axesData=$_POST['data'];
+        try{
+            //validate
+            if(!$this->validateAxes($axesData)){
+                $feedback['message']="There was an validation error in the server";
+                $feedback['type']="error";
+                
+                return $feedback;
+            }
+       
+
+            $axes=Axes::findOrFail($axesData['id']);
+            $axes->name=$axesData['name'];
+            $axes->idScales=$axesData['scale'];
+            $axes->orient=$axesData['orient'];
+            $axes->X_pos=$axesData['xPos'];
+            $axes->Y_pos=$axesData['yPos'];
+            $axes->ticks=$axesData['ticks'];
+            $axes->pid=$axesData['pid'];
+
+            $axes->save();
+
+            //return saved axes to front end
+            $feedback['id']=$axes->idaxes;
+            $feedback['name']=$axes->name;
+            $feedback['scaleId']=$axes->idScales;
+            $feedback['orient']=$axes->orient;
+            $feedback['xPos']=$axes->X_pos;
+            $feedback['yPos']=$axes->Y_pos;
+            $feedback['ticks']=$axes->ticks;
+            $feedback['message']='Axes saved';
+
+
+            return $feedback;
+
+
+        }
+        catch(Exception $e){
+            $feedback->message=$e->getMessage();
+            $feedback->type="error";
+            return $feedback;
+        }
+    }
+
+   public function validateAxes($axesData){
+
+        if(!ctype_digit($axesData['xPos'])){
+            return false;
+        }
+        else if(!ctype_digit($axesData['yPos'])){
+            return false;
+        }
+        else if(!ctype_digit($axesData['ticks'])){
+            return false;
+        }
+        else if(!ctype_digit($axesData['scale'])){
+            return false;
+        }
+        return true;
+            
     }
 
  

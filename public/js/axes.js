@@ -32,8 +32,10 @@ function Axes(id,name,orient,xPos,yPos,scaleId,ticks){
 }
 
 
-//Add axes
+//Add axes/update axes
 $("#axesForm").submit(function(e){
+	var action=$("#addAxesBtn").html();
+
 	e.preventDefault();
 	e.stopImmediatePropagation();
 	var axesData={
@@ -45,8 +47,19 @@ $("#axesForm").submit(function(e){
 		ticks:$("#axesTicks").val(),
 		pid:project.pid
 	};
+	if(action==="Update"){
+		axesData.id=$("#axesId").val();
+		ajaxCall('post','axes/update',axesData,'json',axesUpdateCallback);
+	}
+	else if(action==="Add"){
+		ajaxCall('post','axes/create',axesData,'json',axesAddCallback); 
+	}
+	else{
+		console.error("invalid action for modify axes");
+	}
+	
 
-	ajaxCall('post','axes/create',axesData,'json',axesAddCallback); 
+	
 	
 });
 
@@ -63,7 +76,20 @@ function axesAddCallback(data){
 	axes.addAxes(); //add to screen and memory
 	$("#addAxesModal").modal('hide');//close add axes modal
 }
-//add axes end
+
+function axesUpdateCallback(data){
+	//console.log("axes callback ",data);
+	if(data.type==="error"){
+		$("#ajaxFeedback").html(data.message);
+
+	}
+	
+	$("#ajaxFeedback").html(data.message);
+	//add axes
+	var axes=new Axes(data.id,data.name,data.orient,data.xPos,data.yPos,data.scaleId,data.ticks); //create axes object
+	axes.updateAxes(); //add to screen and memory
+	$("#addAxesModal").modal('hide');//close add axes modal
+}
 
 //delete axes
 //del scale
@@ -77,27 +103,44 @@ $(document).on('click','.axesDelBtn',function(e){
 
 });
 
+//triggered when modal is about to be shown
+$('#addAxesModal').on('show.bs.modal', function(e) {
+	var axesId = $(e.relatedTarget).data('axes-id');
+	var axesName,axesObj;
+    //clicked form entity group list
+    if(axesId){
+    	$("#axesId").val(axesId);
+    	axesName='axes'+axesId;
+    	axesObj=project.axes[axesName];
+    	$("#axesName").val(axesObj.name);
+    	$("#axesScale").val(axesObj.scaleId);
+    	$("#axesOrient").val(axesObj.orient);
+    	$("#axesX").val(axesObj.xPos);
+    	$("#axesY").val(axesObj.yPos);
+    	$("#axesTicks").val(axesObj.ticks);
+
+    	$("#addAxesBtn").html("Update");
+    }
+    else{
+    	$("#addAxesBtn").html("Add");
+    }
+ });   
+
 Axes.prototype={
 	constructor:Axes,
 	addAxes:function(){
 		var axesName="axes"+this.id;
-		
-		console.debug('rf',this);
 		//add to memory
 		project.axes[axesName]=this;
-
 		project.scales[this.associatedScaleName].axes[axesName]={id:this.id};    //add axes to the associated scale    
 		//add to screen
-		var groupLi="<div id=axes"+this.id+"><li class='groupItem' id=axes"+this.id+">"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button></div>  ";
+		var groupLi="<div id=axes"+this.id+"><li data-axes-id="+this.id+" class='groupItem' data-toggle='modal' data-target='#addAxesModal'  id=Liaxes"+this.id+">"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button></div>  ";
 		$("#groupsUl").append(groupLi);  		 	//add to list
-		project.stage.append("g")                	//add to stage 
-        	.attr("class", "axis")
-        	.attr("id",this.d3AxisId)
-            .attr("transform", "translate("+project.getAxisX(this.xPos,this.orient,this.associatedScale.rangeFrom)+" ,"+project.getAxisY(this.yPos,this.orient,this.associatedScale.rangeFrom,this.length)+")")
-            .call(this.d3Axes); 
+		this.drawOnStage(); 
 
 
 	},
+	//called when scale is change to cascade the change into associated axes
 	updateAxesScale:function(scale){
 		//read updated scale values
 		this.associatedScale=project.scales[this.associatedScaleName]; 
@@ -141,6 +184,25 @@ Axes.prototype={
 		    }
 		    
 		}
+	},
+	updateAxes:function(){
+		var axesName="axes"+this.id;
+		//update in  memory
+		project.axes[axesName]=this;
+		project.scales[this.associatedScaleName].axes[axesName]={id:this.id};    //add axes to the associated scale    
+		//update to screen
+		//remove previous axes
+		d3.select("#"+this.d3AxisId)
+				.remove();
+		$("#Li"+axesName).html(this.name); 		 	//update in list
+		this.drawOnStage(); 						//update in stage
+	},
+	drawOnStage:function(){
+		project.stage.append("g")                	
+        	.attr("class", "axis")
+        	.attr("id",this.d3AxisId)
+            .attr("transform", "translate("+project.getAxisX(this.xPos,this.orient,this.associatedScale.rangeFrom)+" ,"+project.getAxisY(this.yPos,this.orient,this.associatedScale.rangeFrom,this.length)+")")
+            .call(this.d3Axes); 
 	},
 	setAxes:function(){
 		switch(this.orient){
