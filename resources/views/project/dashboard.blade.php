@@ -195,25 +195,41 @@ ul {
     <div id="stageDiv" class="span_7 column" style="height:500px">
        
     </div>
+
     <div class="span_4 column">
+      <!--Info-->
       <div class='funcGroup'>
-         <h5><b>Info</b></h5>
-          <span>Stage X :</span><span id="infoStageX">567</span><br/>
+        <h5><b>Info</b></h5>
+        <div>
+          <span>Stage X :</span><span id="infoStageX">567</span>
+        </div>
+        <div>
           <span>Stage Y :</span><span id="infoStageY">457</span>
         </div>
-         <div class='funcGroup'>
-           <h5><b>Add</b></h5>
-           <button data-toggle="modal" data-target="#addAxesModal">Axes</button>
-           <button id="addRectBtn">Rect</button>
-           <button disabled="true">Circle</button>
-           <button disabled="true">Pie</button>
-           <button disabled="true">Text</button>
+        <div id="entityNameInfoDiv" >
+          <span>Entity Name :</span><span id="entityNameInfo"></span>
         </div>
-        <div class='funcGroup'>
-          <h5><b>Groups</b></h5>
-          <ul id="groupsUl">
-          </ul>
+        <div id="entityTypeInfoDiv" >
+          <span>Entity Type :</span><span id="entityTypeInfo"></span>
         </div>
+        
+      </div>
+      <!--Entity Add-->
+      <div class='funcGroup'>
+         <h5><b>Add</b></h5>
+         <button data-toggle="modal" data-target="#addAxesModal">Axes</button>
+         <button id="addRectBtn">Rect</button>
+         <button disabled="true">Circle</button>
+         <button disabled="true">Pie</button>
+         <button disabled="true">Text</button>
+      </div>
+
+      <!--Entity group-->
+      <div class='funcGroup'>
+        <h5><b>Groups</b></h5>
+        <ul id="groupsUl">
+        </ul>
+      </div>
     </div>
     
     

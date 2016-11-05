@@ -1,5 +1,6 @@
 function Axes(id,name,orient,xPos,yPos,scaleId,ticks){
 	this.id=id;
+	this.type="Axes";
 	this.name=name;
 	this.orient=orient;
 	this.xPos=xPos;
@@ -103,9 +104,16 @@ $(document).on('click','.axesDelBtn',function(e){
 
 });
 
+//open modal when double click
+$(document).on('dblclick','.axesGroupItem',function(e){
+	console.debug('double cliked');
+	$('#addAxesModal').modal('show',$(this));
+});
 //triggered when modal is about to be shown
 $('#addAxesModal').on('show.bs.modal', function(e) {
+
 	var axesId = $(e.relatedTarget).data('axes-id');
+	console.debug('axesId', axesId);
 	var axesName,axesObj;
     //clicked form entity group list
     if(axesId){
@@ -129,12 +137,15 @@ $('#addAxesModal').on('show.bs.modal', function(e) {
 Axes.prototype={
 	constructor:Axes,
 	addAxes:function(){
+		var self=this;
 		var axesName="axes"+this.id;
 		//add to memory
 		project.axes[axesName]=this;
 		project.scales[this.associatedScaleName].axes[axesName]={id:this.id};    //add axes to the associated scale    
 		//add to screen
-		var groupLi="<div id=axes"+this.id+"><li data-axes-id="+this.id+" class='groupItem' data-toggle='modal' data-target='#addAxesModal'  id=Liaxes"+this.id+">"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button></div>  ";
+		var groupLi="<div id=axes"+this.id+"><li data-axes-id="+this.id+" data-entityid="+this.id+" data-entitytype=axes class='groupItem axesGroupItem'   id=Liaxes"+this.id+">"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary axesDelBtn'    data-axes-id="+this.id+" >Delete</button></div>  ";
+		
+	
 		$("#groupsUl").append(groupLi);  		 	//add to list
 		this.drawOnStage(); 
 

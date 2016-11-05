@@ -212,7 +212,34 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
 
 }
 
+//group list event listener
+//select group item on click
+$(document).on('click','.groupItem',function(){
+	var entityId=$(this).data().entityid;	//actual id
+	var entityType=$(this).data().entitytype; //axes,rect etc
+	var entityName=entityType+entityId;
+	var entity;
+	//make group item look selected
+	$('.groupItem').css('background-color',''); //remove previous(all) backgroud selected
+	$(this).css('background-color','#7f8a9b');	//add background to selected
+	
+	switch (entityType){
+		case "axes":
+			entity=project.axes[entityName];
+		break;
+		case "rect":
+			entity=project.rect[entityName];
+		break;
+		default:
+			console.error("invalid entity type");
+	}
 
+	//update info box
+	$('#entityNameInfo').html(entity.name);
+	$('#entityTypeInfo').html(entity.type);
+
+	
+});
 //takes range input 0 to 100 and converts to 0 to 1 output and populates an  outputID ele
 function setOutput(rangeInput,outputID){
 	var rangeInputEle=$(rangeInput);

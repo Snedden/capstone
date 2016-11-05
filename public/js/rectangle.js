@@ -8,6 +8,7 @@ function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,
 	
 	
 	this.id=id;	
+	this.type="Rectangle";
 	this.name=name;
 	this.width=width;
 	this.height=height;
@@ -70,7 +71,7 @@ Rectangle.prototype={
 		project.rectNum++;
 
 		//add to screen
-		groupLi="<div id=rect"+this.id+"><li data-toggle='modal' data-target='#addRectModal' class='groupItem' data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button>  </div>";
+		groupLi="<div id=rect"+this.id+"><li  class='groupItem rectGroupItem' data-entityid="+this.id+" data-entitytype=rect data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button>  </div>";
 		$("#groupsUl").append(groupLi);  		 	//add to list
 		//////////add to stage 
 		project.stage.append("g")                	
@@ -119,7 +120,7 @@ Rectangle.prototype={
 		project.rect[this.rectName]=this;
 		
 		//update to screen
-		groupLi="<div id=rect"+this.id+"><li data-toggle='modal' data-target='#addRectModal' class='groupItem' data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button></div> ";
+		groupLi="<div id=rect"+this.id+"><li data-entityid="+this.id+" data-entitytype=rect  class='groupItem rectGroupItem' data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button></div> ";
 		$("#rect"+this.id).html(groupLi);  		 	//update  list item
 		//////////add to stage 
 		//remove previous rect
@@ -257,6 +258,12 @@ $("#addRectBtn").click(function(){
 		var rect=new Rectangle(data.name,data.width,data.height,data.xPos,data.yPos,data.color,data.opacity,data.id,data.offsetX,data.offsetY);
 		rect.addRect();	
 	}
+});
+
+//open modal when double click
+$(document).on('dblclick','.rectGroupItem',function(e){
+	console.debug('double cliked');
+	$('#addRectModal').modal('show',$(this));
 });
 
 //delete rect
