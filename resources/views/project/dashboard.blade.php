@@ -153,6 +153,7 @@ ul {
   <button type="button" class="btn  menuBtn" data-toggle="modal" data-target="#myModal">Share project</button>
   <button type="button" class="btn  menuBtn" data-toggle="modal" data-target="#fileUploadModal" >Add Data</button>
   <button type="button" class="btn  menuBtn" data-toggle="modal" data-target="#embedModal" >Embed</button>
+  <button type="button" class="btn  menuBtn" data-toggle="modal" data-target="#exportModal" >Export</button>
 
 </div>  
 
@@ -276,7 +277,6 @@ ul {
           
         <div class="modal-footer">
           <button type="button" id="closeShareBtn" class="btn btn-default" data-dismiss="modal">Close</button>
-         
         </div>
       </div>
     </div>
@@ -312,7 +312,7 @@ ul {
   </div>
   <!-- file upload Modal End -->
 
-    <!-- embed Modal -->
+  <!-- embed Modal -->
   <div class="modal fade" id="embedModal" role="dialog">
     <div class="modal-dialog">
     
@@ -336,6 +336,29 @@ ul {
     </div>
   </div>
   <!-- embed Modal End -->
+
+  <!-- export Modal -->
+  <div class="modal fade" id="exportModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Export</h4>
+        </div>
+        <div class="modal-body">
+          <canvas id="canvas1" width="1000px" height="600px"></canvas> 
+        </div>  
+        <div class="modal-footer">
+          <button type="button" id="closefileUpBtn" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      
+      </div>
+ 
+    </div>
+  </div>
+  <!-- export Modal End -->
 
   <!-- dataset Modal -->
   <div class="modal fade" id="datasetModal" role="dialog">

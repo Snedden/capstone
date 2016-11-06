@@ -87,15 +87,17 @@
     @yield('content')
 
    
-    
+    <!--bootstrap and jquery-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
- 
-   
-
+    <!--Canvg-->
+    <script type="text/javascript" src="http://canvg.github.io/canvg/rgbcolor.js"></script> 
+    <script type="text/javascript" src="http://canvg.github.io/canvg/StackBlur.js"></script>
+    <script type="text/javascript" src="http://canvg.github.io/canvg/canvg.js"></script> 
+    <!--base files-->
     <script src="{{asset('js/ajax.js')}}"></script>
     <script src="{{asset('js/dashboard.js')}}"></script>
-
+    <!--d3.js-->
     <script src="{{asset('js/d3.min.js')}}"></script>
     <script src="{{asset('js/axes.js')}}"></script>
     <script src="{{asset('js/scales.js')}}"></script>

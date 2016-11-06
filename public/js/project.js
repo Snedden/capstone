@@ -293,7 +293,15 @@ $('#embedModal').on('show.bs.modal', function(e) {
         range.moveToElementText($("#embedableOp")[0]);
         range.select();
     }
-})
+});
+
+//Export modal opened event
+//triggered when modal is about to be shown
+$('#exportModal').on('show.bs.modal', function(e) {
+	//load a svg snippet in the canvas with id = 'canvas1'
+  	canvg(document.getElementById('canvas1'), "<svg width='900px' height='500px'>"+$('#stageEntities').html()+"</svg>")
+
+});
 
 
 Project.prototype={
