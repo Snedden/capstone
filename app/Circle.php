@@ -16,13 +16,13 @@ class Circle extends Model
     ]; 
 
      /**
-     * a Circle belongs to a entity
+     * a Circle belongs to a project
      *
      * @var array
      */
-     public function baseEntity()
+     public function project()
     {
-        return $this->belongsTo('App\Entitie','idEntities');//belongsTo(model,foreignkey)
+        return $this->belongsTo('App\Project','pid');//belongsTo(model,foreignkey)
     }
 
 

@@ -10,8 +10,9 @@
       var svrScales=<?php echo json_encode($project->scales); ?>;
       var svrAxes=<?php echo json_encode($project->axes); ?>;
       var svrRects=<?php echo json_encode($project->rects) ?>;
+      var svrCircles=<?php echo json_encode($project->circles) ?>;
      
-      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales,svrAxes,svrRects); //global object
+      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales,svrAxes,svrRects,svrCircles); //global object
       
 
     }
@@ -200,7 +201,7 @@ ul {
 
     <div class="span_4 column">
       <!--Info-->
-      <div class='funcGroup'>
+      <div class='funcGroup' style="height: 200px">
         <h5><b>Info</b></h5>
         <div>
           <span>Stage X :</span><span id="infoStageX">567</span>
@@ -221,13 +222,13 @@ ul {
          <h5><b>Add</b></h5>
          <button data-toggle="modal" data-target="#addAxesModal">Axes</button>
          <button id="addRectBtn">Rect</button>
-         <button disabled="true">Circle</button>
+         <button id="addCircleBtn">Circle</button>
          <button disabled="true">Pie</button>
          <button disabled="true">Text</button>
       </div>
 
       <!--Entity group-->
-      <div class='funcGroup'>
+      <div class='funcGroup' style="height:200px;overflow:auto">
         <h5><b>Groups</b></h5>
         <ul id="groupsUl">
         </ul>
@@ -338,11 +339,11 @@ ul {
   <!-- embed Modal End -->
 
   <!-- export Modal -->
-  <div class="modal fade" id="exportModal" role="dialog">
+  <div class="modal fade" id="exportModal" role="dialog" >
     <div class="modal-dialog">
     
       <!-- Modal content-->
-      <div class="modal-content" >
+      <div class="modal-content" style="width:900px" >
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Export</h4>
@@ -390,7 +391,7 @@ ul {
   </div>
   <!-- dataset Modal End -->
 
-    <!-- addScaleModal Modal -->
+  <!-- addScaleModal Modal -->
   <div class="modal fade" id="addScaleModal" role="dialog">
     <div class="modal-dialog">
     
@@ -569,7 +570,7 @@ ul {
   </div>
   <!-- Axes Modal End -->
 
-   <!-- Rect Modal    -->
+  <!-- Rect Modal    -->
   <div class="modal fade" id="addRectModal" role="dialog">
     <div class="modal-dialog">
     
@@ -577,7 +578,7 @@ ul {
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title" id='datasetName'>Add Rect</h4>
+          <h4 class="modal-title" id='rectHeading'>Add Rect</h4>
         </div>
         <form  id="rectForm" method="POST" action="" accept-charset="UTF-8" class="form-horizontal">
           <div class="modal-body">
@@ -704,6 +705,114 @@ ul {
     </div>
   </div>
   <!-- Rect Modal End -->
+
+  <!-- Circle Modal    -->
+  <div class="modal fade" id="addCircleModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id='circleHeading'>Add Circle</h4>
+        </div>
+        <form  id="circleForm" method="POST" action="" accept-charset="UTF-8" class="form-horizontal">
+          <div class="modal-body">
+           
+            <input type="hidden" name="_token" value="{{csrf_token()}}"> 
+            <input type="hidden"  id="circleId" >  
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="circleName" >Name:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" required name="rectName" placeholder="Circle Name"  id="circleName"  />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="circleDataset">Dataset:</label>
+              <div class="col-sm-10">
+                <select name="circleDataset" id="circleDataset">
+                  <option value="">No dataset</option>
+                  @forelse ($project->datasets as $dataset)
+                    <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
+                  @empty
+                  @endforelse   
+
+                  
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="circleRadius">Radius:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="circleRadius" placeholder="" id="circleRadius"  />
+              </div>
+              <label class="control-label col-sm-3 circleSelect" for="circleRadiusScale">Radius Scale:</label>
+               <div class="col-sm-3 circleSelect">
+                <select name="circleRadiusScale" class="circleScaleSelect circleLengths" data-assinputid="circleRadius" id="circleRadiusScale" >
+                   <!-- populated in rectagle.js getAxesCallback -->
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="circleX">X:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="circleX" placeholder="" id="circleX"  />
+              </div>
+              <label class="control-label col-sm-3 circleSelect" for="circleXScale">X Scale:</label>
+               <div class="col-sm-3 circleSelect">
+                <select name="circleXScale" class="circleScaleSelect " id="circleXScale" data-assinputid="circleX" >
+                   <!-- populated in rectagle.js getAxesCallback -->
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2 " for="circleY">Y:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="circleY" placeholder="" id="circleY"  />
+              </div>
+              <label class="control-label col-sm-3 circleSelect" for="circleYScale">Y Scale:</label>
+               <div class="col-sm-3 circleSelect">
+                <select name="circleYScale" id="circleYScale" class="circleScaleSelect" data-assinputid="circleY" >
+                   <!-- populated in rectagle.js getAxesCallback -->
+                </select>
+              </div>
+            </div>
+
+
+             <div class="form-group">
+              <label class="control-label col-sm-2" for="circleColor">Color</label>
+              <div class="col-sm-2">
+                <input  class="form-control" required type="color" placeholder="Color"  name="circleColor"  id="circleColor"  />
+              </div>
+            </div>
+
+            <div class="form-group ">
+              <label class="control-label col-sm-2" for="circleOpacityOutput">Opacity:</label>
+              <div class="col-xs-3">
+                <input  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'circleOpacityOutput')" min=0 max=100 required id="circleOpacityInput" placeholder="Opacity"   />
+              </div>  
+              <div class="col-xs-3">
+                <input type="text" class="form-control " id="circleOpacityOutput" disabled="true" value="1">
+              </div>
+            </div>
+          </div>  
+
+          <span style="color:red" id="ajaxFeedback"><span>   
+          <div class="modal-footer">
+            <button type="submit" id="updateCircleBtn" class="btn btn-default"  >Update</button>
+            <button type="button"  class="btn btn-default"  data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+ 
+    </div>
+  </div>
+  <!-- Circle Modal End -->
 
 </div>
 

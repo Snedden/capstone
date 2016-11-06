@@ -1,4 +1,4 @@
-function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
+function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles){
 	this.stageMarginLeft=30;
 	this.stageMarginBot=30;
 	this.stageWidth=$("#stageDiv").width();
@@ -17,7 +17,9 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
 	this.scales={};
 	this.axes={};
 	this.rect={};
+	this.circle={};
 	this.rectNum=0;
+	this.circleNum=0;
 	//set in setStageScales
 	this.stage;
 	this.stageEntities;
@@ -41,10 +43,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
       var coords = d3.mouse(this);
       $("#infoStageX").html(self.getStageX(coords[0])-2*(self.stageMarginLeft)); //invert doesn't make a diff here as range and domain are the same
       $("#infoStageY").html(self.getStageY(coords[1]));	//invert doesn't make a diff here as range and domain are the same
-      //console.log("X:",(self.stageXScale(coords[0])),"Y:",(self.stageYScale.invert(coords[1])));
-     /* $("#infoStageX").html(Math.round((self.stageXScale.invert(coords[0]))-(self.stageMarginLeft))); //invert doesn't make a diff here as range and domain are the same
-      $("#infoStageY").html(Math.round((self.stageYScale.invert(coords[1]))-(self.stageMarginBot)));	//invert doesn't make a diff here as range and domain are the same*/
-     }); 
+   	 }); 
 	
 	//make and add dataset object for each entry in pdataSets
 	for(var i=0;i<pdataSets.length;i++){
@@ -84,12 +83,24 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
 	*@desc:Loads rect object which are fetched form the DB to the client side of the project
 	*/
 	function loadRectsDBToMem(){
-		console.log('pRects ',pRects);
+		//console.log('pRects ',pRects);
 		for(var i=0;i<pRects.length;i++){
 
 			var rect=new Rectangle(pRects[i].rect_name,pRects[i].Width,pRects[i].Height,pRects[i].X_pos,pRects[i].Y_pos,pRects[i].Color,pRects[i].Opacity,pRects[i].idRectangle,pRects[i].Offset_X,pRects[i].Offset_Y,pRects[i].iddata_sets,pRects[i].widthScale,pRects[i].heightScale,pRects[i].XScale,pRects[i].YScale);
 			//console.log("i",i,"axes ",axes);
 			rect.addRect();
+		}
+	}
+
+	/**
+	*@desc:Loads circle object which are fetched form the DB to the client side of the project
+	*/
+	function loadCirclesDBToMem(){
+		//console.debug('pCircles ',pCircles);
+		for(var i=0;i<pCircles.length;i++){
+			var circle=new Circle(pCircles[i].cir_name,pCircles[i].radius,pCircles[i].X_pos,pCircles[i].Y_pos,pCircles[i].Color,pCircles[i].Opacity,pCircles[i].idCircle,pCircles[i].id_dataset,pCircles[i].radiusScale,pCircles[i].xPosScale,pCircles[i].yPosScale);
+			//console.log("i",i,"circle ",pCircles[i]);
+			circle.addCircle();
 		}
 	}
 
@@ -110,6 +121,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
 		loadScalesDBToMem(); //load scales data
 		loadAxesDBToMem();//load axes
 		loadRectsDBToMem();//load rect
+		loadCirclesDBToMem();//load circles
 	});
 
 
@@ -257,6 +269,10 @@ function selectEntity(entityId,entityType){
 		case "rect":
 			entity=project.rect[entityName];
 			$("#d3Rect"+entityId).attr("stroke","gray"); //draw a stroke around the element to let know its select
+		break;
+		case "circle":
+			entity=project.circle[entityName];
+			$("#d3Circle"+entityId).attr("stroke","gray"); //draw a stroke around the element to let know its select
 		break;
 		default:
 			console.error("invalid entity type");

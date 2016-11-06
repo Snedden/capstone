@@ -3,21 +3,23 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DropScaleToRectOneToManyRelation extends Migration
+class DropScaleFkInCircle extends Migration
 {
-    /**
+/**
      * Run the migrations.
      *
      * @return void
      */
-    public function up(){
+    public function up()
+    {
         //
         //drop entity foreign key from  rectangle table
-        Schema::table('Rectangle', function( Blueprint $table) {
+        Schema::table('circle', function( Blueprint $table) {
             
             $table->dropForeign(['idScale']);            //drop fk 
             $table->dropColumn('idScale');               //drop fk column 
            
+             
         });
     }
 
@@ -26,12 +28,12 @@ class DropScaleToRectOneToManyRelation extends Migration
      *
      * @return void
      */
-    public function down(){
+    public function down()
+    {
         Schema::table('circle', function($table) {
             $table->integer('idScale')->length(10)->unsigned();
             $table->foreign('idScale')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
         });
      
     }
-
 }

@@ -71,7 +71,7 @@ Rectangle.prototype={
 		project.rectNum++;
 
 		//add to screen
-		groupLi="<div id=rect"+this.id+"><li  class='groupItem rectGroupItem' data-entityid="+this.id+" data-entitytype=rect data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button>  </div>";
+		groupLi="<div id=rect"+this.id+"><li id=Lirect"+this.id+"  class='groupItem rectGroupItem' data-entityid="+this.id+" data-entitytype=rect data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button>  </div>";
 		$("#groupsUl").append(groupLi);  		 	//add to list
 		//////////add to stage 
 		this.drawOnStage();
@@ -108,7 +108,7 @@ Rectangle.prototype={
 		project.rect[this.rectName]=this;
 		
 		//update to screen
-		groupLi="<div id=rect"+this.id+"><li data-entityid="+this.id+" data-entitytype=rect  class='groupItem rectGroupItem' data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button></div> ";
+		groupLi="<div id=rect"+this.id+"><li id=Lirect"+this.id+" data-entityid="+this.id+" data-entitytype=rect  class='groupItem rectGroupItem' data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button></div> ";
 		$("#rect"+this.id).html(groupLi);  		 	//update  list item
 		//////////add to stage 
 		//remove previous rect
@@ -264,8 +264,6 @@ $(document).on('click','.rectDelBtn',function(e){
 	var rectId=$(this).attr('data-rect-id');
 	var rectTobeDeleted='rect'+rectId;
 	project.rect[rectTobeDeleted].deleteRect();
-
-
 
 });
 

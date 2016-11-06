@@ -45,6 +45,10 @@ Route::post('rect/create','rectController@create')->middleware('auth');
 Route::post('rect/delete','rectController@delete')->middleware('auth');
 Route::post('rect/update/{id}','rectController@update')->middleware('auth');
 
+Route::post('circle/create','circleController@create')->middleware('auth');
+Route::post('circle/update/{id}','circleController@update')->middleware('auth');
+Route::post('circle/delete','circleController@delete')->middleware('auth');
+
 Route::get('/home', 'HomeController@index')->middleware('auth');
 Route::get('/', 'HomeController@index')->middleware('auth');
 

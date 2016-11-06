@@ -105,7 +105,7 @@ class rectController extends Controller
    		
 
    		$rect->save();
-   		$rectData['id']=$rect->idRectangle; //add the id of just inserted row
+   		$rectData['id']=$rect->idRectangle; //add the id of just updated row
    		return $rectData;
    	}
 

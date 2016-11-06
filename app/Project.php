@@ -87,4 +87,15 @@ class Project extends Model
     {
         return $this->hasMany('App\Rectangle','pid','pid');//hasMany('model',foreingnkey,localkey)
     } 
+
+
+     /**
+     * A Project has many circles
+     *
+     * @var array
+     */
+     public function circles()
+    {
+        return $this->hasMany('App\Circle','pid','pid');//hasMany('model',foreingnkey,localkey)
+    } 
 }
