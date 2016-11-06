@@ -169,11 +169,7 @@ Axes.prototype={
 
 		d3.select("#"+this.d3AxisId)				//remove previous from stage
 				.remove();
-		project.stage.append("g")                	//update in stage 
-        	.attr("class", "axis")
-        	.attr("id",this.d3AxisId)
-            .attr("transform", "translate("+project.getAxisX(this.xPos,this.orient,this.associatedScale.rangeFrom)+","+project.getAxisY(this.yPos,this.orient,this.associatedScale.rangeFrom,this.length)+")")
-            .call(this.d3Axes); 
+		this.drawOnStage();                         //draw on stage 
 	},
 	deleteAxes:function(baseScaleDeleted){
 		var axesObject=this; 						//cache this as it is a lost in the call back funciton call
@@ -209,11 +205,12 @@ Axes.prototype={
 		this.drawOnStage(); 						//update in stage
 	},
 	drawOnStage:function(){
-		project.stage.append("g")                	
-        	.attr("class", "axis")
+		project.stageEntities.append("g")                	
+        	.attr("class", "axis d3Entity")
         	.attr("id",this.d3AxisId)
             .attr("transform", "translate("+project.getAxisX(this.xPos,this.orient,this.associatedScale.rangeFrom)+" ,"+project.getAxisY(this.yPos,this.orient,this.associatedScale.rangeFrom,this.length)+")")
             .call(this.d3Axes); 
+
 	},
 	setAxes:function(){
 		switch(this.orient){

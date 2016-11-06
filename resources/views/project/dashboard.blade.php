@@ -152,6 +152,7 @@ ul {
   
   <button type="button" class="btn  menuBtn" data-toggle="modal" data-target="#myModal">Share project</button>
   <button type="button" class="btn  menuBtn" data-toggle="modal" data-target="#fileUploadModal" >Add Data</button>
+  <button type="button" class="btn  menuBtn" data-toggle="modal" data-target="#embedModal" >Embed</button>
 
 </div>  
 
@@ -206,10 +207,10 @@ ul {
         <div>
           <span>Stage Y :</span><span id="infoStageY">457</span>
         </div>
-        <div id="entityNameInfoDiv" >
+        <div class="entityInfo" style="display:none" id="entityNameInfoDiv" >
           <span>Entity Name :</span><span id="entityNameInfo"></span>
         </div>
-        <div id="entityTypeInfoDiv" >
+        <div class="entityInfo" style="display:none" id="entityTypeInfoDiv" >
           <span>Entity Type :</span><span id="entityTypeInfo"></span>
         </div>
         
@@ -310,6 +311,31 @@ ul {
     </div>
   </div>
   <!-- file upload Modal End -->
+
+    <!-- embed Modal -->
+  <div class="modal fade" id="embedModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Embed</h4>
+        </div>
+        <div class="modal-body" style="height: 200px; overflow: scroll">
+         <span type="text" id="embedableOp" >asdasdas ada  dasd ads</span>
+        
+        </div>  
+          
+        <div class="modal-footer">
+          <button type="button" id="closefileUpBtn" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      
+      </div>
+ 
+    </div>
+  </div>
+  <!-- embed Modal End -->
 
   <!-- dataset Modal -->
   <div class="modal fade" id="datasetModal" role="dialog">

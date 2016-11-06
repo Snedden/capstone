@@ -20,6 +20,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
 	this.rectNum=0;
 	//set in setStageScales
 	this.stage;
+	this.stageEntities;
 	this.stageXScale;
 	this.stageYScale;
 	this.setStageScales(); //set scales and axis of the stage;
@@ -212,6 +213,10 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects){
 
 }
 
+//any click on body
+$('html').click(function() {
+ 	deselectEntities();
+ });
 //group list event listener
 //select group item on click
 $(document).on('click','.groupItem',function(){
@@ -219,27 +224,49 @@ $(document).on('click','.groupItem',function(){
 	var entityType=$(this).data().entitytype; //axes,rect etc
 	var entityName=entityType+entityId;
 	var entity;
-	//make group item look selected
+	
+	selectEntity(entityId,entityType);
+
+	
+	
+
+	
+});
+
+function deselectEntities(){
 	$('.groupItem').css('background-color',''); //remove previous(all) backgroud selected
-	$(this).css('background-color','#7f8a9b');	//add background to selected
+	$(".d3Entity").attr("stroke",""); //clear previous stroke	
+	$(".entityInfo").hide(); //hide info elements
+}
+
+//Select an entity on stage and in group
+function selectEntity(entityId,entityType){
+	var entityName=entityType+entityId;
+	var entity;
+	//deselect previous
+	deselectEntities();
+	//make group item look selected
+	$("#Li"+entityType+entityId).css('background-color','#7f8a9b');	//add background to selected
+	
 	
 	switch (entityType){
 		case "axes":
 			entity=project.axes[entityName];
+			$("#d3Axes"+entityId).attr("stroke","gray"); //draw a stroke around the element to let know its select
 		break;
 		case "rect":
 			entity=project.rect[entityName];
+			$("#d3Rect"+entityId).attr("stroke","gray"); //draw a stroke around the element to let know its select
 		break;
 		default:
 			console.error("invalid entity type");
 	}
-
+	$(".entityInfo").show();  //sho info elements
 	//update info box
 	$('#entityNameInfo').html(entity.name);
 	$('#entityTypeInfo').html(entity.type);
+}
 
-	
-});
 //takes range input 0 to 100 and converts to 0 to 1 output and populates an  outputID ele
 function setOutput(rangeInput,outputID){
 	var rangeInputEle=$(rangeInput);
@@ -247,6 +274,26 @@ function setOutput(rangeInput,outputID){
 	var outputRange=((parseInt(rangeInputEle.val())*0.01)).toFixed(2);
 	rangeOutputEle.val(outputRange);
 }
+
+//Embedable modal opened event
+//triggered when modal is about to be shown
+$('#embedModal').on('show.bs.modal', function(e) {
+	console.debug($("#embedableOp"));
+	$("#embedableOp").text("<svg width='900px' height='500px'>"+$('#stageEntities').html()+"</svg>");
+
+	//trying to select text ,doesn't work
+	if (window.getSelection && document.createRange) {
+        selection = window.getSelection();
+        range = document.createRange();
+        range.selectNodeContents($("#embedableOp")[0]);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    } else if (document.selection && document.body.createTextRange) {
+        range = document.body.createTextRange();
+        range.moveToElementText($("#embedableOp")[0]);
+        range.select();
+    }
+})
 
 
 Project.prototype={
@@ -260,7 +307,7 @@ Project.prototype={
 
 			//set project stage
 			this.stage=d3.select("#stageDiv").append("svg").attr("width",this.stageWidth).attr("height",this.stageHeight);
-
+			this.stageEntities=this.stage.append("g").attr("id","stageEntities");
 			//Set project scale
 			//Xscale
 			this.stageXScale=d3.scaleLinear()            

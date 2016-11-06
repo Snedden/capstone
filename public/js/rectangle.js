@@ -74,19 +74,7 @@ Rectangle.prototype={
 		groupLi="<div id=rect"+this.id+"><li  class='groupItem rectGroupItem' data-entityid="+this.id+" data-entitytype=rect data-rectid="+this.id+" >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary rectDelBtn'    data-rect-id="+this.id+" >Delete</button>  </div>";
 		$("#groupsUl").append(groupLi);  		 	//add to list
 		//////////add to stage 
-		project.stage.append("g")                	
-						.attr("class", "rect")
-	        			.attr("id",this.d3RectId);
-		if(!this.isBasic()){
-			//update attributes
-			this.drawLinkedRect();
-
-
-		}
-		else{
-			//update attributes
-			this.drawBasicRect();	
-		}
+		this.drawOnStage();
 
 		
 
@@ -126,9 +114,15 @@ Rectangle.prototype={
 		//remove previous rect
 		d3.select("#"+this.d3RectId)
 				.remove();
+		this.drawOnStage();
+		
+						
+	},
+	drawOnStage:function(){
+		
 		//add new group			
-		project.stage.append("g")                	
-						.attr("class", "rect")
+		project.stageEntities.append("g")                	
+						.attr("class", "rect d3Entity")
 	        			.attr("id",this.d3RectId);		  
 		if(!this.isBasic()){
 			//update attributes
@@ -140,8 +134,6 @@ Rectangle.prototype={
 			//update attributes
 			this.drawBasicRect();	
 		}
-		
-						
 	},
 	isBasic:function(){
 		if(!this.widthScale&&!this.heightScale&&!this.xPosScale&&!this.yPosScale){
