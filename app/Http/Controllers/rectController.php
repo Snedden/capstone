@@ -94,7 +94,7 @@ class rectController extends Controller
    			$rect->XScale=$rectData['xPosScale'];	
    		}
 		
-		if($rectData['yPosScale']==""){
+		   if($rectData['yPosScale']==""){
    			$rect->YScale=null;	
    		}
    		else{

@@ -29,7 +29,7 @@ function Circle(name,radius,xPos,yPos,color,opacity,id,id_dataset,radiusScale,xP
 		this.rawData=project.datasets[this.yPosScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
 	if(radiusScale){
-		radiusScaleName="scale"+widthScale;
+		radiusScaleName="scale"+radiusScale;
 		this.radiusScale=project.scales[radiusScaleName];
 		this.rawData=project.datasets[this.radiusScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
@@ -178,6 +178,50 @@ $('#addCircleModal').on('show.bs.modal', function(e) {
     $(e.currentTarget).find('#circleOpacityInput').val(circleObj.opacity);
     $(e.currentTarget).find('#circleOpacityOutput').val(circleObj.opacity);
     $(e.currentTarget).find('#circleDataset').val(circleObj.id_dataset);
+
+        //a data select is changed
+	$(document).on('change', '#circleDataset', function() {
+		var selectedDataset=$(this);
+
+		//console.log('circleDs',selectedDataset.val(), selectedDataset);
+
+		//if no dataset selected toggle
+		if(selectedDataset.val()===""){
+			
+			$(".circleSelect").hide();
+		}
+		else{
+			ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
+			$(".circleSelect").show();
+		}
+
+		function getScalesCallback(data){
+			//remove previous
+			$('.circleScaleSelect').html('');
+
+			//add new
+			for(var i=0;i<data.length;i++){
+				//add header once
+				if(i===0){
+					$('.circleScaleSelect').append($('<option>', { 
+				        value:'',
+				        text : 'No scale' 
+				    }));
+				}
+			    $('.circleScaleSelect').append($('<option>', { 
+			        value: data[i].idScales,
+			        text : data[i].scale_name 
+			    }));
+
+			}
+			$(e.currentTarget).find('#circleRadiusScale').val(circleObj.radiusScaleId);
+		    $(e.currentTarget).find('#circleXScale').val(circleObj.xPosScaleId);
+		    $(e.currentTarget).find('#circleYScale').val(circleObj.yPosScaleId);
+		   
+		    
+		}
+	});
+	$(e.currentTarget).find('#circleDataset').trigger("change"); 
     
    
 
@@ -201,7 +245,10 @@ $("#circleForm").submit(function(e){
 		color:$("#circleColor").val(),
 		opacity:$("#circleOpacityInput").val(),
 		pid:project.pid,
-		dataset:$("#circleDataset").val()
+		dataset:$("#circleDataset").val(),
+		yPosScale:$("#circleYScale").val(),
+		xPosScale:$("#circleYScale").val(),
+		radiusScale:$("#circleRadiusScale").val(),
 	};
 
 	ajaxCall('post','circle/update/'+circleId,circleData,'json',updateCircleCallback);
@@ -211,7 +258,7 @@ $("#circleForm").submit(function(e){
 
 function updateCircleCallback(data){
 	console.log("circle ",data);
-	var updatedCircle=new Circle(data.name,data.radius,data.xPos,data.yPos,data.color,data.opacity,data.id);
+	var updatedCircle=new Circle(data.name,data.radius,data.xPos,data.yPos,data.color,data.opacity,data.id,data.dataset,data.radiusScale,data.xPosScale,data.yPosScale);
 	
 	updatedCircle.updateCircle();
 

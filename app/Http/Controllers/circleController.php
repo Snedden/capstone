@@ -59,14 +59,28 @@ class circleController extends Controller
   		$circle->X_pos=$circleData['xPos'];
    		$circle->Y_pos=$circleData['yPos'];
    		$circle->radius=$circleData['radius'];
-
+   		if(strlen($circleData['dataset'])==0){
+   			$circle->iddata_sets=null;
+   		}
+   		else{
+   			$circle->iddata_sets=$circleData['dataset'];
+   		}
+   		if(!$circleData['xPosScale']==""){
+   			$circle->XScale=$circleData['xPosScale'];	
+   		}
+   		if(!$circleData['yPosScale']==""){
+   			$circle->YScale=$circleData['yPosScale'];	
+   		}
+   		if(!$circleData['radiusScale']==""){
+   			$circle->radiusScale=$circleData['radiusScale'];	
+   		}
    		$circle->save();
    		$circleData['id']=$circle->idCircle; //add the id of just updated row
    		return $circleData;
    	}
 
    	/**
-	*delete the rect from storage
+	*delete the circle from storage
 	*/
 	public function delete(){
 		$circleId=$_POST['data'];
