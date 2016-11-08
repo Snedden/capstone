@@ -70,8 +70,17 @@ Circle.prototype={
 		project.stageEntities.append("g")                	
 						.attr("class", "circle d3Entity")
 	        			.attr("id",this.d3CircleId);		  
+	    if(!this.isBasic()){
+			//update attributes
+			this.drawLinkedCircle();
 
-		this.drawBasicCircle();	
+
+		}
+		else{
+			//update attributes
+			this.drawBasicCircle();		
+		}
+		
 		
 	},
 	drawBasicCircle:function(){
@@ -85,6 +94,52 @@ Circle.prototype={
 			//tranform to X and Y 	
 			d3.select("#"+this.d3CircleId)
 				.attr("transform", "translate("+(project.getStageX(this.xPos)-this.originXShift)+","+(project.getStageY(this.yPos)-this.originYShift)+")");
+	},
+	drawLinkedCircle:function(){
+		var self=this;
+		d3.select("#"+this.d3CircleId)
+				.html("")  //remove previous circle
+				.selectAll(".disc")
+				.data(this.rawData)
+    			.enter().append("circle") //add new circle
+				 	.attr("r", function(d){
+				 		if(self.radiusScale){
+							return   self.radiusScale.d3ScaleLateral(d[self.radiusScale.colName])/12;   //reducing by  factor 10 to fit on screen
+						}
+				 		else{
+				 			return self.radius;
+				 		}
+				 	})
+				 	.attr("class", "disc")
+					.attr("fill",this.color)
+					.attr("fill-opacity",(0.01*this.opacity))
+					.attr("cx", function(d) { 
+						if(self.xPosScale){
+							return (self.xPosScale.d3ScaleLateral.bandwidth()/2)+ self.xPosScale.d3ScaleLateral(d[self.xPosScale.colName]);  //adding the half of bandwith so center coincides with the scale band
+						}
+						else{
+							return null;
+						} })
+					.attr("cy",function(d) { 
+						if(self.yPosScale){
+							return -(self.yPosScale.d3ScaleLateral(d[self.yPosScale.colName]));
+						}
+						else{
+							return null;
+						} });
+		//tranform to X and Y 	
+
+						d3.select("#"+this.d3CircleId)
+				.attr("transform", " translate("+(project.getStageX(this.xPos)-this.originXShift)+","+(project.getStageY(this.yPos)-this.originYShift)+")");	 //scale(1,-)			
+
+	},
+	isBasic:function(){
+		if(!this.radiusScale&&!this.xPosScale&&!this.yPosScale){
+			return true;
+		}		
+	    else{
+	    	return false;
+	    }
 	},
 	updateCircle:function(){
 		var groupLi;  //list item in group list
@@ -214,9 +269,25 @@ $('#addCircleModal').on('show.bs.modal', function(e) {
 			    }));
 
 			}
-			$(e.currentTarget).find('#circleRadiusScale').val(circleObj.radiusScaleId);
-		    $(e.currentTarget).find('#circleXScale').val(circleObj.xPosScaleId);
-		    $(e.currentTarget).find('#circleYScale').val(circleObj.yPosScaleId);
+			if(circleObj.radiusScaleId){
+				$(e.currentTarget).find('#circleRadiusScale').val(circleObj.radiusScaleId);
+			}
+			else{
+				$(e.currentTarget).find('#circleRadiusScale').val('');
+			}
+			if(circleObj.xPosScaleId){
+				$(e.currentTarget).find('#circleXScale').val(circleObj.xPosScaleId);
+			}
+			else{
+				$(e.currentTarget).find('#circleXScale').val('');
+			}
+		    if(circleObj.yPosScaleId){
+		    	$(e.currentTarget).find('#circleYScale').val(circleObj.yPosScaleId);
+		    }
+		    else{
+		    	$(e.currentTarget).find('#circleYScale').val('');
+		    }
+		    
 		   
 		    
 		}
@@ -246,11 +317,10 @@ $("#circleForm").submit(function(e){
 		opacity:$("#circleOpacityInput").val(),
 		pid:project.pid,
 		dataset:$("#circleDataset").val(),
-		yPosScale:$("#circleYScale").val(),
-		xPosScale:$("#circleYScale").val(),
+		
 		radiusScale:$("#circleRadiusScale").val(),
 	};
-
+	console.log('circleData ',circleData );
 	ajaxCall('post','circle/update/'+circleId,circleData,'json',updateCircleCallback);
 	$("#addCircleModal").modal('hide');//close modal dialog
 	

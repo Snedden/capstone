@@ -243,7 +243,7 @@ Scale.prototype={
 	},
 	updateScale:function(data){
 		var scaleTobeUpdated='scale'+this.scaleId;
-		var axisToBeUpdated,axisId,rectData;
+		var axisToBeUpdated,axisId,rectData,circleData;
 		//update scale
 		if(this.type==="Linear"){
 			this.rangeFrom=data.rangeFrom;
@@ -268,7 +268,7 @@ Scale.prototype={
 		//update associated  rect
 		
 		for (var key in project.rect){
-			rectChange=false;
+			
 			if((project.rect[key].widthScaleId==this.scaleId)||(project.rect[key].heightScaleId==this.scaleId)||(project.rect[key].xPosScaleId==this.scaleId)||(project.rect[key].yPosScaleId==this.scaleId)){ // double == on purpose as RHS is num and LHS is string
 				rectData={
 					name:project.rect[key].name,
@@ -290,8 +290,30 @@ Scale.prototype={
 
 				ajaxCall('post','rect/update/'+project.rect[key].id,rectData,'json',updateRectCallback);
 			}
+
 		
+		}
+		//update associated  circle
+		
+		for (var key in project.circle){
 			
+			if((project.circle[key].radiusScaleId==this.scaleId)||(project.circle[key].xPosScaleId==this.scaleId)||(project.circle[key].yPosScaleId==this.scaleId)){ // double == on purpose as RHS is num and LHS is string
+				circleData={
+					name:project.circle[key].name,
+					radius:project.circle[key].radius,
+					radiusScale:project.circle[key].radiusScaleId,
+					xPos:project.circle[key].xPos,
+					xPosScale:project.circle[key].xPosScaleId,
+					yPos:project.circle[key].yPos,
+					yPosScale:project.circle[key].yPosScaleId,
+					color:project.circle[key].color,
+					opacity:project.circle[key].opacity,
+					pid:project.pid,
+					dataset:project.circle[key].id_dataset
+				};
+
+				ajaxCall('post','circle/update/'+project.circle[key].id,circleData,'json',updateCircleCallback);
+			}
 		}
 		
 	},
@@ -303,7 +325,7 @@ Scale.prototype={
 		ajaxCall('post','scale/delete',this.scaleId,'text',scaleDelCallback);
 
 		function scaleDelCallback(data){
-			var rectChange;
+			var rectChanged,circleChanged;
 		    var scaleTobeDeleted='scale'+scaleObject.scaleId;
 		    //delete form screen
 		    $("#"+scaleTobeDeleted+'Li').remove(); //list item
@@ -319,29 +341,29 @@ Scale.prototype={
 
 			//update rectangle associted with to-be-deleted scale
 			for (var key in project.rect){
-				rectChange=false;
+				rectChanged=false;
 				if(project.rect[key].widthScaleId==scaleObject.scaleId){ // double == on purpose as RHS is num and LHS is string
 					project.rect[key].widthScaleId=null;
 					project.rect[key].widthScaleName=null;
-					rectChange=true;
+					rectChanged=true;
 				}
 				if(project.rect[key].heightScaleId==scaleObject.scaleId){
 					project.rect[key].heightScaleId=null;
 					project.rect[key].heightScaleName=null;
-					rectChange=true;
+					rectChanged=true;
 				}
 				if(project.rect[key].xPosScaleId==scaleObject.scaleId){
 					project.rect[key].xPosScaleId=null;
 					project.rect[key].XScaleName=null;
-					rectChange=true;
+					rectChanged=true;
 				}
 				if(project.rect[key].yPosScaleId==scaleObject.scaleId){
 					project.rect[key].yPosScaleId=null;
 					project.rect[key].YScaleName=null;
-					rectChange=true;
+					rectChanged=true;
 				}
 				//update rect
-				if(rectChange){
+				if(rectChanged){
 					var rectData={
 					name:project.rect[key].name,
 					width:project.rect[key].width,
@@ -363,6 +385,45 @@ Scale.prototype={
 					ajaxCall('post','rect/update/'+project.rect[key].id,rectData,'json',updateRectCallback);
 				}
 			}
+
+			//update circle associted with to-be-deleted scale
+			for (var key in project.circle){
+				circleChanged=false;
+				if(project.circle[key].radiusScaleId==scaleObject.scaleId){ // double == on purpose as RHS is num and LHS is string
+					project.circle[key].radiusScaleId=null;
+					project.circle[key].radiusScaleName=null;
+					circleChanged=true;
+				}
+				if(project.circle[key].xPosScaleId==scaleObject.scaleId){
+					project.circle[key].xPosScaleId=null;
+					project.circle[key].XScaleName=null;
+					circleChanged=true;
+				}
+				if(project.circle[key].yPosScaleId==scaleObject.scaleId){
+					project.circle[key].yPosScaleId=null;
+					project.circle[key].YScaleName=null;
+					circleChanged=true;
+				}
+				//update circle
+				if(circleChanged){
+					var circleData={
+					name:project.circle[key].name,
+					radius:project.circle[key].radius,
+					radiusScale:project.circle[key].radiusScaleId,
+					xPos:project.circle[key].xPos,
+					xPosScale:project.circle[key].xPosScaleId,
+					yPos:project.circle[key].yPos,
+					yPosScale:project.circle[key].yPosScaleId,
+					color:project.circle[key].color,
+					opacity:project.circle[key].opacity,
+					pid:project.pid,
+					dataset:project.circle[key].id_dataset
+					};
+
+					ajaxCall('post','circle/update/'+project.circle[key].id,circleData,'json',updateCircleCallback);
+				}
+			}
+
 		 	//delete scale object
 		    delete project.scales[scaleTobeDeleted];
 

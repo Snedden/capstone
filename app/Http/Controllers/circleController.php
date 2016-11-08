@@ -65,15 +65,27 @@ class circleController extends Controller
    		else{
    			$circle->iddata_sets=$circleData['dataset'];
    		}
+
    		if(!$circleData['xPosScale']==""){
    			$circle->XScale=$circleData['xPosScale'];	
+   		}
+   		else{
+   			$circle->XScale=null;
    		}
    		if(!$circleData['yPosScale']==""){
    			$circle->YScale=$circleData['yPosScale'];	
    		}
+   		else{
+   			$circle->YScale=null;
+   		}
+
    		if(!$circleData['radiusScale']==""){
    			$circle->radiusScale=$circleData['radiusScale'];	
    		}
+   		else{
+   			$circle->radiusScale=$circleData['radiusScale'];
+   		}
+
    		$circle->save();
    		$circleData['id']=$circle->idCircle; //add the id of just updated row
    		return $circleData;

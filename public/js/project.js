@@ -98,7 +98,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles){
 	function loadCirclesDBToMem(){
 		//console.debug('pCircles ',pCircles);
 		for(var i=0;i<pCircles.length;i++){
-			var circle=new Circle(pCircles[i].cir_name,pCircles[i].radius,pCircles[i].X_pos,pCircles[i].Y_pos,pCircles[i].Color,pCircles[i].Opacity,pCircles[i].idCircle,pCircles[i].id_dataset,pCircles[i].radiusScale,pCircles[i].xPosScale,pCircles[i].yPosScale);
+			var circle=new Circle(pCircles[i].cir_name,pCircles[i].radius,pCircles[i].X_pos,pCircles[i].Y_pos,pCircles[i].Color,pCircles[i].Opacity,pCircles[i].idCircle,pCircles[i].iddata_sets,pCircles[i].radiusScale,pCircles[i].XScale,pCircles[i].YScale);
 			//console.log("i",i,"circle ",pCircles[i]);
 			circle.addCircle();
 		}
