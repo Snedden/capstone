@@ -20,6 +20,7 @@ Dataset.prototype={
 		var self=this;
 		d3.csv(this.path+".csv", function(data) {
 			var colName;
+			var colName1;
 			var colType;
 			var colData;
 			var dataColObj;
@@ -31,6 +32,7 @@ Dataset.prototype={
   			for(var i=0;i<data.columns.length;i++){
   				console.log('col ',data.columns[i]);
   				colName=data.columns[i];
+  				colName1=
   				colType=isNaN(data[0][colName])?'String':'Number';
   				colData=[];
 
@@ -48,7 +50,7 @@ Dataset.prototype={
   				//add column obect
   				dataColObj=new Datacol(colName,colType,colData,datasetId);
   				self.dataCols[colName]=dataColObj;
-
+  				
           //count the number of data sets loaded
           project.dataSetLoaded++;
           //dispatch event if all data sets are loaded
@@ -59,7 +61,7 @@ Dataset.prototype={
 		});
 	},
 	addDataCol:function(){
-
+		
 	}
 }
 

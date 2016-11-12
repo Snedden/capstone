@@ -41,7 +41,7 @@ class AddScaleColumnsToRect extends Migration
              $table->integer('X_pos')->default(0)->change();
             $table->integer('Y_pos')->default(0)->change();
             $table->integer('Height')->default(50)->change();
-            $table->integer('Width')->default(50)->change()
+            $table->integer('Width')->default(50)->change();
         });
     }
 }

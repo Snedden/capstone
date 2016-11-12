@@ -145,6 +145,10 @@ ul {
   display: none;
 }
 
+.selectPieDiv{
+  display: none;
+}
+
 
 
 </style>
@@ -223,7 +227,7 @@ ul {
          <button data-toggle="modal" data-target="#addAxesModal">Axes</button>
          <button id="addRectBtn">Rect</button>
          <button id="addCircleBtn">Circle</button>
-         <button disabled="true">Pie</button>
+         <button data-toggle="modal" data-target="#addPieModal">Pie</button>
          <button disabled="true">Text</button>
       </div>
 
@@ -725,7 +729,7 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="circleName" >Name:</label>
               <div class="col-sm-10">
-                <input  class="form-control" required name="rectName" placeholder="Circle Name"  id="circleName"  />
+                <input  class="form-control" required name="circleName" placeholder="Circle Name"  id="circleName"  />
               </div>
             </div>
 
@@ -752,7 +756,7 @@ ul {
               <label class="control-label col-sm-3 circleSelect" for="circleRadiusScale">Radius Scale:</label>
                <div class="col-sm-3 circleSelect">
                 <select name="circleRadiusScale" class="circleScaleSelect circleLengths" data-assinputid="circleRadius" id="circleRadiusScale" >
-                   <!-- populated in rectagle.js getAxesCallback -->
+                   <!-- populated in circle.js getAxesCallback -->
                 </select>
               </div>
             </div>
@@ -765,7 +769,7 @@ ul {
               <label class="control-label col-sm-3 circleSelect" for="circleXScale">X Scale:</label>
                <div class="col-sm-3 circleSelect">
                 <select name="circleXScale" class="circleScaleSelect " id="circleXScale" data-assinputid="circleX" >
-                   <!-- populated in rectagle.js getAxesCallback -->
+                   <!-- populated in circlee.js getAxesCallback -->
                 </select>
               </div>
             </div>
@@ -778,7 +782,7 @@ ul {
               <label class="control-label col-sm-3 circleSelect" for="circleYScale">Y Scale:</label>
                <div class="col-sm-3 circleSelect">
                 <select name="circleYScale" id="circleYScale" class="circleScaleSelect" data-assinputid="circleY" >
-                   <!-- populated in rectagle.js getAxesCallback -->
+                   <!-- populated in circle.js getAxesCallback -->
                 </select>
               </div>
             </div>
@@ -814,6 +818,128 @@ ul {
   </div>
   <!-- Circle Modal End -->
 
+    <!-- Pie Modal    -->
+  <div class="modal fade" id="addPieModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id='pieHeading'>Add Pie</h4>
+        </div>
+        <form  id="pieForm" method="POST" action="" accept-charset="UTF-8" class="form-horizontal">
+          <div class="modal-body">
+           
+            <input type="hidden" name="_token" value="{{csrf_token()}}"> 
+            <input type="hidden"  id="pieId" >  
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pieName" >Name:</label>
+              <div class="col-sm-8">
+                <input  class="form-control" required name="pieName" placeholder="Pie Name"  id="pieName"  />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pieDataset">Dataset:</label>
+              <div class="col-sm-10">
+                <select name="pieDataset" id="pieDataset" required>
+                  <option value="">No dataset</option>
+                  @forelse ($project->datasets as $dataset)
+                    <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
+                  @empty
+                  @endforelse   
+
+                  
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group selectPieDiv">
+              <label class="control-label col-sm-2" for="pieLabels">Pie Labels:</label>
+              <div class="col-sm-10">
+                <select name="pieLabels" class="pieSelects" id="pieLabels" required>
+                  <option value=""></option>
+                  
+
+                  
+                </select>
+              </div>
+            </div>
+            <div class="form-group selectPieDiv" >
+              <label class="control-label col-sm-2" for="pieValues">Pie values:</label>
+              <div class="col-sm-10">
+                <select name="pieValues" id="pieValues" class="pieSelects" required>
+                  <option value=""></option>
+                  
+
+                  
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pieInnerRadius">Inner Radius:</label>
+              <div class="col-sm-4">
+                <input  class="form-control" type="number" value=0 min=0 max=300  required name="pieInnerRadius" placeholder="" id="pieInnerRadius"  />
+              </div>
+
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pieOuterRadius">Outer Radius:</label>
+              <div class="col-sm-4">
+                <input  class="form-control" type="number" min=0 max=320 required name="pieOuterRadius" placeholder="" id="pieOuterRadius"  />
+              </div>
+
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pieLabelRadius">Label Radius:</label>
+              <div class="col-sm-4">
+                <input  class="form-control" type="number" min=0 max=320  required name="pieLabelRadius" placeholder="" id="pieLabelRadius"  />
+              </div>
+
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pieX">X:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="pieX" placeholder="" id="pieX"  />
+              </div>
+
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2 " for="pieY">Y:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="pieY" placeholder="" id="pieY"  />
+              </div>
+            </div>
+
+            <div class="form-group ">
+              <label class="control-label col-sm-2" for="pieOpacityOutput">Opacity:</label>
+              <div class="col-xs-3">
+                <input  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'pieOpacityOutput')" min=0 max=100 required id="pieOpacityInput" placeholder="Opacity"   />
+              </div>  
+              <div class="col-xs-3">
+                <input type="text" class="form-control " id="pieOpacityOutput" disabled="true" value="1">
+              </div>
+            </div>
+          </div>  
+
+          <span style="color:red" id="ajaxFeedback"><span>   
+          <div class="modal-footer">
+            <button type="submit" id="updatePieBtn" class="btn btn-default"  >Update</button>
+            <button type="button"  class="btn btn-default"  data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+ 
+    </div>
+  </div>
+  <!-- Pie Modal End -->
 </div>
 
 @endsection

@@ -49,6 +49,8 @@ Route::post('circle/create','circleController@create')->middleware('auth');
 Route::post('circle/update/{id}','circleController@update')->middleware('auth');
 Route::post('circle/delete','circleController@delete')->middleware('auth');
 
+Route::post('pie/create','pieController@create')->middleware('auth');
+
 Route::get('/home', 'HomeController@index')->middleware('auth');
 Route::get('/', 'HomeController@index')->middleware('auth');
 

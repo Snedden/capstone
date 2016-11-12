@@ -18,8 +18,10 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles){
 	this.axes={};
 	this.rect={};
 	this.circle={};
+	this.pie={};
 	this.rectNum=0;
 	this.circleNum=0;
+	this.pieNum=0;
 	//set in setStageScales
 	this.stage;
 	this.stageEntities;
