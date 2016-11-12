@@ -28,7 +28,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles){
 	this.stageXScale;
 	this.stageYScale;
 	this.setStageScales(); //set scales and axis of the stage;
-
+	
 
 	this.getStageX=function(xPos){
 		
@@ -51,11 +51,18 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles){
 	for(var i=0;i<pdataSets.length;i++){
 		
 		this.NumberOfDataSets+=pdataSets[i].cols;
-
+		//get the associated cols
+		
+		
 		var dataset=new Dataset(pdataSets[i].name,pdataSets[i].path,pdataSets[i].iddata_sets); //.path is just the filename not the entire path
-		this.addDataSet(dataset);
+		dataset.addDataset(this.pid); //dataset object
+		this.addDataSet(dataset); //add to project object
 	}
 	
+	function getDataColsCallback(data){
+		dataCols=data;
+	}
+
 	/**
 	*@desc: Loads  pScales object which is fetched form the DB to the client side of the project
 	*/

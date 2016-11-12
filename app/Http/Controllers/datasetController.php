@@ -32,6 +32,10 @@ class datasetController extends Controller
 		    
 		    // Undefined | Multiple Files | $_FILES Corruption Attack
 		    // If this request falls under any of them, treat it invalid.
+		/*	if(!isset($_FILES['csv']) || !is_uploaded_file($_FILES['csv']['tmp_name'][0])){
+   				throw new Exception('File missing');
+			}*/
+
 		    if (
 		        !isset($_FILES['csv']['error']) ||
 		        is_array($_FILES['csv']['error'])
@@ -114,6 +118,8 @@ class datasetController extends Controller
 	        $dataset->cols=count($csvAsArray[0]);
 	        $dataset->save();
 
+	     
+	        
 	        for($i=0;$i<count($csvAsArray[0]);$i++ ){  
 	        	$datasetCol=new DataSetColumn;
 				$datasetCol->col_name=$csvAsArray[0][$i];  //first row is assume to be the header row
@@ -124,15 +130,18 @@ class datasetController extends Controller
 					$datasetCol->col_type='String';
 				}
 				$datasetCol->iddata_sets=$dataset->iddata_sets;
+				
 				$datasetCol->save();
 	        }
 
-	      
-	        return redirect('projects/'.$pid); 
+	      	
+	            return response($dataset, 200)
+                  ->header('Content-Type', 'application/json');  //cant get this to return ONLY json so did some bandaid work in the front end instead
 
 		} catch (Exception $e) {
 
-		    echo 'Error:'.$e->getMessage();
+		    $message='Error:'.$e->getMessage();
+		    return $message;
 
 		}
 

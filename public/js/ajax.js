@@ -1,6 +1,7 @@
  
 function ajaxCall(type,url,submitData,dataType,successCallBack){
-    console.log(submitData);
+    //console.log(submitData);
+
     $.ajaxSetup({
         headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -13,6 +14,7 @@ function ajaxCall(type,url,submitData,dataType,successCallBack){
             url: window.location.origin+'/'+url,
             data:{data:submitData},
             dataType: dataType,
+        
             success: function (data) {
                 //console.log(data);
                 successCallBack(data);

@@ -13,7 +13,7 @@ function Pie(id,name,xPos,yPos,opacity,innerRadius,outerRadius,labelRadius,label
 	this.id_dataset=id_dataset;
 	this.datasetName=datasetName;
 
-	this assDataset=project.datasets[datasetName];
+	this.assDataset=project.datasets[datasetName];
 
 
 }

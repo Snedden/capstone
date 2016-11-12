@@ -175,8 +175,8 @@ ul {
     <div class="span_4 column">
         <div class='funcGroup'>
           <h5><b>Data</b></h5>
-           <ul>
-            @forelse ($project->datasets as $dataset)
+           <ul id="dataSetUL">
+<!--             @forelse ($project->datasets as $dataset)
               <li class='dataset' id="{{$dataset->iddata_sets}}">{{$dataset->name}} <a style="float:right;font-size:9px"href="#" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#datasetModal" data-dataset-name="{{$dataset->name}}" data-project-id="{{$project->pid}}"  data-dataset-id="{{$dataset->iddata_sets}}">edit</a>
                 <ul>
                   @forelse($dataset->columns as $col)
@@ -188,7 +188,7 @@ ul {
               </li>
             @empty
               <span>No data</p>
-            @endforelse 
+            @endforelse  -->
           </ul>  
         </div>
          <div class='funcGroup'>
@@ -291,7 +291,7 @@ ul {
   <!-- file upload Modal -->
   <div class="modal fade" id="fileUploadModal" role="dialog">
     <div class="modal-dialog">
-    
+      
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -299,9 +299,10 @@ ul {
           <h4 class="modal-title">Upload file</h4>
         </div>
         <div class="modal-body">
-          <form method="POST" action="{{url('dataset/create/'.$project->pid)}}" accept-charset="UTF-8" enctype="multipart/form-data" >
+          <form method="POST" action="" id="datasetUploadForm" accept-charset="UTF-8" enctype="multipart/form-data" >
+
             <input type="hidden" name="_token" value="{{csrf_token()}}">  
-            <input type="file" name="csv" value="" accept=".csv" />
+            <input type="file" name="csv" id="csv" value="" accept=".csv" />
             <input type="submit" value="Upload File">
           </form>
         
