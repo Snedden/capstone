@@ -4,6 +4,7 @@ function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,range
 	var brokenScaleName=name.split("__"); //pScales[i].name="datasetName_datacolumnName_scale";
 	this.datasetName=brokenScaleName[0];
 	this.colName=brokenScaleName[1];
+	var dataColName='dataCol'+dataColId;
 
 	this.scaleId=scaleId;
 	this.pid=pid;
@@ -29,7 +30,7 @@ function Scale(scaleId,pid,name,type,dataColId,width,bandPadding,rangeFrom,range
 	}
 	
 
-	this.dataCol=project.datasets[this.datasetName].dataCols[this.colName];
+	this.dataCol=project.dataCols[dataColName];
 	this.setScales();
 
 }
@@ -156,8 +157,10 @@ $('#addScaleModal').on('show.bs.modal', function(e) {
 
     datasetName=datasetName.slice(0,-4); //ignore csv
     var datasetCol = $(e.relatedTarget).data('datasetcol-name');
-    var dataColId=$(e.relatedTarget).attr("id");
-    var datasetColObj=project.datasets[datasetName].dataCols[datasetCol];
+    var dataColId=$(e.relatedTarget).data("col-id");
+  
+    var dataColName='dataCol'+dataColId;
+    var datasetColObj=project.dataCols[dataColName];
     var scaleType=(datasetColObj.type==="Number"?"Linear":"Ordinal");
     var scaleName=datasetName+"__"+datasetColObj.name+"__scale"; //two underscore as delimeters to mitigate just incase if column name have underscores
     var ordinalDomain="";
@@ -189,11 +192,11 @@ $('#addScaleModal').on('show.bs.modal', function(e) {
 		scaleId=$(e.relatedTarget).data('scale-id');
       	scaleName="scale"+scaleId;
       	scaleObj=project.scales[scaleName];
-	      if(scaleType==="Linear"){
+	      if(scaleObj.type==="Linear"){
 	        $(e.currentTarget).find("#range_from").val(scaleObj.rangeFrom);
 	        $(e.currentTarget).find("#range_from").val(scaleObj.rangeFrom);
 	      }
-	      else if(scaleType==="Ordinal"){
+	      else if(scaleObj.type==="Ordinal"){
 	        $(e.currentTarget).find("#scaleWidthOrdinal").val(scaleObj.width);
 	        $(e.currentTarget).find("#scaleBandPaddingOrdinal").val(scaleObj.padding);
 	      }
@@ -231,7 +234,7 @@ Scale.prototype={
 		//add to screen
 
 		//scale  list in main screen
-		var scaleLiM="<div id=scale"+this.scaleId+"Li><li class='scales groupItem' data-scale-id="+this.scaleId+" data-toggle='modal' data-action='update'  data-target='#addScaleModal' data-datasetcol-name="+this.colName+" data-dataset-name="+this.datasetName+".csv   >"+this.name+"</li><button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'     data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </div> ";
+		var scaleLiM="<div id=scale"+this.scaleId+"Li><li style='width:125px;overflow:hidden'  class='scales groupItem' data-col-id="+this.dataColId+" data-scale-id="+this.scaleId+" data-toggle='modal' data-action='update'  data-target='#addScaleModal' data-datasetcol-name="+this.colName+" data-dataset-name="+this.datasetName+".csv   >"+this.name+"</li> <button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'  data-col-id="+this.dataColId+"    data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </div> ";
 		$("#scaleUl").append(scaleLiM);
 		//scale list in add scale modal
 		var scaleOpA="<option id=scale"+this.scaleId+"Op value="+this.scaleId+">"+this.name+"</option>";

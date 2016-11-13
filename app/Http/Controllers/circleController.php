@@ -56,7 +56,7 @@ class circleController extends Controller
    		$circle->Opacity=$circleData['opacity'];
    		$circle->Color=$circleData['color'];
    		$circle->pid=$circleData['pid'];
-  		$circle->X_pos=$circleData['xPos'];
+  		   $circle->X_pos=$circleData['xPos'];
    		$circle->Y_pos=$circleData['yPos'];
    		$circle->radius=$circleData['radius'];
    		if(strlen($circleData['dataset'])==0){

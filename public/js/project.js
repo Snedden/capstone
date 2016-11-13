@@ -1,4 +1,4 @@
-function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles){
+function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies){
 	this.stageMarginLeft=30;
 	this.stageMarginBot=30;
 	this.stageWidth=$("#stageDiv").width();
@@ -113,6 +113,18 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles){
 		}
 	}
 
+		/**
+	*@desc:Loads pie object which are fetched form the DB to the client side of the project
+	*/
+	function loadPiesDBToMem(){
+		//console.debug('pCircles ',pCircles);
+		for(var i=0;i<pPies.length;i++){
+			var pie=new Pie(pPies[i].idpie,pPies[i].piename,pPies[i].X_pos,pPies[i].Y_pos,pPies[i].Opacity,pPies[i].innerRadius,pPies[i].outerRadius,pPies[i].labelRadius,pPies[i].LabelCol,pPies[i].valueCol,pPies[i].iddata_sets,pPies[i].datasetName);
+			pie.addPie();
+
+		}
+	}
+
 
 	
 	
@@ -131,6 +143,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles){
 		loadAxesDBToMem();//load axes
 		loadRectsDBToMem();//load rect
 		loadCirclesDBToMem();//load circles
+		loadPiesDBToMem();//load pies
 	});
 
 
@@ -282,6 +295,10 @@ function selectEntity(entityId,entityType){
 		case "circle":
 			entity=project.circle[entityName];
 			$("#d3Circle"+entityId).attr("stroke","gray"); //draw a stroke around the element to let know its select
+		break;
+		case "pie":
+			entity=project.pie[entityName];
+			$("#d3Pie"+entityId).attr("stroke","gray"); //draw a stroke around the element to let know its select
 		break;
 		default:
 			console.error("invalid entity type");

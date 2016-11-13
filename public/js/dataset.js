@@ -59,26 +59,28 @@ Dataset.prototype={
 
 
   				
-          //add to memory i.e project object
-          project.dataSetLoaded++;
-          project.datasets[datasetName]=self; 
-          //dispatch event if all data sets are loaded
-          if(project.dataSetLoaded===project.NumberOfDataSets){
-            window.dispatchEvent(project.evt);
-          }
-  		}
+	          //count loaded dataset and add to memory
+	          project.dataSetLoaded++;
+	          project.datasets[datasetName]=self; 
+	          
 
-		//add data columns 
-		for(var i=0;i<self.dataColumns.length;i++){
+  			}
 
-			var dataCol=new Datacol(self.dataColumns[i].col_Id,self.dataColumns[i].col_name,self.dataColumns[i].col_type,colData[self.dataColumns[i].col_name],self.id);
-			project.dataCols[dataCol.dataColName]=dataCol;
-		}
+			//add data columns 
+			for(var i=0;i<self.dataColumns.length;i++){
+
+				var dataCol=new Datacol(self.dataColumns[i].col_Id,self.dataColumns[i].col_name,self.dataColumns[i].col_type,colData[self.dataColumns[i].col_name],self.id);
+				project.dataCols[dataCol.dataColName]=dataCol;
+			}
+			//dispatch event if all data sets are loaded
+			if(project.dataSetLoaded===project.NumberOfDataSets){
+	            window.dispatchEvent(project.evt);
+	         }
 		});
 	},
 	addToStage:function(){
 		var dataColLi,dataSetLi;
-	    dataSetLi="<li class='dataset' id="+this.id+">"+this.name+" <a style='float:right;font-size:9px' href='#'' class='btn btn-xs btn-primary' data-toggle='modal' data-target='#datasetModal' data-dataset-name="+this.name+" data-project-id="+this.pid+"  data-dataset-id="+this.id+">edit</a><ul id='dataColUl"+this.id+"'></ul></li>";
+	    dataSetLi="<li class='dataset' data-col-id="+this.id+" id="+this.id+">"+this.name+" <a style='float:right;font-size:9px' href='#'' class='btn btn-xs btn-primary' data-toggle='modal' data-target='#datasetModal' data-dataset-name="+this.name+" data-project-id="+this.pid+"  data-dataset-id="+this.id+">edit</a><ul id='dataColUl"+this.id+"'></ul></li>";
 	     $("#dataSetUL").append(dataSetLi);
 	        
         for(var i = 0; i<this.dataColumns.length; i++){

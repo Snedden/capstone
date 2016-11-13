@@ -11,8 +11,9 @@
       var svrAxes=<?php echo json_encode($project->axes); ?>;
       var svrRects=<?php echo json_encode($project->rects) ?>;
       var svrCircles=<?php echo json_encode($project->circles) ?>;
+      var svrPies=<?php echo json_encode($project->pies) ?>;
      
-      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales,svrAxes,svrRects,svrCircles); //global object
+      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales,svrAxes,svrRects,svrCircles,svrPies); //global object
       
 
     }
@@ -932,7 +933,7 @@ ul {
 
           <span style="color:red" id="ajaxFeedback"><span>   
           <div class="modal-footer">
-            <button type="submit" id="updatePieBtn" class="btn btn-default"  >Update</button>
+            <button type="submit" id="updatePieBtn" class="btn btn-default"  >Add</button>
             <button type="button"  class="btn btn-default"  data-dismiss="modal">Close</button>
           </div>
         </form>

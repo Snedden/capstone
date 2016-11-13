@@ -98,4 +98,15 @@ class Project extends Model
     {
         return $this->hasMany('App\Circle','pid','pid');//hasMany('model',foreingnkey,localkey)
     } 
+
+         /**
+     * A Project has many pies'
+     *
+     * @var array
+     */
+     public function pies()
+    {
+        return $this->hasMany('App\Pie','pid','pid');//hasMany('model',foreingnkey,localkey)
+    } 
+
 }

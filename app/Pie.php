@@ -21,14 +21,15 @@ class Pie extends Model
     ]; 
 
      /**
-     * a Pie belongs to a entity
+     * a Pie belongs to a project
      *
      * @var array
      */
-     public function baseEntity()
+     public function project()
     {
-        return $this->belongsTo('App\Entitie','idEntities');//belongsTo(model,foreignkey)
+        return $this->belongsTo('App\Project','pid');//belongsTo(model,foreignkey)
     }
+
 
    
 }
