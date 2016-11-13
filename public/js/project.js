@@ -119,7 +119,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies){
 	function loadPiesDBToMem(){
 		//console.debug('pCircles ',pCircles);
 		for(var i=0;i<pPies.length;i++){
-			var pie=new Pie(pPies[i].idpie,pPies[i].piename,pPies[i].X_pos,pPies[i].Y_pos,pPies[i].Opacity,pPies[i].innerRadius,pPies[i].outerRadius,pPies[i].labelRadius,pPies[i].LabelCol,pPies[i].valueCol,pPies[i].iddata_sets,pPies[i].datasetName);
+			var pie=new Pie(pPies[i].idpie,pPies[i].piename,pPies[i].X_pos,pPies[i].Y_pos,pPies[i].Opacity,pPies[i].innerRadius,pPies[i].outerRadius,pPies[i].labelRadius,pPies[i].LabelCol,pPies[i].valueCol,pPies[i].iddata_sets,pPies[i].datasetName,pPies[i].cornerRadius,pPies[i].paddingAngle);
 			pie.addPie();
 
 		}

@@ -906,6 +906,14 @@ ul {
             </div>
 
             <div class="form-group">
+              <label class="control-label col-sm-2" for="pieCornerRadius">Corner Radius:</label>
+              <div class="col-sm-4">
+                <input  class="form-control" type="number" value=0 min=0 max=300  required name="pieCornerRadius" placeholder="" id="pieCornerRadius"  />
+              </div>
+
+            </div>
+
+            <div class="form-group">
               <label class="control-label col-sm-2" for="pieX">X:</label>
               <div class="col-sm-2">
                 <input  class="form-control" type="number"  required name="pieX" placeholder="" id="pieX"  />
@@ -927,6 +935,16 @@ ul {
               </div>  
               <div class="col-xs-3">
                 <input type="text" class="form-control " id="pieOpacityOutput" disabled="true" value="1">
+              </div>
+            </div>
+
+            <div class="form-group ">
+              <label class="control-label col-sm-2" for="piePaddingOutput">Padding:</label>
+              <div class="col-xs-3">
+                <input  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'piePaddingOutput')" min=0 max=100 required id="piePaddingInput" placeholder="padding angle"   />
+              </div>  
+              <div class="col-xs-3">
+                <input type="text" class="form-control " id="piePaddingOutput" disabled="true" value="1">
               </div>
             </div>
           </div>  

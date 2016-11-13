@@ -23,6 +23,8 @@ class pieController extends Controller
 	   		$pie=new Pie();
 	   		$pie->piename=$pieData['name'];
 	   		$pie->Opacity=$pieData['opacity'];
+	   		$pie->paddingAngle=$pieData['padding'];
+	   		$pie->cornerRadius=$pieData['cornerRadius'];
 	   		$pie->pid=$pieData['pid'];
 	   		$pie->X_pos=$pieData['xPos'];
 	   		$pie->Y_pos=$pieData['yPos'];
@@ -59,6 +61,8 @@ class pieController extends Controller
    		$pie=Pie::findOrFail($id);
    		$pie->piename=$pieData['name'];
    		$pie->Opacity=$pieData['opacity'];
+   		$pie->paddingAngle=$pieData['padding'];
+	   	$pie->cornerRadius=$pieData['cornerRadius'];
    		$pie->pid=$pieData['pid'];
    		$pie->X_pos=$pieData['xPos'];
    		$pie->Y_pos=$pieData['yPos'];

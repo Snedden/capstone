@@ -1,4 +1,4 @@
-function Pie(id,name,xPos,yPos,opacity,innerRadius,outerRadius,labelRadius,labelCol,valueCol,id_dataset,datasetName){
+function Pie(id,name,xPos,yPos,opacity,innerRadius,outerRadius,labelRadius,labelCol,valueCol,id_dataset,datasetName,cornerRadius,padding){
 	this.id=id;
 	this.name=name;
 	this.xPos=xPos;
@@ -14,6 +14,9 @@ function Pie(id,name,xPos,yPos,opacity,innerRadius,outerRadius,labelRadius,label
 	this.pieName="pie"+this.id;
 	this.id_dataset=id_dataset;
 	this.printName=datasetName;
+
+	this.paddingAngle=padding;
+	this.cornerRadius=cornerRadius;
 
 	this.datasetName='dataset'+id_dataset;
 	this.labelColName='dataCol'+labelCol;
@@ -100,17 +103,17 @@ Pie.prototype={
 		var arcs = d3.pie()
             .sort(null)
             .value(function(d) { return d[self.ascDataColValue.name]; })   //pie.ascdataCol.name is pie.ascDataset.rawData{columnName}
-            (this.ascDataset.rawData);
+            (self.ascDataset.rawData);
 
 		var arc = d3.arc()
-            .outerRadius(this.outerRadius)
-            .innerRadius(this.innerRadius)
-            .padAngle(0.005)
-            .cornerRadius(1) ;
+            .outerRadius(self.outerRadius)
+            .innerRadius(self.innerRadius)
+            .padAngle(0.01*self.paddingAngle)
+            .cornerRadius(self.cornerRadius) ;
 
-        var pieG =d3.select("#"+this.d3PieId)
+        var pieG =d3.select("#"+self.d3PieId)
         	.selectAll("g")
-            .data([this.ascDataset.rawData])
+            .data([self.ascDataset.rawData])
             .enter()
             .append("g")
             
@@ -125,7 +128,7 @@ Pie.prototype={
             .attr("id", function(d, i) { return "arc-" + i })
             .attr("stroke", "gray")
             .attr("fill", function(d,i){ return self.colorScale(i) }) 
-            .attr("fill-opacity",(0.01*this.opacity));
+            .attr("fill-opacity",(0.01*self.opacity));
 
   /*      newBlock.append("text")
             .attr("dx", 55)
@@ -239,13 +242,16 @@ $('#addPieModal').on('show.bs.modal', function(e) {
     	$("#pieY").val(pieObj.yPos);
 
     	$('#pieOpacityInput').val(pieObj.opacity);
-    	$('#pieOpacityOutput').val(pieObj.opacity);
+    	$('#pieOpacityOutput').val(0.01*pieObj.opacity);
+		$('#piePaddingInput').val(pieObj.paddingAngle);
+    	$('#piePaddingOutput').val(0.01*pieObj.paddingAngle);
 
     	$('#pieDataset').val(pieObj.id_dataset);
 
     	$('#pieInnerRadius').val(pieObj.innerRadius);
     	$('#pieOuterRadius').val(pieObj.outerRadius);
     	$('#pieLabelRadius').val(pieObj.labelRadius);
+    	$('#pieCornerRadius').val(pieObj.cornerRadius);
     	
  
     	$('#pieLabels').val(pieObj.labelCol);
@@ -275,11 +281,13 @@ $("#pieForm").submit(function(e){
 	 	innerRadius:$("#pieInnerRadius").val(),
 	 	outerRadius:$("#pieOuterRadius").val(),
 	 	labelRadius:$("#pieLabelRadius").val(),
+	 	cornerRadius:$("#pieCornerRadius").val(),
 		xPos:$("#pieX").val(),
 		yPos:$("#pieY").val(),
 		valueCol:$("#pieValues").val(),
 		labelCol:$("#pieLabels").val(),
 		opacity:$("#pieOpacityInput").val(),
+		padding:$("#piePaddingInput").val(),
 		pid:project.pid,
 		dataset:$("#pieDataset").val(),
 		datasetName: datasetName
@@ -303,11 +311,11 @@ $("#pieForm").submit(function(e){
 });
 
 function addPieCallback(data){
-	var pie=new Pie(data.id,data.name,data.xPos,data.yPos,data.opacity,data.innerRadius,data.outerRadius,data.labelRadius,data.labelCol,data.valueCol,data.dataset,data.datasetName);
+	var pie=new Pie(data.id,data.name,data.xPos,data.yPos,data.opacity,data.innerRadius,data.outerRadius,data.labelRadius,data.labelCol,data.valueCol,data.dataset,data.datasetName,data.cornerRadius,data.padding);
 	pie.addPie();
 }
 
 function updatePieCallback(data){
-	var updatedPie=new Pie(data.id,data.name,data.xPos,data.yPos,data.opacity,data.innerRadius,data.outerRadius,data.labelRadius,data.labelCol,data.valueCol,data.dataset,data.datasetName);
+	var updatedPie=new Pie(data.id,data.name,data.xPos,data.yPos,data.opacity,data.innerRadius,data.outerRadius,data.labelRadius,data.labelCol,data.valueCol,data.dataset,data.datasetName,data.cornerRadius,data.padding);
 	updatedPie.updatePie();
 }
