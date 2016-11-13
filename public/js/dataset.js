@@ -1,11 +1,11 @@
-function Dataset(dName,dFileName,dId,dataCol){
+function Dataset(dName,dFileName,dId,dataCols){
 	this.name=dName;
 	this.path='../devStorage/'+dFileName;  //have to change in online server
 	this.id=dId;
 	this.rawData;
 
 	this.dataCols=[];
-	this.dataColumns=dataCol;
+	this.dataColumns=dataCols;
 
 	this.jqueryObj=$('.dataset#'+this.id);
 	this.pid;
@@ -27,9 +27,10 @@ Dataset.prototype={
 			var colName;
 			var colName1;
 			var colType;
-			var colData;
+			var colData={};
 			var dataColObj;
 			var datasetId=self.id;
+			var datasetName='dataset'+self.id;
   			console.log('storageDAta:',data);
 
   			self.rawData=data;
@@ -37,17 +38,17 @@ Dataset.prototype={
   			for(var i=0;i<data.columns.length;i++){
   				console.log('col ',data.columns[i]);
   				colName=data.columns[i];
-  				colName1=
+  				
   				colType=isNaN(data[0][colName])?'String':'Number';
-  				colData=[];
+  				colData[colName]=[];
 
   				for(var j=0;j<data.length;j++){
   					//make sure to parse as int if number
   					if(colType==='Number'){
-  						colData.push(parseInt(data[j][colName]));
+  						colData[colName].push(parseInt(data[j][colName]));
   					}
   					else{
-  						colData.push(data[j][colName]);
+  						colData[colName].push(data[j][colName]);
   					}
   					
   				}
@@ -55,14 +56,24 @@ Dataset.prototype={
   				//add column obect
   				dataColObj=new Datacol(colName,colType,colData,datasetId);
   				self.dataCols[colName]=dataColObj;
+
+
   				
-          //count the number of data sets loaded
+          //add to memory i.e project object
           project.dataSetLoaded++;
+          project.datasets[datasetName]=self; 
           //dispatch event if all data sets are loaded
           if(project.dataSetLoaded===project.NumberOfDataSets){
             window.dispatchEvent(project.evt);
           }
-  			}
+  		}
+
+		//add data columns 
+		for(var i=0;i<self.dataColumns.length;i++){
+
+			var dataCol=new Datacol(self.dataColumns[i].col_Id,self.dataColumns[i].col_name,self.dataColumns[i].col_type,colData[self.dataColumns[i].col_name],self.id);
+			project.dataCols[dataCol.dataColName]=dataCol;
+		}
 		});
 	},
 	addToStage:function(){
@@ -93,11 +104,13 @@ Dataset.prototype={
 }
 
 ///Data column object
-function Datacol(colName,colType,colData,datasetId){
+function Datacol(id,colName,colType,colData,datasetId){
+	this.id=id;
 	this.name=colName;
 	this.type=colType;
 	this.data=colData;
 	this.datasetId=datasetId;
+	this.dataColName='dataCol'+this.id;
 
 	this.scales=[];
 
