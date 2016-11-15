@@ -41,7 +41,7 @@
         <div class="panel-heading" style="text-align:center">My projects</div>
         <div class="panel-body">
           <div class="list-group">
-            @forelse ($projects as $project)
+            @forelse (Auth::user()->projects as $project)
               <a href={{url('projects/'.$project->pid)}}  >{{ $project->name }}</a></br>
             @empty
               <p>No projects</p>

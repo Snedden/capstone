@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Circle extends Model
 {
     //
-    protected $table = 'Circle';
+    protected $table = 'circle';
     protected $primaryKey='idCircle';
 
     protected $fillable = [

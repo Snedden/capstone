@@ -270,6 +270,7 @@ $('#addPieModal').on('show.bs.modal', function(e) {
 $("#pieForm").submit(function(e){
 	e.preventDefault();
 	e.stopImmediatePropagation();
+
 	var pieId=$("#pieId").val();
 	var dataset=($("#pieDataset option:selected").text());
 	var datasetName=dataset.split(".");
@@ -295,7 +296,7 @@ $("#pieForm").submit(function(e){
 	console.log(pieData);
 
 	if(action==="Add"){
-		ajaxCall('post','pie/create/',pieData,'json',addPieCallback);
+		ajaxCall('post','pie/create',pieData,'json',addPieCallback);
 	}
 	else if(action==="Update"){
 		ajaxCall('post','pie/update/'+pieId,pieData,'json',updatePieCallback);

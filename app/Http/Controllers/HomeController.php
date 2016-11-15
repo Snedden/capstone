@@ -25,10 +25,12 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $projects = Project::all();
+    {   
+        /*$user=Auth::user()->id;
+        $projects = User::all();*/
+
         
-       
-        return view('home',compact('projects'));
+        return view('home');
+        /*return view('home',compact('projects'));*/
     }
 }

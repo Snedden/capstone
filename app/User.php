@@ -34,7 +34,7 @@ class User extends Authenticatable
      * @var array
      */
     public function projects(){
-        return $this->hasMany('App\Project','pid','iduser'); // hasmany(model,foreignkey,localkey)
+        return $this->hasMany('App\Project','iduser','iduser'); // hasmany(model,foreignkey,localkey)
     }
 
       /**

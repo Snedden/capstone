@@ -15,7 +15,7 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
-        'name','id_user'
+        'name','iduser'
       
     ]; 
 
@@ -26,7 +26,7 @@ class Project extends Model
      */
      public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User','iduser');
     }
 
     /**
@@ -52,10 +52,10 @@ class Project extends Model
      /**
      * The project can be shared by many users
      */
-    public function sharedProjects()
+    public function sharedUsers()
     {
         
-        return $this->belongsToMany('App\SharedProject', 'sharedProjects', 'pid', 'iduser');//  belongsToMany('intermediate tablename','id1','id2')
+        return $this->belongsToMany('App\User','sharedprojects','pid','iduser');//  belongsToMany('intermediate tablename','id1','id2')
     }
 
      /**
