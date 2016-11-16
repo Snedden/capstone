@@ -36,7 +36,7 @@
     <div class="row">
    
 
-      <div class="panel-group col-xs-6 col-md-4">
+    <div class="panel-group col-xs-6 col-md-4">
       <div class="panel panel-default">
         <div class="panel-heading" style="text-align:center">My projects</div>
         <div class="panel-body">
@@ -50,10 +50,24 @@
           </div>
         </div>
       </div>
-      </div>
+    </div>
 
-      <div style="text-align:center" class="col-xs-6 col-md-4">Shared Projects</div>
-      
+    <div class="panel-group col-xs-6 col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading" style="text-align:center">Shared projects</div>
+        <div class="panel-body">
+          <div class="list-group">
+            @forelse (Auth::user()->sharedProjects as $project)
+              @if ($project->iduser != Auth::user()->iduser)
+                <a href={{url('projects/'.$project->pid)}}  >{{ $project->name }}</a></br>
+              @endif  
+            @empty
+              <p>No projects</p>
+            @endforelse
+            
+          </div>
+        </div>
+      </div>
     </div>
 
    

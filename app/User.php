@@ -52,7 +52,8 @@ class User extends Authenticatable
     public function sharedProjects()
     {
         
-        return $this->belongsToMany('App\SharedProject', 'sharedProjects', 'iduser', 'pid');//  belongsToMany('intermediate tablename','id1','id2')
+      
+        return $this->belongsToMany('App\Project','sharedprojects','iduser','pid');//  belongsToMany('intermediate tablename','id1','id2')
     }
 
     /**
