@@ -25,26 +25,26 @@ function Rectangle(name,width,height,xPos,yPos,color,opacity,id,offsetX,offsetY,
 	this.heightScaleId=heightScale;
 	this.xPosScaleId=xPosScale;
 	this.yPosScaleId=yPosScale;
-
+	this.datasetName='dataset'+id_dataset;
 	if(xPosScale){
 		XScaleName="scale"+xPosScale;
 		this.xPosScale=project.scales[XScaleName];
-		this.rawData=project.datasets[this.xPosScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+		this.rawData=project.datasets[this.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
 	if(yPosScale){
 		YScaleName="scale"+yPosScale;
 		this.yPosScale=project.scales[YScaleName];
-		this.rawData=project.datasets[this.yPosScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+		this.rawData=project.datasets[this.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
 	if(widthScale){
 		widthScaleName="scale"+widthScale;
 		this.widthScale=project.scales[widthScaleName];
-		this.rawData=project.datasets[this.widthScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+		this.rawData=project.datasets[this.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
 	if(heightScale){
 		heightScaleName="scale"+heightScale;
 		this.heightScale=project.scales[heightScaleName];
-		this.rawData=project.datasets[this.heightScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+		this.rawData=project.datasets[this.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
 
 	this.originXShift=this.width*(this.originX/100);
@@ -164,7 +164,7 @@ Rectangle.prototype={
     			.enter().append("rect") //add new rect
 				 	.attr("width", function(d){
 				 		if(self.widthScale){
-							return   self.widthScale.d3ScaleLateral(d[self.widthScale.colName]);   
+							return   self.widthScale.d3ScaleLateral(d[self.widthScale.dataCol.name]);   
 						}
 				 		if(self.xPosScale){
 				 			return self.xPosScale.d3ScaleLateral.bandwidth();
@@ -177,7 +177,7 @@ Rectangle.prototype={
 				 	.attr("class", "bar")
 					.attr("height", function(d,i){
 						if(self.heightScale){
-							return   self.heightScale.d3ScaleLateral(d[self.heightScale.colName]) ;   //since the bot is excluded from height,think about it can't explain
+							return   self.heightScale.d3ScaleLateral(d[self.heightScale.dataCol.name]) ;   //since the bot is excluded from height,think about it can't explain
 						}
 				 		if(self.yPosScale){
 				 			return self.yPosScale.d3ScaleVertical.bandwidth();
@@ -190,14 +190,14 @@ Rectangle.prototype={
 					.attr("fill-opacity",(0.01*this.opacity))
 					.attr("x", function(d) { 
 						if(self.xPosScale){
-							return self.xPosScale.d3ScaleLateral(d[self.xPosScale.colName]);
+							return self.xPosScale.d3ScaleLateral(d[self.xPosScale.dataCol.name]);
 						}
 						else{
 							return null;
 						} })
 					.attr("y",function(d) { 
 						if(self.yPosScale){
-							return (self.yPosScale.d3ScaleLateral(d[self.yPosScale.colName]));
+							return (self.yPosScale.d3ScaleLateral(d[self.yPosScale.dataCol.name]));
 						}
 						else{
 							return null;

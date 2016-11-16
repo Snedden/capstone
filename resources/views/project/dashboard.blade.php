@@ -115,7 +115,11 @@ ul {
    padding-left: 10px;
 }
 
-
+.listItem  {
+  cursor:pointer;
+  display:inline-block;
+  width:75%;
+}
 
 .groupItem  {
   cursor:pointer;

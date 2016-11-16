@@ -22,6 +22,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies){
 	this.rectNum=0;
 	this.circleNum=0;
 	this.pieNum=0;
+	this.dataColsNum=0;
 	//set in setStageScales
 	this.stage;
 	this.stageEntities;

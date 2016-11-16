@@ -17,21 +17,22 @@ function Circle(name,radius,xPos,yPos,color,opacity,id,id_dataset,radiusScale,xP
 	this.radiusScaleId=radiusScale;
 	this.xPosScaleId=xPosScale;
 	this.yPosScaleId=yPosScale;
+	this.datasetName='dataset'+id_dataset;
 
 	if(xPosScale){
 		XScaleName="scale"+xPosScale;
 		this.xPosScale=project.scales[XScaleName];
-		this.rawData=project.datasets[this.xPosScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+		this.rawData=project.datasets[this.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
 	if(yPosScale){
 		YScaleName="scale"+yPosScale;
 		this.yPosScale=project.scales[YScaleName];
-		this.rawData=project.datasets[this.yPosScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+		this.rawData=project.datasets[this.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
 	if(radiusScale){
 		radiusScaleName="scale"+radiusScale;
 		this.radiusScale=project.scales[radiusScaleName];
-		this.rawData=project.datasets[this.radiusScale.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
+		this.rawData=project.datasets[this.datasetName].rawData; //all scales belong to the same dataset so doens't matter which scale we choose x,y,width or height
 	}
 
 	this.originXShift=this.radius*(this.originX/100);
@@ -104,7 +105,7 @@ Circle.prototype={
     			.enter().append("circle") //add new circle
 				 	.attr("r", function(d){
 				 		if(self.radiusScale){
-							return   self.radiusScale.d3ScaleLateral(d[self.radiusScale.colName])/12;   //reducing by  factor 10 to fit on screen
+							return   self.radiusScale.d3ScaleLateral(d[self.radiusScale.dataCol.name])/12;   //reducing by  factor 10 to fit on screen
 						}
 				 		else{
 				 			return self.radius;
@@ -115,14 +116,14 @@ Circle.prototype={
 					.attr("fill-opacity",(0.01*this.opacity))
 					.attr("cx", function(d) { 
 						if(self.xPosScale){
-							return (self.xPosScale.d3ScaleLateral.bandwidth()/2)+ self.xPosScale.d3ScaleLateral(d[self.xPosScale.colName]);  //adding the half of bandwith so center coincides with the scale band
+							return (self.xPosScale.d3ScaleLateral.bandwidth()/2)+ self.xPosScale.d3ScaleLateral(d[self.xPosScale.dataCol.name]);  //adding the half of bandwith so center coincides with the scale band
 						}
 						else{
 							return null;
 						} })
 					.attr("cy",function(d) { 
 						if(self.yPosScale){
-							return -(self.yPosScale.d3ScaleLateral(d[self.yPosScale.colName]));
+							return -(self.yPosScale.d3ScaleLateral(d[self.yPosScale.dataCol.name]));
 						}
 						else{
 							return null;

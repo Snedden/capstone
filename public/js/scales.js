@@ -151,18 +151,17 @@ $('#addScaleModal').on('show.bs.modal', function(e) {
 
     var action = $(e.relatedTarget).data('action');
     
-    //get data-id attribute of the clicked element
-    var datasetName = $(e.relatedTarget).data('dataset-name');
 
 
-    datasetName=datasetName.slice(0,-4); //ignore csv
+
+
     var datasetCol = $(e.relatedTarget).data('datasetcol-name');
     var dataColId=$(e.relatedTarget).data("col-id");
   
     var dataColName='dataCol'+dataColId;
     var datasetColObj=project.dataCols[dataColName];
     var scaleType=(datasetColObj.type==="Number"?"Linear":"Ordinal");
-    var scaleName=datasetName+"__"+datasetColObj.name+"__scale"; //two underscore as delimeters to mitigate just incase if column name have underscores
+    var scaleName=datasetColObj.name+"__scale"; //two underscore as delimeters to mitigate just incase if column name have underscores
     var ordinalDomain="";
 
     var scaleId,scaleName,scaleObj,rangeFrom,rangeTo,width,padding;
@@ -234,7 +233,7 @@ Scale.prototype={
 		//add to screen
 
 		//scale  list in main screen
-		var scaleLiM="<div id=scale"+this.scaleId+"Li><li style='width:125px;overflow:hidden'  class='scales groupItem' data-col-id="+this.dataColId+" data-scale-id="+this.scaleId+" data-toggle='modal' data-action='update'  data-target='#addScaleModal' data-datasetcol-name="+this.colName+" data-dataset-name="+this.datasetName+".csv   >"+this.name+"</li> <button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'  data-col-id="+this.dataColId+"    data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </div> ";
+		var scaleLiM="<div id=scale"+this.scaleId+"Li><li style='width:125px;overflow:hidden'  class='scales listItem' data-col-id="+this.dataColId+" data-scale-id="+this.scaleId+" data-toggle='modal' data-action='update'  data-target='#addScaleModal' data-datasetcol-name="+this.colName+" data-dataset-name="+this.datasetName+".csv   >"+this.name+"</li> <button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'  data-col-id="+this.dataColId+"    data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </div> ";
 		$("#scaleUl").append(scaleLiM);
 		//scale list in add scale modal
 		var scaleOpA="<option id=scale"+this.scaleId+"Op value="+this.scaleId+">"+this.name+"</option>";
