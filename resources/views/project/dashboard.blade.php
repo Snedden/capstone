@@ -233,7 +233,7 @@ ul {
          <button id="addRectBtn">Rect</button>
          <button id="addCircleBtn">Circle</button>
          <button data-toggle="modal" data-target="#addPieModal">Pie</button>
-         <button disabled="true">Text</button>
+         <button data-toggle="modal" data-target="#addTextModal">Text</button>
       </div>
 
       <!--Entity group-->
@@ -964,6 +964,135 @@ ul {
     </div>
   </div>
   <!-- Pie Modal End -->
+
+    <!-- Text Modal    -->
+  <div class="modal fade" id="addTextModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id='textHeading'>Add Text</h4>
+        </div>
+        <form  id="textForm" method="POST" action="" accept-charset="UTF-8" class="form-horizontal">
+          <div class="modal-body">
+           
+            <input type="hidden" name="_token" value="{{csrf_token()}}"> 
+            <input type="hidden"  id="textId" >  
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="textName" >Name:</label>
+              <div class="col-sm-10">
+                <input  class="form-control" required name="textName" placeholder="Textangle Name"  id="textName"  />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="textDataset">Dataset:</label>
+              <div class="col-sm-10">
+                <select name="textDataset" id="textDataset">
+                  <option value="">No dataset</option>
+                  @forelse ($project->datasets as $dataset)
+                    <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
+                  @empty
+                  @endforelse   
+
+                  
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="textHeight">Text:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="textText" placeholder="" id="textText"  />
+              </div>
+              <label class="control-label col-sm-3 textSelect" for="textTextScale">Text Scale:</label>
+               <div class="col-sm-3 textSelect">
+                <select name="textTextScale" class="textScaleSelect textLengths" data-assinputid="textText" id="textTextScale" >
+                   <!-- populated in text.js getAxesCallback -->
+                </select>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="textHeight">Size:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="textSize" placeholder="" id="textSize"  />
+              </div>
+              <label class="control-label col-sm-3 textSelect" for="textSizeScale">Size Scale:</label>
+               <div class="col-sm-3 textSelect">
+                <select name="textSizeScale" class="textScaleSelect textLengths" data-assinputid="textSize" id="textSizeScale" >
+                   <!-- populated in text.js getAxesCallback -->
+                </select>
+              </div>
+            </div>
+
+
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="textX">X:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="textX" placeholder="" id="textX"  />
+              </div>
+              <label class="control-label col-sm-3 textSelect" for="textXScale">X Scale:</label>
+               <div class="col-sm-3 textSelect">
+                <select name="textXScale" class="textScaleSelect " id="textXScale" data-assinputid="textX" >
+                   <!-- populated in textagle.js getAxesCallback -->
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2 " for="textY">Y:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number"  required name="textY" placeholder="" id="textY"  />
+              </div>
+              <label class="control-label col-sm-3 textSelect" for="textYScale">Y Scale:</label>
+               <div class="col-sm-3 textSelect">
+                <select name="textYScale" id="textYScale" class="textScaleSelect" data-assinputid="textY" >
+                   <!-- populated in textagle.js getAxesCallback -->
+                </select>
+              </div>
+            </div>
+
+
+
+
+
+             <div class="form-group">
+              <label class="control-label col-sm-2" for="textColor">Color</label>
+              <div class="col-sm-2">
+                <input  class="form-control" required type="color" placeholder="Color"  name="textColor"  id="textColor"  />
+              </div>
+            </div>
+
+            <div class="form-group ">
+              <label class="control-label col-sm-2" for="textOpacityOutput">Opacity:</label>
+              <div class="col-xs-3">
+                <input  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'textOpacityOutput')" min=0 max=100 required id="textOpacityInput" placeholder="Opacity"   />
+              </div>  
+              <div class="col-xs-3">
+                <input type="text" class="form-control " id="textOpacityOutput" disabled="true" value="1">
+              </div>
+            </div>
+
+
+
+          </div>  
+          <span style="color:red" id="ajaxFeedback"><span>   
+          <div class="modal-footer">
+            <button type="submit" id="updateTextBtn" class="btn btn-default"  >Update</button>
+            <button type="button"  class="btn btn-default"  data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+ 
+    </div>
+  </div>
+  <!-- Text Modal End -->
 </div>
 
 @endsection
