@@ -19,6 +19,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies){
 	this.rect={};
 	this.circle={};
 	this.pie={};
+	this.text={};
 	this.rectNum=0;
 	this.circleNum=0;
 	this.pieNum=0;

@@ -105,6 +105,7 @@
     <script src="{{asset('js/rectangle.js')}}"></script>
     <script src="{{asset('js/circle.js')}}"></script>
     <script src="{{asset('js/pie.js')}}"></script>
+    <script src="{{asset('js/text.js')}}"></script>
     <script src="{{asset('js/dataset.js')}}"></script>
     <script src="{{asset('js/project.js')}}"></script>
     

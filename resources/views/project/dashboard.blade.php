@@ -1006,7 +1006,7 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="textHeight">Text:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="textText" placeholder="" id="textText"  />
+                <input  class="form-control"   required name="textText" placeholder="" id="textText"  />
               </div>
               <label class="control-label col-sm-3 textSelect" for="textTextScale">Text Scale:</label>
                <div class="col-sm-3 textSelect">
@@ -1069,6 +1069,15 @@ ul {
               </div>
             </div>
 
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="textAngle">Angle</label>
+              <div class="col-sm-2">
+                <input  class="form-control" required type="number" min=0 max=360 value=0  name="textColor"  id="textAngle"  />
+              </div>
+            </div>
+
+
+
             <div class="form-group ">
               <label class="control-label col-sm-2" for="textOpacityOutput">Opacity:</label>
               <div class="col-xs-3">
@@ -1084,7 +1093,7 @@ ul {
           </div>  
           <span style="color:red" id="ajaxFeedback"><span>   
           <div class="modal-footer">
-            <button type="submit" id="updateTextBtn" class="btn btn-default"  >Update</button>
+            <button type="submit" id="updateTextBtn" class="btn btn-default"  >Add</button>
             <button type="button"  class="btn btn-default"  data-dismiss="modal">Close</button>
           </div>
         </form>
