@@ -21,7 +21,8 @@ class AddScaleToText extends Migration
             $table->integer('XScale')->length(10)->unsigned()->nullable();
             $table->integer('YScale')->length(10)->unsigned()->nullable();
             $table->integer('textScale')->length(10)->unsigned()->nullable();
-       
+            
+             $table->string('label', 100)->nullable()->change();
 
             $table->integer('iddata_sets')->length(10)->unsigned()->nullable();
 
@@ -45,6 +46,7 @@ class AddScaleToText extends Migration
             $table->dropColumn('YScale');
             $table->dropColumn('sizeScale');
             $table->dropColumn('textScale');
+            $table->string('label', 100);
 
 
             $table->dropForeign(['iddata_sets']);

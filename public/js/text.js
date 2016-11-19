@@ -150,7 +150,7 @@ Text.prototype={
         .append("text") //add new text
         .attr("font-size", this.size)
         .attr("fill",this.color)
-        .attr("transform","rotate("+this.angle+")")
+        .attr("transform","rotate("+(-this.angle)+")")
         .attr("fill-opacity",(0.01*this.opacity))
         .text( this.text);
       //tranform to X and Y   
@@ -216,6 +216,117 @@ Text.prototype={
 
 }
 
+//open modal when double click
+$(document).on('dblclick','.textGroupItem',function(e){
+
+  $('#addTextModal').modal('show',$(this));
+});
+
+//delete text
+$(document).on('click','.textDelBtn',function(e){
+
+  var textId=$(this).attr('data-text-id');
+  var textTobeDeleted='text'+textId;
+  project.text[textTobeDeleted].deleteText();
+
+});
+
+
+///////////////////modal events
+//add text modle open
+$('#addTextModal').on('show.bs.modal', function(e) {
+  var textId = $(e.relatedTarget).data('textid');
+  var textName='text'+textId;
+  var textObj=project.text[textName];
+  var defaultName="Text"+project.textNum;
+
+  $("#textId").val(textId);                     //to be referenced in update clicked
+  
+  console.log('text', textObj);
+    //update
+    if(textObj){
+        //populate the textbox
+      $(e.currentTarget).find('#textName').val(textObj.name);
+      $(e.currentTarget).find('#textText').val(textObj.text);
+      $(e.currentTarget).find('#textSize').val(textObj.size);
+      $(e.currentTarget).find('#textText').val(textObj.text);
+      $(e.currentTarget).find('#textX').val(textObj.xPos);
+      $(e.currentTarget).find('#textY').val(textObj.yPos);
+      $(e.currentTarget).find('#textColor').val(textObj.color);
+      $(e.currentTarget).find('#textAngle').val(textObj.angle);
+      $(e.currentTarget).find('#textOpacityInput').val(textObj.opacity);
+      $(e.currentTarget).find('#textOpacityOutput').val(textObj.opacity);
+      $(e.currentTarget).find('#textDataset').val(textObj.id_dataset);
+      $("#updateTextBtn").html("Update");
+      $("#textHeading").html("Update Text");
+    }
+    else{
+      $(e.currentTarget).find('#textName').val(defaultName);
+      $(e.currentTarget).find('#textText').val("");
+      $(e.currentTarget).find('#textSize').val(18);
+      $(e.currentTarget).find('#textText').val("");
+      $(e.currentTarget).find('#textX').val(600);
+      $(e.currentTarget).find('#textY').val(200);
+      $(e.currentTarget).find('#textColor').val("#000000");
+      $(e.currentTarget).find('#textAngle').val(0);
+
+      $(e.currentTarget).find('#textDataset').val("");
+      $("#updateTextBtn").html("Add");
+      $("#textHeading").html("Add text");
+    }
+
+    
+   
+
+    //a data select is changed
+  $(document).on('change', '#textDataset', function() {
+    var selectedDataset=$(this);
+
+    //console.log('textDs',selectedDataset.val(), selectedDataset);
+
+    //if no dataset selected toggle
+    if(selectedDataset.val()===""){
+      
+      $(".textSelect").hide();
+    }
+    else{
+      ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
+      $(".textSelect").show();
+    }
+
+    function getScalesCallback(data){
+      //remove previous
+      $('.textScaleSelect').html('');
+
+      //add new
+      for(var i=0;i<data.length;i++){
+        //add header once
+        if(i===0){
+          $('.textScaleSelect').append($('<option>', { 
+                value:'',
+                text : 'No scale' 
+            }));
+        }
+          $('.textScaleSelect').append($('<option>', { 
+              value: data[i].idScales,
+              text : data[i].scale_name 
+          }));
+
+      }
+      if(textObj){
+        $(e.currentTarget).find('#textWidthScale').val(textObj.widthScaleId);
+        $(e.currentTarget).find('#textHeightScale').val(textObj.heightScaleId);
+        $(e.currentTarget).find('#textXScale').val(textObj.xPosScaleId);
+        $(e.currentTarget).find('#textYScale').val(textObj.yPosScaleId);
+          
+      }
+       
+        
+    }
+  });
+  $(e.currentTarget).find('#textDataset').trigger("change"); 
+});
+
 
 ///////////////submit events
 //update text
@@ -265,12 +376,12 @@ $("#textForm").submit(function(e){
 });
 
 function addTextCallback(data){
-  var text=new Text(data.name,data.text,data.size,data.angle,data.xPos,data.yPos,data.color,data.opacity,data.id,data.id_dataset,data.sizeScale,data.textScale,data.xPosScale,data.yPosScale);
+  var text=new Text(data.name,data.text,data.size,data.angle,data.xPos,data.yPos,data.color,data.opacity,data.id,data.dataset,data.sizeScale,data.textScale,data.xPosScale,data.yPosScale);
   text.addText();
 }
 
 function updateTextCallback(data){
-  var updatedText=new Text(data.id,data.name,data.xPos,data.yPos,data.opacity,data.innerRadius,data.outerRadius,data.labelRadius,data.labelCol,data.valueCol,data.dataset,data.datasetName,data.cornerRadius,data.padding);
+  var updatedText=new Text(data.name,data.text,data.size,data.angle,data.xPos,data.yPos,data.color,data.opacity,data.id,data.dataset,data.sizeScale,data.textScale,data.xPosScale,data.yPosScale);
   updatedText.updateText();
 }
 

@@ -109,4 +109,15 @@ class Project extends Model
         return $this->hasMany('App\Pie','pid','pid');//hasMany('model',foreingnkey,localkey)
     } 
 
+             /**
+     * A Project has many texts'
+     *
+     * @var array
+     */
+     public function texts()
+    {
+        return $this->hasMany('App\Text','pid','pid');//hasMany('model',foreingnkey,localkey)
+    } 
+
+
 }

@@ -1,4 +1,4 @@
-function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies){
+function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pTexts){
 	this.stageMarginLeft=30;
 	this.stageMarginBot=30;
 	this.stageWidth=$("#stageDiv").width();
@@ -22,6 +22,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies){
 	this.text={};
 	this.rectNum=0;
 	this.circleNum=0;
+	this.textNum=0;
 	this.pieNum=0;
 	this.dataColsNum=0;
 	//set in setStageScales
@@ -127,6 +128,18 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies){
 		}
 	}
 
+			/**
+	*@desc:Loads text object which are fetched form the DB to the client side of the project
+	*/
+	function loadTextsDBToMem(){
+		//console.debug('pCircles ',pCircles);
+		for(var i=0;i<pTexts.length;i++){
+			var text=new Text(pTexts[i].name,pTexts[i].label,pTexts[i].size,pTexts[i].angle,pTexts[i].X_pos,pTexts[i].Y_pos,pTexts[i].Color,pTexts[i].opacity,pTexts[i].idtext,pTexts[i].iddata_sets,pTexts[i].sizeScale,pTexts[i].textScale,pTexts[i].XScale,pTexts[i].YScale);
+			text.addText();
+
+		}
+	}
+
 
 	
 	
@@ -146,6 +159,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies){
 		loadRectsDBToMem();//load rect
 		loadCirclesDBToMem();//load circles
 		loadPiesDBToMem();//load pies
+		loadTextsDBToMem();//load texts
 	});
 
 
@@ -301,6 +315,10 @@ function selectEntity(entityId,entityType){
 		case "pie":
 			entity=project.pie[entityName];
 			$("#d3Pie"+entityId).attr("stroke","gray"); //draw a stroke around the element to let know its select
+		break;
+		case "text":
+			entity=project.text[entityName];
+			$("#d3Text"+entityId).attr("stroke","gray"); //draw a stroke around the element to let know its select
 		break;
 		default:
 			console.error("invalid entity type");

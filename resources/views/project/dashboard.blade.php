@@ -12,8 +12,9 @@
       var svrRects=<?php echo json_encode($project->rects) ?>;
       var svrCircles=<?php echo json_encode($project->circles) ?>;
       var svrPies=<?php echo json_encode($project->pies) ?>;
+      var svrText=<?php echo json_encode($project->texts) ?>;
      
-      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales,svrAxes,svrRects,svrCircles,svrPies); //global object
+      project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales,svrAxes,svrRects,svrCircles,svrPies,svrText); //global object
       
 
     }
@@ -965,7 +966,7 @@ ul {
   </div>
   <!-- Pie Modal End -->
 
-    <!-- Text Modal    -->
+  <!-- Text Modal    -->
   <div class="modal fade" id="addTextModal" role="dialog">
     <div class="modal-dialog">
     
@@ -1005,10 +1006,10 @@ ul {
             
             <div class="form-group">
               <label class="control-label col-sm-2" for="textHeight">Text:</label>
-              <div class="col-sm-2">
-                <input  class="form-control"   required name="textText" placeholder="" id="textText"  />
+              <div class="col-sm-4">
+                <input  class="form-control"   required name="textText" placeholder="Enter Text" id="textText"  />
               </div>
-              <label class="control-label col-sm-3 textSelect" for="textTextScale">Text Scale:</label>
+              <label class="control-label col-sm-2 textSelect" for="textTextScale">Text Scale:</label>
                <div class="col-sm-3 textSelect">
                 <select name="textTextScale" class="textScaleSelect textLengths" data-assinputid="textText" id="textTextScale" >
                    <!-- populated in text.js getAxesCallback -->
@@ -1020,9 +1021,9 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="textHeight">Size:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="textSize" placeholder="" id="textSize"  />
+                <input  class="form-control" type="number" value=18 required name="textSize" placeholder="" id="textSize"  />
               </div>
-              <label class="control-label col-sm-3 textSelect" for="textSizeScale">Size Scale:</label>
+              <label class="control-label col-sm-4 textSelect" for="textSizeScale">Size Scale:</label>
                <div class="col-sm-3 textSelect">
                 <select name="textSizeScale" class="textScaleSelect textLengths" data-assinputid="textSize" id="textSizeScale" >
                    <!-- populated in text.js getAxesCallback -->
@@ -1035,9 +1036,9 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="textX">X:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="textX" placeholder="" id="textX"  />
+                <input  class="form-control" type="number" value=600 required name="textX" placeholder="" id="textX"  />
               </div>
-              <label class="control-label col-sm-3 textSelect" for="textXScale">X Scale:</label>
+              <label class="control-label col-sm-4 textSelect" for="textXScale">X Scale:</label>
                <div class="col-sm-3 textSelect">
                 <select name="textXScale" class="textScaleSelect " id="textXScale" data-assinputid="textX" >
                    <!-- populated in textagle.js getAxesCallback -->
@@ -1048,9 +1049,9 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2 " for="textY">Y:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="textY" placeholder="" id="textY"  />
+                <input  class="form-control" type="number" value=200 required name="textY" placeholder="" id="textY"  />
               </div>
-              <label class="control-label col-sm-3 textSelect" for="textYScale">Y Scale:</label>
+              <label class="control-label col-sm-4 textSelect" for="textYScale">Y Scale:</label>
                <div class="col-sm-3 textSelect">
                 <select name="textYScale" id="textYScale" class="textScaleSelect" data-assinputid="textY" >
                    <!-- populated in textagle.js getAxesCallback -->
@@ -1072,7 +1073,7 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="textAngle">Angle</label>
               <div class="col-sm-2">
-                <input  class="form-control" required type="number" min=0 max=360 value=0  name="textColor"  id="textAngle"  />
+                <input  class="form-control" required type="number" min=-360 max=360 value=0  name="textColor"  id="textAngle"  />
               </div>
             </div>
 

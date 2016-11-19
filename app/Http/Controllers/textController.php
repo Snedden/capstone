@@ -31,6 +31,39 @@ class textController extends Controller
 	   		$text->label=$textData['text'];
 	   		$text->size=$textData['size'];
 	   		$text->angle=$textData['angle'];
+	   		if(strlen($textData['dataset'])==0){
+	   			$text->iddata_sets=null;
+	   		}
+	   		else{
+	   			$text->iddata_sets=$textData['dataset'];
+	   		}
+
+
+	   		//check if corresponding scales are selected
+	   		if($textData['textScale']!=""){
+	   			$text->label=null;					
+	   			$text->textScale=$textData['textScale'];
+	   		}
+	 
+
+	   		if($textData['sizeScale']!=""){
+	   			$text->size=null;
+	   			$text->sizeScale=$textData['sizeScale'];
+	   		}
+	  
+	   		if($textData['xPosScale']==""){
+	   			$text->XScale=null;	
+	   		}
+	   		else{
+	   			$text->XScale=$textData['xPosScale'];	
+	   		}
+			
+			if($textData['yPosScale']==""){
+	   			$text->YScale=null;	
+	   		}
+	   		else{
+	   			$text->YScale=$textData['yPosScale'];	
+	   		}
 	   		$text->save();
 	   		$textData['id']=$text->idtext; //add the id of just inserted row
 	   		return $textData;
@@ -45,4 +78,72 @@ class textController extends Controller
 
 
    	}
+
+   	/*
+   	*update and text with id $id
+   	*/
+   	public function update($id){
+   		$textData=$_POST['data'];
+        $text=Text::findOrFail($id); 
+   		$text->name=$textData['name'];
+   		$text->Opacity=$textData['opacity'];
+   		$text->color=$textData['color'];
+   		$text->pid=$textData['pid'];
+   		$text->X_pos=$textData['xPos'];
+   		$text->Y_pos=$textData['yPos'];
+   		$text->label=$textData['text'];
+   		$text->size=$textData['size'];
+   		$text->angle=$textData['angle'];
+   		if(strlen($textData['dataset'])==0){
+   			$text->iddata_sets=null;
+   		}
+   		else{
+   			$text->iddata_sets=$textData['dataset'];
+   		}
+   		
+   		
+   		//check if corresponding scales are selected
+   		if($textData['textScale']!=""){
+   			$text->label=null;					
+   			$text->textScale=$textData['textScale'];
+   		}
+ 
+
+   		if($textData['sizeScale']!=""){
+   			$text->size=null;
+   			$text->sizeScale=$textData['sizeScale'];
+   		}
+  
+   		if($textData['xPosScale']==""){
+   			$text->XScale=null;	
+   		}
+   		else{
+   			$text->XScale=$textData['xPosScale'];	
+   		}
+		
+		if($textData['yPosScale']==""){
+   			$text->YScale=null;	
+   		}
+   		else{
+   			$text->YScale=$textData['yPosScale'];	
+   		}
+   		
+   			
+   		
+
+   		$text->save();
+   		$textData['id']=$text->idtext; //add the id of just updated row
+   		return $textData;
+   	}
+
+   		/**
+	*delete the text from storage
+	*/
+	public function delete(){
+
+	    $textId=$_POST['data'];
+	    Text::destroy($textId);
+	    return 'deleted';
+	}
+
 }
