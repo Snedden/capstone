@@ -45,6 +45,9 @@ class axesController extends Controller
             $axes->Y_pos=$axesData['yPos'];
             $axes->ticks=$axesData['ticks'];
             $axes->pid=$axesData['pid'];
+            $axes->textAnchor=$axesData['labelAnchor'];
+            $axes->labelAngle=$axesData['labelAngle'];
+
 
             $axes->save();
 
@@ -56,6 +59,9 @@ class axesController extends Controller
             $feedback['xPos']=$axes->X_pos;
             $feedback['yPos']=$axes->Y_pos;
             $feedback['ticks']=$axes->ticks;
+            $feedback['labelAngle']=$axes->labelAngle;
+            $feedback['labelAnchor']=$axes->textAnchor;
+
             $feedback['message']='Axes saved';
 
 
@@ -103,6 +109,8 @@ class axesController extends Controller
             $axes->Y_pos=$axesData['yPos'];
             $axes->ticks=$axesData['ticks'];
             $axes->pid=$axesData['pid'];
+            $axes->textAnchor=$axesData['labelAnchor'];
+            $axes->labelAngle=$axesData['labelAngle'];
 
             $axes->save();
 
@@ -114,6 +122,8 @@ class axesController extends Controller
             $feedback['xPos']=$axes->X_pos;
             $feedback['yPos']=$axes->Y_pos;
             $feedback['ticks']=$axes->ticks;
+            $feedback['labelAngle']=$axes->labelAngle;
+            $feedback['labelAnchor']=$axes->textAnchor;            
             $feedback['message']='Axes saved';
 
 

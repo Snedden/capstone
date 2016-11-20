@@ -548,6 +548,24 @@ ul {
             </div>
 
             <div class="form-group">
+              <label class="control-label col-sm-2" for="axesLabelAngle">Label Angle:</label>
+              <div class="col-sm-2">
+                <input  class="form-control" type="number" value=0 min=-180 max=180  required name="axesLabelAngle" placeholder="" id="axesLabelAngle"  />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="axesLabelAnchor">Label Anchor:</label>
+              <div class="col-sm-5">
+                <select name="axesLabelAnchor" id="axesLabelAnchor">
+                  <option value="start">start</option>
+                  <option value="middle">middle</option>
+                  <option value="end">end</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
               <label class="control-label col-sm-2" for="axesX">X:</label>
               <div class="col-sm-10">
                 <input  class="form-control" type="number"  required name="axesX" placeholder="X position" id="axesX"  />

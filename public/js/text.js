@@ -22,8 +22,8 @@ function Text(name,text,size,angle,xPos,yPos,color,opacity,id,id_dataset,sizeSca
   this.originX=0;     //origin is in percent; (0 ,0) is deafault; (100,0) shift X 100 percent of text (50,50) center the origin and so on..
   this.originY=0;   //origin is in percent 
   this.id_dataset=id_dataset;
-  this.textScaleId=sizeScale;
-  this.sizeScaleId=textScale;
+  this.textScaleId=textScale;
+  this.sizeScaleId=sizeScale;
   this.xPosScaleId=xPosScale;
   this.yPosScaleId=yPosScale;
   this.datasetName='dataset'+id_dataset;
@@ -159,30 +159,26 @@ Text.prototype={
   },
   drawLinkedText:function(){
     var self=this;
+    var cx=0; //x of each element
+    var cy=0; //y of each element 
     d3.select("#"+this.d3TextId)
         .html("")  //remove previous text
-        .selectAll(".bar")
+        .selectAll(".textStream")
         .data(this.rawData)
           .enter().append("text") //add new text
-          .attr("text", function(d){
+          .text(function(d){
+
             if(self.textScale){
               return   self.textScale.d3ScaleLateral(d[self.textScale.dataCol.name]);   
-            }
-            if(self.xPosScale){
-              return self.xPosScale.d3ScaleLateral.bandtext();
-              
             }
             else{
               return self.text;
             }
           })
-          .attr("class", "bar")
-          .attr("size", function(d,i){
+          .attr("class", "textStream")
+          .attr("font-size", function(d,i){
             if(self.sizeScale){
-              return   self.sizeScale.d3ScaleLateral(d[self.sizeScale.dataCol.name]) ;   //since the bot is excluded from size,think about it can't explain
-            }
-            if(self.yPosScale){
-              return self.yPosScale.d3ScaleVertical.bandtext();
+              return   Math.round(self.sizeScale.d3ScaleLateral(d[self.sizeScale.dataCol.name])) * 0.1 ;   //since the bot is excluded from size,think about it can't explain
             }
             else{
               return self.size;
@@ -192,23 +188,36 @@ Text.prototype={
           .attr("fill-opacity",(0.01*this.opacity))
           .attr("x", function(d) { 
               if(self.xPosScale){
-                return self.xPosScale.d3ScaleLateral(d[self.xPosScale.dataCol.name]);
+                cx=Math.round(self.xPosScale.d3ScaleLateral(d[self.xPosScale.dataCol.name]));
+                return cx;
               }
               else{
                 return null;
                 } })
           .attr("y",function(d) { 
             if(self.yPosScale){
-              return (self.yPosScale.d3ScaleLateral(d[self.yPosScale.dataCol.name]));
+              cy= Math.round(self.yPosScale.d3ScaleLateral(d[self.yPosScale.dataCol.name]));
+              return cy;
               }
               else{
                 return null;
-              } });
+              } })
+          .attr("transform",function(d) {
+            if(self.xPosScale){
+              cx=Math.round(self.xPosScale.d3ScaleLateral(d[self.xPosScale.dataCol.name])); //center of rotation
+            }
+            if(self.yPosScale){
+              cy= Math.round(self.yPosScale.d3ScaleLateral(d[self.yPosScale.dataCol.name])); //center of rotation
+            }
+            
+            return "rotate("+(-self.angle)+","+cx+","+cy+")";
+          });
+          //.attr("transform","rotate("+(-this.angle)+","+cx+","+cy+")");
+
+
     //tranform to X and Y   
-/*      d3.select("#"+this.d3TextId)
-        .attr("transform", "translate("+(project.getStageX(this.xPos)-this.originXShift)+","+(project.getStageY(this.yPos)-this.originYShift)+")");*/
-            d3.select("#"+this.d3TextId)
-        .attr("transform", "scale(1,-1) translate("+(project.getStageX(this.xPos)-this.originXShift)+","+-(project.getStageY(this.yPos)-this.originYShift)+")");   //scale(1,-)     
+    d3.select("#"+this.d3TextId)
+        .attr("transform", " translate("+(project.getStageX(this.xPos)-this.originXShift)+","+(project.getStageY(this.yPos)-this.originYShift)+")");   //scale(1,-)     
 
   }
 
@@ -314,8 +323,8 @@ $('#addTextModal').on('show.bs.modal', function(e) {
 
       }
       if(textObj){
-        $(e.currentTarget).find('#textWidthScale').val(textObj.widthScaleId);
-        $(e.currentTarget).find('#textHeightScale').val(textObj.heightScaleId);
+        $(e.currentTarget).find('#textSizeScale').val(textObj.sizeScaleId);
+        $(e.currentTarget).find('#textTextScale').val(textObj.textScaleId);
         $(e.currentTarget).find('#textXScale').val(textObj.xPosScaleId);
         $(e.currentTarget).find('#textYScale').val(textObj.yPosScaleId);
           

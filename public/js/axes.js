@@ -1,4 +1,4 @@
-function Axes(id,name,orient,xPos,yPos,scaleId,ticks){
+function Axes(id,name,orient,xPos,yPos,scaleId,ticks,labelAngle,labelAnchor){
 	this.id=id;
 	this.type="Axes";
 	this.name=name;
@@ -8,6 +8,8 @@ function Axes(id,name,orient,xPos,yPos,scaleId,ticks){
 	this.scaleId=scaleId;
 	this.ticks=ticks;
 	this.d3AxisId="d3Axes"+this.id;
+	this.labelAnchor=labelAnchor;
+	this.labelAngle=labelAngle;
 
 
 	console.log('ticks ',this.ticks);
@@ -46,6 +48,8 @@ $("#axesForm").submit(function(e){
 		xPos:$("#axesX").val(),
 		yPos:$("#axesY").val(),
 		ticks:$("#axesTicks").val(),
+		labelAngle:$("#axesLabelAngle").val(),
+		labelAnchor:$("#axesLabelAnchor").val(),
 		pid:project.pid
 	};
 	if(action==="Update"){
@@ -73,7 +77,7 @@ function axesAddCallback(data){
 	
 	$("#ajaxFeedback").html(data.message);
 	//add axes
-	var axes=new Axes(data.id,data.name,data.orient,data.xPos,data.yPos,data.scaleId,data.ticks); //create axes object
+	var axes=new Axes(data.id,data.name,data.orient,data.xPos,data.yPos,data.scaleId,data.ticks,data.labelAngle,data.labelAnchor); //create axes object
 	axes.addAxes(); //add to screen and memory
 	$("#addAxesModal").modal('hide');//close add axes modal
 }
@@ -87,7 +91,7 @@ function axesUpdateCallback(data){
 	
 	$("#ajaxFeedback").html(data.message);
 	//add axes
-	var axes=new Axes(data.id,data.name,data.orient,data.xPos,data.yPos,data.scaleId,data.ticks); //create axes object
+	var axes=new Axes(data.id,data.name,data.orient,data.xPos,data.yPos,data.scaleId,data.ticks,data.labelAngle,data.labelAnchor); //create axes object
 	axes.updateAxes(); //add to screen and memory
 	$("#addAxesModal").modal('hide');//close add axes modal
 }
@@ -126,6 +130,8 @@ $('#addAxesModal').on('show.bs.modal', function(e) {
     	$("#axesX").val(axesObj.xPos);
     	$("#axesY").val(axesObj.yPos);
     	$("#axesTicks").val(axesObj.ticks);
+    	$("#axesTextAnchor").val(axesObj.labelAnchor);
+    	$("#axesLabelAngle").val(axesObj.labelAngle);
 
     	$("#addAxesBtn").html("Update");
     }
@@ -205,11 +211,32 @@ Axes.prototype={
 		this.drawOnStage(); 						//update in stage
 	},
 	drawOnStage:function(){
+		var self=this;
 		project.stageEntities.append("g")                	
         	.attr("class", "axis d3Entity")
         	.attr("id",this.d3AxisId)
             .attr("transform", "translate("+project.getAxisX(this.xPos,this.orient,this.associatedScale.rangeFrom)+" ,"+project.getAxisY(this.yPos,this.orient,this.associatedScale.rangeFrom,this.length)+")")
-            .call(this.d3Axes); 
+            .call(this.d3Axes)
+            .selectAll("text")
+			   	.attr("y", function(){
+			   		if(self.orient==="Left" || self.orient==="Right"){  //align to ticks
+			   			return -10;
+			   		}
+			   		else{
+			   			return 0;
+			   		}
+			   	})
+    			.attr("x", function(){
+    				if(self.orient==="Bottom" ||self.orient==="Top"){ //align to ticks
+    					return -1; 
+    				}
+    				else{
+    					return 0;
+    				}
+    			})
+			    .attr("dy", ".95em")
+			    .attr("transform", "rotate("+-(self.labelAngle)+")")
+			    .style("text-anchor", self.labelAnchor);; 
 
 	},
 	setAxes:function(){

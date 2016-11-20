@@ -85,7 +85,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 		//console.log('pAxes ',pAxes);
 		for(var i=0;i<pAxes.length;i++){
 
-			var axes=new Axes(pAxes[i].idaxes,pAxes[i].name,pAxes[i].orient,pAxes[i].X_pos,pAxes[i].Y_pos,pAxes[i].idScales,pAxes[i].ticks);
+			var axes=new Axes(pAxes[i].idaxes,pAxes[i].name,pAxes[i].orient,pAxes[i].X_pos,pAxes[i].Y_pos,pAxes[i].idScales,pAxes[i].ticks,pAxes[i].labelAngle,pAxes[i].textAnchor);
 			//console.log("i",i,"axes ",axes);
 			axes.addAxes();
 		}
