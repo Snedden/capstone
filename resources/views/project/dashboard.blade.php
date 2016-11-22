@@ -1043,7 +1043,7 @@ ul {
               </div>
               <label class="control-label col-sm-4 textSelect" for="textSizeScale">Size Scale:</label>
                <div class="col-sm-3 textSelect">
-                <select name="textSizeScale" class="textScaleSelect textLengths" data-assinputid="textSize" id="textSizeScale" >
+                <select name="textSizeScale" class="textLinearScaleSelect textLengths" data-assinputid="textSize" id="textSizeScale" >
                    <!-- populated in text.js getAxesCallback -->
                 </select>
               </div>

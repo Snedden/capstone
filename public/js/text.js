@@ -169,7 +169,7 @@ Text.prototype={
           .text(function(d){
 
             if(self.textScale){
-              return   self.textScale.d3ScaleLateral(d[self.textScale.dataCol.name]);   
+              return   d[self.textScale.dataCol.name];   
             }
             else{
               return self.text;
@@ -197,7 +197,7 @@ Text.prototype={
           .attr("y",function(d) { 
             if(self.yPosScale){
               cy= Math.round(self.yPosScale.d3ScaleLateral(d[self.yPosScale.dataCol.name]));
-              return cy;
+              return -cy;
               }
               else{
                 return null;
@@ -250,6 +250,8 @@ $('#addTextModal').on('show.bs.modal', function(e) {
   var defaultName="Text"+project.textNum;
 
   $("#textId").val(textId);                     //to be referenced in update clicked
+
+
   
   console.log('text', textObj);
     //update
@@ -301,27 +303,48 @@ $('#addTextModal').on('show.bs.modal', function(e) {
     else{
       ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
       $(".textSelect").show();
+
     }
 
     function getScalesCallback(data){
       //remove previous
       $('.textScaleSelect').html('');
+      $('.textLinearScaleSelect').html('');
+
+
 
       //add new
       for(var i=0;i<data.length;i++){
         //add header once
         if(i===0){
+          //Linear + ordinal scales
           $('.textScaleSelect').append($('<option>', { 
                 value:'',
                 text : 'No scale' 
             }));
+          //only Linear scales
+          $('.textLinearScaleSelect').append($('<option>', { 
+                value:'',
+                text : 'No scale' 
+          }));
         }
+          //Linear + ordinal scales
           $('.textScaleSelect').append($('<option>', { 
               value: data[i].idScales,
               text : data[i].scale_name 
           }));
 
+          //Linear  scales
+          if(data[i].type==="Linear"){ //only add Linear scales
+            $('.textLinearScaleSelect').append($('<option>', { 
+              value: data[i].idScales,
+              text : data[i].scale_name 
+            }));
+          }
+
+
       }
+      //update clicked,assign respective values
       if(textObj){
         $(e.currentTarget).find('#textSizeScale').val(textObj.sizeScaleId);
         $(e.currentTarget).find('#textTextScale').val(textObj.textScaleId);
@@ -329,6 +352,8 @@ $('#addTextModal').on('show.bs.modal', function(e) {
         $(e.currentTarget).find('#textYScale').val(textObj.yPosScaleId);
           
       }
+
+
        
         
     }

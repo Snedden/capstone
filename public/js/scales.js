@@ -245,7 +245,7 @@ Scale.prototype={
 	},
 	updateScale:function(data){
 		var scaleTobeUpdated='scale'+this.scaleId;
-		var axisToBeUpdated,axisId,rectData,circleData;
+		var axisToBeUpdated,axisId,rectData,circleData,textData;
 		//update scale
 		if(this.type==="Linear"){
 			this.rangeFrom=data.rangeFrom;
@@ -315,6 +315,30 @@ Scale.prototype={
 				};
 
 				ajaxCall('post','circle/update/'+project.circle[key].id,circleData,'json',updateCircleCallback);
+			}
+		}
+		//update associated text
+		for (var key in project.text){
+			
+			if((project.text[key].textScaleId==this.scaleId)||(project.text[key].sizeScaleId==this.scaleId)){ // double == on purpose as RHS is num and LHS is string
+				 textData={
+				    name:project.text[key].name,
+				    size:project.text[key].size,
+				    sizeScale:project.text[key].sizeScaleId,
+				    text:project.text[key].text,
+				    textScale:project.text[key].textScaleId,
+				    xPos:project.text[key].xPos,
+				    xPosScale:project.text[key].xPosScaleId,
+				    yPos:project.text[key].yPos,
+				    yPosScale:project.text[key].yPosScaleId,
+				    angle:project.text[key].angle,
+				    color:project.text[key].color,
+				    opacity:project.text[key].opacity,
+				    pid:project.pid,
+				    dataset:project.text[key].id_dataset
+				  };
+
+				ajaxCall('post','text/update/'+project.text[key].id,textData,'json',updateTextCallback);
 			}
 		}
 		

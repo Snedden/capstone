@@ -134,9 +134,9 @@ class datasetController extends Controller
 				$datasetCol->save();
 	        }
 
-	      	
-	            return response($dataset, 200)
-                  ->header('Content-Type', 'application/json');  //cant get this to return ONLY json so did some bandaid work in the front end instead
+	      		return json_encode($dataset);
+	         /*   return response($dataset, 200)
+                  ->header('Content-Type', 'application/json');  //cant get this to return ONLY json so did some bandaid work in the front end instead*/
 
 		} catch (Exception $e) {
 
@@ -179,7 +179,7 @@ class datasetController extends Controller
 	*/
 	function getScales($id){
 
-		$axis=DB::select("select idScales,scale_name from scales where col_Id in (select col_Id from data_sets_columns where iddata_sets=? )",[$id]);
+		$axis=DB::select("select idScales,scale_name,type from scales where col_Id in (select col_Id from data_sets_columns where iddata_sets=? )",[$id]);
 		
 		return json_encode($axis);
 	}
