@@ -119,6 +119,15 @@
     
     //nav menu clicked active higligheer
     $( document ).ready(function(){
+
+        //loader events 
+        $(document).ajaxStart(function(){
+            $("#wait").css("display", "block");
+        });
+        $(document).ajaxComplete(function(){
+            $("#wait").css("display", "none");
+        });
+
         init();  //function defined in dashboard.blade.php
         
 

@@ -126,7 +126,7 @@ function Datacol(id,colName,colType,colData,datasetId){
 }
 
 ///////////////submit events
-//update pie
+
 $("#datasetUploadForm").submit(function(e){
 	e.preventDefault();
 	e.stopImmediatePropagation();
@@ -134,10 +134,10 @@ $("#datasetUploadForm").submit(function(e){
         alert("Your browser does not support new File API! Please upgrade.");
     	return false;
     }
-	
-	var formData = new FormData($("#datasetUploadForm")[0]);
-	formData.append('csv', $('#csv'));
-	//ajaxCall('post','dataset/create/'+project.pid,formData,'json',uploadDataCallback,true);
+	console.debug($('#csv'));
+	var formData = new FormData();
+	formData.append('file', $('#csv')[0].files[0]);
+
 	//Not using ajax.js as too many different variable to re factor 
 	$.ajaxSetup({
         headers: {
@@ -151,7 +151,7 @@ $("#datasetUploadForm").submit(function(e){
         //url: window.location.origin+'/projectFirst/public/'+url,
         url: window.location.origin+'/'+'dataset/create/'+project.pid,
         data:formData,
-        dataType:'text',
+       
     	processData:false,
     	contentType:false,
     	mimeType:"multipart/form-data",
@@ -169,7 +169,7 @@ $("#datasetUploadForm").submit(function(e){
 
 function uploadDataCallback(data){
 	//console.log(JSON.parse(data.split('</pre>')[1]));
-	var ret=JSON.parse(data.split('</pre>')[1]); //need to do this as cant get propoer json response for file upload
+	var ret=JSON.parse(data); 
 	var dataset=new Dataset(ret.name,ret.path,ret.iddata_sets);
 	dataset.addDataset(project.pid);
 }

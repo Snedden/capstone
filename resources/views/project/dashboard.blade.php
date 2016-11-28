@@ -172,7 +172,8 @@ ul {
  
 
 <div class="container" style="width:98%">
-
+  <div id="wait" style="display:none;width:100%;height:100%;position:absolute;top:50%;left:50%;"><img src='../Loading_icon.gif' width="64" height="64" alt="loading..." /><br>Loading..
+  </div>
   <div>
            
          
@@ -308,7 +309,7 @@ ul {
           <form method="POST" action="" id="datasetUploadForm" accept-charset="UTF-8" enctype="multipart/form-data" >
 
             <input type="hidden" name="_token" value="{{csrf_token()}}">  
-            <input type="file" name="csv" id="csv" value="" accept=".csv" />
+            <input type="file" name="csv" id="csv" value="" accept=".csv,.json" />
             <input type="submit" value="Upload File">
           </form>
         

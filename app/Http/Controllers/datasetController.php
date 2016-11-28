@@ -20,11 +20,22 @@ class datasetController extends Controller
     */
     function create($pid){
 
-    	$tmpName = $_FILES['csv']['tmp_name'];
-		$csvAsArray = array_map('str_getcsv', file($tmpName));
-		//dd($csvAsArray);
-		$rows=count($csvAsArray);
+    	$tmpName = $_FILES['file']['tmp_name'];
+    	$file = file($tmpName);
+    	$fileName=($_FILES['file']['name']);
+    	$fileExt=explode(".",$fileName)[1];
 
+    	//doing it here as temp file is deleted after upload
+    	if($fileExt=='json'){
+    		$fileString = file_get_contents($tmpName);
+			$fileAsArray = json_decode($fileString, true);
+    	}
+    	else if($fileExt=='csv'){
+    		$fileAsArray = array_map('str_getcsv', $file);
+    	}
+
+		
+		
 		
 		
 		//uploading a file
@@ -32,19 +43,19 @@ class datasetController extends Controller
 		    
 		    // Undefined | Multiple Files | $_FILES Corruption Attack
 		    // If this request falls under any of them, treat it invalid.
-		/*	if(!isset($_FILES['csv']) || !is_uploaded_file($_FILES['csv']['tmp_name'][0])){
+		/*	if(!isset($_FILES['file']) || !is_uploaded_file($_FILES['file']['tmp_name'][0])){
    				throw new Exception('File missing');
 			}*/
 
 		    if (
-		        !isset($_FILES['csv']['error']) ||
-		        is_array($_FILES['csv']['error'])
+		        !isset($_FILES['file']['error']) ||
+		        is_array($_FILES['file']['error'])
 		    ) {
 		        throw new Exception('Invalid parameters.');
 		    }
 
-		    // Check $_FILES['csv']['error'] value.
-		    switch ($_FILES['csv']['error']) {
+		    // Check $_FILES['file']['error'] value.
+		    switch ($_FILES['file']['error']) {
 		        case UPLOAD_ERR_OK:
 		            break;
 		        case UPLOAD_ERR_NO_FILE:
@@ -57,16 +68,17 @@ class datasetController extends Controller
 		    }
 
 		    // You should also check filesize here. 
-		    if ($_FILES['csv']['size'] > 1000000) {
+		    if ($_FILES['file']['size'] > 1000000) {
 		        throw new Exception('Exceeded filesize limit.');
 		    }
 
-		    // DO NOT TRUST $_FILES['csv']['mime'] VALUE !!
+		    // DO NOT TRUST $_FILES['file']['mime'] VALUE !!
 		    // Check MIME Type by yourself.
 		    $finfo = new finfo(FILEINFO_MIME_TYPE);
-		    var_dump($finfo->file($_FILES['csv']['tmp_name']));
+		    //dd($finfo->file($_FILES['file']['tmp_name']));
+		    //var_dump($finfo->file($_FILES['file']['tmp_name']));
 		    if (false === $ext = array_search(
-		        $finfo->file($_FILES['csv']['tmp_name']),
+		        $finfo->file($_FILES['file']['tmp_name']),
 		        array(
 		            'csv' => 'text/csv',
 		            'json' => 'application/json',
@@ -79,64 +91,100 @@ class datasetController extends Controller
 		    }
 
 		    // You should name it uniquely.
-		    // DO NOT USE $_FILES['csv']['name'] WITHOUT ANY VALIDATION !!
+		    // DO NOT USE $_FILES['file']['name'] WITHOUT ANY VALIDATION !!
 		    // On this example, obtain safe unique name from its binary data.
-		    $path=sha1_file($_FILES['csv']['tmp_name']);
+		    $path=sha1_file($_FILES['file']['tmp_name']);
 
-		    //server config
-		  /*  if (!move_uploaded_file(
-		        $_FILES['csv']['tmp_name'],
-		        sprintf(base_path().'/storage/%s.%s',
-		            $path,
-		            $ext
-		        )
-		    )) {
-		        throw new Exception('Failed to move uploaded file.');
-		    }*/
+			
 
 		    //dev config
 		    if (!move_uploaded_file(
-		        $_FILES['csv']['tmp_name'],
+		        $_FILES['file']['tmp_name'],
 		        sprintf(base_path().'/public/devStorage/%s.%s',
 		            $path,
-		            $ext
+		            $fileExt
 		        )
 		    )) {
 		        throw new Exception('Failed to move uploaded file.');
 		    }
 
-
-		    //everything fine,file is uploaded succesfully
+	    	//dd($fileAsArray);
+			$rows=count($fileAsArray);
+	        //everything fine,file is uploaded succesfully
 		    //save dataset
 		    $dataset=new DataSet;   
-	        $dataset->name=$_FILES['csv']['name'];
+	        $dataset->name=$_FILES['file']['name'];
 	        $dataset->iduser=Auth::user()->iduser;
 	        $dataset->pid=$pid;
 	        $dataset->path=$path;
-	        $dataset->type=$ext;
+	        $dataset->type=$fileExt;
 	        $dataset->rows=$rows;
-	        $dataset->cols=count($csvAsArray[0]);
-	        $dataset->save();
+	        $dataset->cols=count($fileAsArray[0]);
+		    
+		    $dataset->save();
 
-	     
-	        
-	        for($i=0;$i<count($csvAsArray[0]);$i++ ){  
-	        	$datasetCol=new DataSetColumn;
-				$datasetCol->col_name=$csvAsArray[0][$i];  //first row is assume to be the header row
-				if(is_numeric($csvAsArray[1][$i])){        //second row is taken as value and its type is assumed for entire column
-					$datasetCol->col_type='Number';	
+		    //parsing different types of files 
+		    if($fileExt=='csv'){
+
+		    	for($i=0;$i<count($fileAsArray[0]);$i++ ){
+		        	$datasetCol=new DataSetColumn;
+					$datasetCol->col_name=$fileAsArray[0][$i];  //first row is assume to be the header row
+					if(is_numeric($fileAsArray[1][$i])){        //second row is taken as value and its type is assumed for entire column
+						$datasetCol->col_type='Number';	
+					}
+					else{
+						$datasetCol->col_type='String';
+					}
+					$datasetCol->iddata_sets=$dataset->iddata_sets;
+					
+					$datasetCol->save();
+		        }
+
+		      	
+	        }
+	        else if($fileExt=='json'){
+	        	
+	        	//check if json is in valid format
+
+	        	$validJson=$this->isValidFormat($fileAsArray);
+	       		if(!$validJson){
+	       			throw new Exception('Please have valid json format, i.e. array of objects.');
+
+	       		}
+
+	       		foreach ($fileAsArray as $key => $L1val) { //level one of json
+	       			$counter=0;
+					foreach ($L1val as $key => $L2val) { //level two of json //we know $L1val is an array
+						
+
+						$datasetCol=new DataSetColumn;
+						$datasetCol->col_name=$key;                 //key if col heading
+						if(is_numeric($L2val)){        
+							$datasetCol->col_type='Number';	
+						}
+						else{
+							$datasetCol->col_type='String';
+						}
+						$datasetCol->iddata_sets=$dataset->iddata_sets;
+						
+						$datasetCol->save();
+
+						$counter++;
+						}
+					if($counter>0){
+						break; //do this only once as we only need meta data not the data
+					}
 				}
-				else{
-					$datasetCol->col_type='String';
-				}
-				$datasetCol->iddata_sets=$dataset->iddata_sets;
-				
-				$datasetCol->save();
+
+					
+	        }
+	        else{
+	        	throw new Exception('Invalid file type');
 	        }
 
-	      		return json_encode($dataset);
-	         /*   return response($dataset, 200)
-                  ->header('Content-Type', 'application/json');  //cant get this to return ONLY json so did some bandaid work in the front end instead*/
+	    	return json_encode($dataset);
+		    
+	         
 
 		} catch (Exception $e) {
 
@@ -148,6 +196,30 @@ class datasetController extends Controller
 
 	}
 
+	function isValidFormat($jsonObj){
+		
+		if(is_array($jsonObj)){
+			
+			foreach ($jsonObj as $key => $L1val) { //level one of json
+				if(is_array($L1val)){
+
+					foreach ($L1val as $key => $L2val) { //level two of json
+						if(is_array($L2val)){
+							return false;  //level three should not be a array but a string
+						}
+					}
+				}
+				else{
+					return false; //level two should be array too
+				}
+        	}
+
+        	return true; //file is parsed and valid
+		}
+		else{
+			return false;  //level one should be array 
+		}
+	}
 	/*
 	*Delete a dataset
 	*/
