@@ -83,11 +83,21 @@ Dataset.prototype={
 	    dataSetLi="<li class='dataset' data-col-id="+this.id+" id="+this.id+">"+this.name+" <a style='float:right;font-size:9px' href='#'' class='btn btn-xs btn-primary' data-toggle='modal' data-target='#datasetModal' data-dataset-name="+this.name+" data-project-id="+this.pid+"  data-dataset-id="+this.id+">edit</a><ul id='dataColUl"+this.id+"'></ul></li>";
 	     $("#dataSetUL").append(dataSetLi);
 	        
-  /*      for(var i = 0; i<this.dataColumns.length; i++){
-          	var dataColLi="<li data-toggle='modal' data-dataset-name="+this.name+"  data-target='#addScaleModal' data-datasetcol-name="+this.dataColumns[i].col_name+" data-action='add'  id="+this.dataColumns[i].col_Id+">"+this.dataColumns[i].col_name+"</li>";
-          	$("#dataColUl"+this.id).append(dataColLi);
-         }*/
-	                    
+ 		//add to rect modal
+		var dsOpRect="<option  value="+this.id+">"+this.name+"</option>";
+		$("#rectDataset").append(dsOpRect);
+
+ 		//add to circle modal
+		var dsOpCircle="<option  value="+this.id+">"+this.name+"</option>";
+		$("#circleDataset").append(dsOpCircle);
+ 		
+ 		//add to pie modal
+		var dsOpPie="<option  value="+this.id+">"+this.name+"</option>";
+		$("#pieDataset").append(dsOpPie);
+
+ 		//add to text modal
+		var dsOpText="<option  value="+this.id+">"+this.name+"</option>";
+		$("#textDataset").append(dsOpText);					                    
 
            
 	},
@@ -122,6 +132,9 @@ function Datacol(id,colName,colType,colData,datasetId){
 	//add to screen
     var dataColLi="<li data-toggle='modal' data-datacolnum="+project.dataColsNum+" data-col-id="+this.id+" data-target='#addScaleModal' data-datasetcol-name="+this.name+" data-action='add'  id="+this.id+">"+this.name+"</li>";
   	$("#dataColUl"+this.datasetId).append(dataColLi);
+
+ 
+  	
 	
 }
 

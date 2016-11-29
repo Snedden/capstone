@@ -628,10 +628,10 @@ ul {
               <div class="col-sm-10">
                 <select name="rectDataset" id="rectDataset">
                   <option value="">No dataset</option>
-                  @forelse ($project->datasets as $dataset)
+<!--                   @forelse ($project->datasets as $dataset)
                     <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
                   @empty
-                  @endforelse   
+                  @endforelse  -->  
 
                   
                 </select>
@@ -764,10 +764,10 @@ ul {
               <div class="col-sm-10">
                 <select name="circleDataset" id="circleDataset">
                   <option value="">No dataset</option>
-                  @forelse ($project->datasets as $dataset)
+<!--                   @forelse ($project->datasets as $dataset)
                     <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
                   @empty
-                  @endforelse   
+                  @endforelse  -->  
 
                   
                 </select>
@@ -872,10 +872,10 @@ ul {
               <div class="col-sm-10">
                 <select name="pieDataset" id="pieDataset" required>
                   <option value="">No dataset</option>
-                  @forelse ($project->datasets as $dataset)
+<!--                   @forelse ($project->datasets as $dataset)
                     <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
                   @empty
-                  @endforelse   
+                  @endforelse  -->  
 
                   
                 </select>
@@ -1013,10 +1013,10 @@ ul {
               <div class="col-sm-10">
                 <select name="textDataset" id="textDataset">
                   <option value="">No dataset</option>
-                  @forelse ($project->datasets as $dataset)
+<!--                   @forelse ($project->datasets as $dataset)
                     <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
                   @empty
-                  @endforelse   
+                  @endforelse    -->
 
                   
                 </select>
