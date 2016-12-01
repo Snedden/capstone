@@ -32,7 +32,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 	this.stageYScale;
 	this.setStageScales(); //set scales and axis of the stage;
 	
-
+	
 	this.getStageX=function(xPos){
 		
 		return Math.round(this.stageXScale(xPos)+this.stageMarginLeft);
@@ -57,7 +57,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 		//get the associated cols
 		
 		
-		var dataset=new Dataset(pdataSets[i].name,pdataSets[i].path,pdataSets[i].iddata_sets); //.path is just the filename not the entire path
+		var dataset=new Dataset(pdataSets[i].name,pdataSets[i].path,pdataSets[i].iddata_sets,pdataSets[i].type); //.path is just the filename not the entire path
 		dataset.addDataset(this.pid); //dataset object
 		this.addDataSet(dataset); //add to project object
 	}

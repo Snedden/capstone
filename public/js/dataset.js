@@ -1,11 +1,12 @@
-function Dataset(dName,dFileName,dId,dataCols){
+function Dataset(dName,dFileName,dId,type){
 	this.name=dName;
 	this.path='../devStorage/'+dFileName;  //have to change in online server
 	this.id=dId;
 	this.rawData;
+	this.type=type;
 
 	this.dataCols=[];
-	this.dataColumns=dataCols;
+	this.dataColumns;
 
 	this.jqueryObj=$('.dataset#'+this.id);
 	this.pid;
@@ -13,6 +14,67 @@ function Dataset(dName,dFileName,dId,dataCols){
 
 
 
+}
+
+function handleData(data,self){
+	var colName;
+	var colName1;
+	var colType;
+	var colData={};
+	var dataColObj;
+	var datasetId=self.id;
+	var datasetName='dataset'+self.id;
+	var dataColumns;
+		
+		for(var  key in data[0]){
+			console.log('key ',key);
+		}
+		
+		self.rawData=data;
+
+		//for(var i=0;i<data.columns.length;i++){
+		for(var  key in data[0]){	
+			//console.log('col ',data.columns[i]);
+			//colName=data.columns[i];
+			colName=key;
+			
+			colType=isNaN(data[0][colName])?'String':'Number';
+			colData[colName]=[];
+
+			for(var j=0;j<data.length;j++){
+				//make sure to parse as int if number
+				if(colType==='Number'){
+					colData[colName].push(parseInt(data[j][colName]));
+				}
+				else{
+					colData[colName].push(data[j][colName]);
+				}
+				
+			}
+
+			//add column obect
+			dataColObj=new Datacol(colName,colType,colData,datasetId);
+			self.dataCols[colName]=dataColObj;
+
+
+			
+      //count loaded dataset and add to memory
+      project.dataSetLoaded++;
+      project.datasets[datasetName]=self; 
+      
+
+		}
+
+	//add data columns 
+	for(var i=0;i<self.dataColumns.length;i++){
+
+		var dataCol=new Datacol(self.dataColumns[i].col_Id,self.dataColumns[i].col_name,self.dataColumns[i].col_type,colData[self.dataColumns[i].col_name],self.id);
+		project.dataCols[dataCol.dataColName]=dataCol;
+	}
+	//dispatch event if all data sets are loaded
+	if(project.dataSetLoaded===project.NumberOfDataSets){
+        window.dispatchEvent(project.evt);
+     }
 }
 
 Dataset.prototype={
@@ -23,60 +85,23 @@ Dataset.prototype={
 	},
 	addFileData:function(){
 		var self=this;
-		d3.csv(this.path+".csv", function(data) {
-			var colName;
-			var colName1;
-			var colType;
-			var colData={};
-			var dataColObj;
-			var datasetId=self.id;
-			var datasetName='dataset'+self.id;
-  			console.log('storageDAta:',data);
+		console.log('ds ',this);
+		if(self.type==='json'){
+			d3.json(this.path+".json", function(data) {
+				console.log('jsondata ',data);
+  				handleData(data,self);
+			});
+		}
+		else if(self.type==='csv'){
+			d3.csv(this.path+".csv", function(data) {
+				console.log('csvdata ',data);
+				handleData(data,self);
+			});
+		}
+		else{
+			console.error("Invalid dataset type");
+		}
 
-  			self.rawData=data;
-
-  			for(var i=0;i<data.columns.length;i++){
-  				console.log('col ',data.columns[i]);
-  				colName=data.columns[i];
-  				
-  				colType=isNaN(data[0][colName])?'String':'Number';
-  				colData[colName]=[];
-
-  				for(var j=0;j<data.length;j++){
-  					//make sure to parse as int if number
-  					if(colType==='Number'){
-  						colData[colName].push(parseInt(data[j][colName]));
-  					}
-  					else{
-  						colData[colName].push(data[j][colName]);
-  					}
-  					
-  				}
-
-  				//add column obect
-  				dataColObj=new Datacol(colName,colType,colData,datasetId);
-  				self.dataCols[colName]=dataColObj;
-
-
-  				
-	          //count loaded dataset and add to memory
-	          project.dataSetLoaded++;
-	          project.datasets[datasetName]=self; 
-	          
-
-  			}
-
-			//add data columns 
-			for(var i=0;i<self.dataColumns.length;i++){
-
-				var dataCol=new Datacol(self.dataColumns[i].col_Id,self.dataColumns[i].col_name,self.dataColumns[i].col_type,colData[self.dataColumns[i].col_name],self.id);
-				project.dataCols[dataCol.dataColName]=dataCol;
-			}
-			//dispatch event if all data sets are loaded
-			if(project.dataSetLoaded===project.NumberOfDataSets){
-	            window.dispatchEvent(project.evt);
-	         }
-		});
 	},
 	addToStage:function(){
 		var dataColLi,dataSetLi;
