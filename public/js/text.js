@@ -250,6 +250,8 @@ $('#addTextModal').on('show.bs.modal', function(e) {
   var defaultName="Text"+project.textNum;
 
   $("#textId").val(textId);                     //to be referenced in update clicked
+  $('#textDataset').attr('data-textid',textId);
+  $(".textLengths").attr("data-textid",textId);                //to be used in change dataset
 
 
   
@@ -289,75 +291,7 @@ $('#addTextModal').on('show.bs.modal', function(e) {
     
    
 
-    //a data select is changed
-  $(document).on('change', '#textDataset', function() {
-    var selectedDataset=$(this);
 
-    //console.log('textDs',selectedDataset.val(), selectedDataset);
-
-    //if no dataset selected toggle
-    if(selectedDataset.val()===""){
-      
-      $(".textSelect").hide();
-    }
-    else{
-      ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
-      $(".textSelect").show();
-
-    }
-
-    function getScalesCallback(data){
-      //remove previous
-      $('.textScaleSelect').html('');
-      $('.textLinearScaleSelect').html('');
-
-
-
-      //add new
-      for(var i=0;i<data.length;i++){
-        //add header once
-        if(i===0){
-          //Linear + ordinal scales
-          $('.textScaleSelect').append($('<option>', { 
-                value:'',
-                text : 'No scale' 
-            }));
-          //only Linear scales
-          $('.textLinearScaleSelect').append($('<option>', { 
-                value:'',
-                text : 'No scale' 
-          }));
-        }
-          //Linear + ordinal scales
-          $('.textScaleSelect').append($('<option>', { 
-              value: data[i].idScales,
-              text : data[i].scale_name 
-          }));
-
-          //Linear  scales
-          if(data[i].type==="Linear"){ //only add Linear scales
-            $('.textLinearScaleSelect').append($('<option>', { 
-              value: data[i].idScales,
-              text : data[i].scale_name 
-            }));
-          }
-
-
-      }
-      //update clicked,assign respective values
-      if(textObj){
-        $(e.currentTarget).find('#textSizeScale').val(textObj.sizeScaleId);
-        $(e.currentTarget).find('#textTextScale').val(textObj.textScaleId);
-        $(e.currentTarget).find('#textXScale').val(textObj.xPosScaleId);
-        $(e.currentTarget).find('#textYScale').val(textObj.yPosScaleId);
-          
-      }
-
-
-       
-        
-    }
-  });
   $(e.currentTarget).find('#textDataset').trigger("change"); 
 });
 
@@ -374,6 +308,7 @@ $("#textForm").submit(function(e){
   var datasetName=dataset.split(".");
   datasetName=datasetName[0];
   var action=$("#updateTextBtn").text();
+
 
   var textData={
     name:$("#textName").val(),
@@ -419,6 +354,106 @@ function updateTextCallback(data){
   updatedText.updateText();
 }
 
+///Change events
+//a data select is changed
+$(document).on('change', '#textDataset', function() {
+  var selectedDataset=$(this);
+  var textId = $(this).data('textid');
+  var textName='text'+textId;
+  var textObj=project.text[textName];
+
+  //console.log('textDs',selectedDataset.val(), selectedDataset);
+
+  //if no dataset selected toggle
+  if(selectedDataset.val()===""){
+    
+    $(".textSelect").hide();
+  }
+  else{
+    ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
+    $(".textSelect").show();
+
+  }
+
+  function getScalesCallback(data){
+    //remove previous
+    $('.textScaleSelect').html('');
+    $('.textLinearScaleSelect').html('');
+
+
+
+    //add new
+    for(var i=0;i<data.length;i++){
+      //add header once
+      if(i===0){
+        //Linear + ordinal scales
+        $('.textScaleSelect').append($('<option>', { 
+              value:'',
+              text : 'No scale' 
+          }));
+        //only Linear scales
+        $('.textLinearScaleSelect').append($('<option>', { 
+              value:'',
+              text : 'No scale' 
+        }));
+      }
+        //Linear + ordinal scales
+        $('.textScaleSelect').append($('<option>', { 
+            value: data[i].idScales,
+            text : data[i].scale_name 
+        }));
+
+        //Linear  scales
+        if(data[i].type==="Linear"){ //only add Linear scales
+          $('.textLinearScaleSelect').append($('<option>', { 
+            value: data[i].idScales,
+            text : data[i].scale_name 
+          }));
+        }
+
+
+    }
+    //update clicked,assign respective values
+    if(textObj){
+      $('#textSizeScale').val(textObj.sizeScaleId);
+      $('#textSizeScale').trigger("change");
+      $('#textTextScale').val(textObj.textScaleId);
+      $('#textTextScale').trigger("change");
+      $('#textXScale').val(textObj.xPosScaleId);
+      $('#textYScale').val(textObj.yPosScaleId);
+        
+    }
+
+
+     
+      
+  }
+});
+
+//textScale select is changed
+$(document).on('change','.textLengths',function(){
+  var textId = $(this).data('textid');
+  var textName='text'+textId;
+  var textObj=project.text[textName];
+  var data=$(this).data();
+
+  console.log('val ',$(this).val());
+  if($(this).val()===""){
+    //$("#"+data.assinputid).val("");
+    console.log('disabled');
+    $("#"+data.assinputid).prop("disabled",false);
+    $("#"+data.assinputid).prop('required',true);
+
+    $(this).prop('required',false);
+  }
+  else{
+    //$("#"+data.assinputid).val('');
+    $("#"+data.assinputid).prop("disabled",true);
+    $("#"+data.assinputid).prop('required',false);
+    //$("#"+data.assinputid).html('');
+    $(this).prop('required',true);  
+  }
+});
 
 
 

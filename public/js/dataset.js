@@ -105,7 +105,7 @@ Dataset.prototype={
 	},
 	addToStage:function(){
 		var dataColLi,dataSetLi;
-	    dataSetLi="<li class='dataset' data-col-id="+this.id+" id="+this.id+">"+this.name+" <a style='float:right;font-size:9px' href='#'' class='btn btn-xs btn-primary' data-toggle='modal' data-target='#datasetModal' data-dataset-name="+this.name+" data-project-id="+this.pid+"  data-dataset-id="+this.id+">edit</a><ul id='dataColUl"+this.id+"'></ul></li>";
+	    dataSetLi="<li class='dataset listItem' data-col-id="+this.id+" id="+this.id+">"+this.name+" <a style='float:right;font-size:9px' href='#'' class='btn btn-xs btn-primary' id='deleteDatasetBtn' data-dataset-name="+this.name+" data-datasetid="+this.id+" data-project-id="+this.pid+"  data-dataset-id="+this.id+">Delete</a><ul id='dataColUl"+this.id+"'></ul></li>";
 	     $("#dataSetUL").append(dataSetLi);
 	        
  		//add to rect modal
@@ -202,15 +202,41 @@ $("#datasetUploadForm").submit(function(e){
             console.error('Error:', data);
         }
     });
-    $("#fileUploadModal").modal('hide');//close modal dialog
+    
 });
 
 function uploadDataCallback(data){
-	//console.log(JSON.parse(data.split('</pre>')[1]));
+	var dataset;
 	var ret=JSON.parse(data); 
-	var dataset=new Dataset(ret.name,ret.path,ret.iddata_sets);
+	console.log(ret);
+	//there was in error
+	if(ret.error){
+		$("#ajaxFeedback").html(ret.error);
+		return;
+	}
+	$("#ajaxFeedback").html('');
+	dataset=new Dataset(ret.name,ret.path,ret.iddata_sets,ret.type);
 	dataset.addDataset(project.pid);
+	$("#fileUploadModal").modal('hide');//close modal dialog
 }
+
+//click events
+
+//delete dataset button click
+	$(document).on('click','#deleteDatasetBtn',function(){
+	  //console.log($(this).attr('data-datasetid'));
+	  var postData={
+	    iddata_sets:$(this).data('datasetid'),
+	    pid:project.pid
+	  };
+	  //console.log(postData);
+	  ajaxCall('post','dataset/delete',postData,'text',deleteDataSetCallBack); 
+	});
+
+	function deleteDataSetCallBack(data){
+	  
+	  location.reload();
+	}
 
 
 

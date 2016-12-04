@@ -119,7 +119,8 @@ ul {
 .listItem  {
   cursor:pointer;
   display:inline-block;
-  width:75%;
+  width:100%;
+
 }
 
 .groupItem  {
@@ -183,19 +184,7 @@ ul {
         <div class='funcGroup'>
           <h5><b>Data</b></h5>
            <ul id="dataSetUL">
-<!--             @forelse ($project->datasets as $dataset)
-              <li class='dataset' id="{{$dataset->iddata_sets}}">{{$dataset->name}} <a style="float:right;font-size:9px"href="#" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#datasetModal" data-dataset-name="{{$dataset->name}}" data-project-id="{{$project->pid}}"  data-dataset-id="{{$dataset->iddata_sets}}">edit</a>
-                <ul>
-                  @forelse($dataset->columns as $col)
-                    <li data-toggle="modal" data-dataset-name="{{$dataset->name}}"  data-target="#addScaleModal" data-datasetcol-name="{{$col->col_name}}" data-action='add'  id="{{$col->col_Id}}">{{$col->col_name}}</li>
-                  @empty
-                    <li>No columns found!</li>
-                  @endforelse
-                </ul>
-              </li>
-            @empty
-              <span>No data</p>
-            @endforelse  -->
+
           </ul>  
         </div>
          <div class='funcGroup'>
@@ -311,6 +300,8 @@ ul {
             <input type="hidden" name="_token" value="{{csrf_token()}}">  
             <input type="file" name="csv" id="csv" value="" accept=".csv,.json" />
             <input type="submit" value="Upload File">
+            <br/><span style="color:red" id="ajaxFeedback"><span>   
+
           </form>
         
         </div>  
@@ -612,8 +603,7 @@ ul {
         </div>
         <form  id="rectForm" method="POST" action="" accept-charset="UTF-8" class="form-horizontal">
           <div class="modal-body">
-           
-            <input type="hidden" name="_token" value="{{csrf_token()}}"> 
+           <input type="hidden" name="_token" value="{{csrf_token()}}"> 
             <input type="hidden"  id="rectId" >  
 
             <div class="form-group">
@@ -690,7 +680,7 @@ ul {
               </div>
             </div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label class="control-label col-sm-2" for="rectXOffset">Offset X:</label>
               <div class="col-sm-10">
                 <input  class="form-control" value=0 required type="number" placeholder="Offset to X"  name="rectXOffset"  id="rectXOffset"  />
@@ -702,7 +692,7 @@ ul {
               <div class="col-sm-10">
                 <input  class="form-control" required type="number" value=0 placeholder="Offset to Y" name="rectYOffset"  id="rectYOffset"  />
               </div>
-            </div>
+            </div> -->
 
              <div class="form-group">
               <label class="control-label col-sm-2" for="rectColor">Color</label>
@@ -781,7 +771,7 @@ ul {
               </div>
               <label class="control-label col-sm-3 circleSelect" for="circleRadiusScale">Radius Scale:</label>
                <div class="col-sm-3 circleSelect">
-                <select name="circleRadiusScale" class="circleScaleSelect circleLengths" data-assinputid="circleRadius" id="circleRadiusScale" >
+                <select name="circleRadiusScale" class="circleLinearScaleSelect circleLengths" data-assinputid="circleRadius" id="circleRadiusScale" >
                    <!-- populated in circle.js getAxesCallback -->
                 </select>
               </div>

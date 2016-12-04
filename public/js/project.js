@@ -32,7 +32,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 	this.stageYScale;
 	this.setStageScales(); //set scales and axis of the stage;
 	
-	
+
 	this.getStageX=function(xPos){
 		
 		return Math.round(this.stageXScale(xPos)+this.stageMarginLeft);
@@ -59,7 +59,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 		
 		var dataset=new Dataset(pdataSets[i].name,pdataSets[i].path,pdataSets[i].iddata_sets,pdataSets[i].type); //.path is just the filename not the entire path
 		dataset.addDataset(this.pid); //dataset object
-		this.addDataSet(dataset); //add to project object
+		//this.addDataSet(dataset); //add to project object
 	}
 	
 	function getDataColsCallback(data){
@@ -169,7 +169,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 	});
 
 	//dataset modle open
-	//triggered when modal is about to be shown
+/*	//triggered when modal is about to be shown
 	$('#datasetModal').on('show.bs.modal', function(e) {
 	    $("#dataSetColsList").empty(); //clear previous
 	    //get data-id attribute of the clicked element
@@ -255,7 +255,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 	function deleteDataSetCallBack(data){
 	  
 	  location.reload();
-	}
+	}*/
 
 
 	///Data set event listeners end

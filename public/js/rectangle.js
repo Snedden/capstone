@@ -284,8 +284,6 @@ $("#rectForm").submit(function(e){
 		xPosScale:$("#rectXScale").val(),
 		yPos:$("#rectY").val(),
 		yPosScale:$("#rectYScale").val(),
-		xOffset:$("#rectXOffset").val(),
-		yOffset:$("#rectYOffset").val(),
 		color:$("#rectColor").val(),
 		opacity:$("#rectOpacityInput").val(),
 		pid:project.pid,
@@ -311,8 +309,8 @@ $('#addRectModal').on('show.bs.modal', function(e) {
 	var rectName='rect'+rectId;
 	var rectObj=project.rect[rectName];
 	$("#rectId").val(rectId);           					//to be referenced in update clicked
-
-	console.log('rect', rectObj);
+	$(".rectLengths").attr("data-rectId",rectId);                //to be used in change dataset
+	$("#rectDataset").attr("data-rectId",rectId); 
 
 	//populate the textbox
     $(e.currentTarget).find('#rectName').val(rectObj.name);
@@ -327,54 +325,15 @@ $('#addRectModal').on('show.bs.modal', function(e) {
     
    
 
-    //a data select is changed
-	$(document).on('change', '#rectDataset', function() {
-		var selectedDataset=$(this);
 
-		//console.log('rectDs',selectedDataset.val(), selectedDataset);
-
-		//if no dataset selected toggle
-		if(selectedDataset.val()===""){
-			
-			$(".rectSelect").hide();
-		}
-		else{
-			ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
-			$(".rectSelect").show();
-		}
-
-		function getScalesCallback(data){
-			//remove previous
-			$('.rectScaleSelect').html('');
-
-			//add new
-			for(var i=0;i<data.length;i++){
-				//add header once
-				if(i===0){
-					$('.rectScaleSelect').append($('<option>', { 
-				        value:'',
-				        text : 'No scale' 
-				    }));
-				}
-			    $('.rectScaleSelect').append($('<option>', { 
-			        value: data[i].idScales,
-			        text : data[i].scale_name 
-			    }));
-
-			}
-			$(e.currentTarget).find('#rectWidthScale').val(rectObj.widthScaleId);
-		    $(e.currentTarget).find('#rectHeightScale').val(rectObj.heightScaleId);
-		    $(e.currentTarget).find('#rectXScale').val(rectObj.xPosScaleId);
-		    $(e.currentTarget).find('#rectYScale').val(rectObj.yPosScaleId);
-		   
-		    
-		}
-	});
 	$(e.currentTarget).find('#rectDataset').trigger("change"); 
 });
 /////////////////change events
 //rectScale select is changed
 $(document).on('change','.rectLengths',function(){
+	var rectId = $(this).data('rectid');
+	var rectName='rect'+rectId;
+	var rectObj=project.rect[rectName];
 	var data=$(this).data();
 
 	console.log('val ',$(this).val());
@@ -390,8 +349,59 @@ $(document).on('change','.rectLengths',function(){
 		//$("#"+data.assinputid).val('');
 		$("#"+data.assinputid).prop("disabled",true);
 		$("#"+data.assinputid).prop('required',false);
-		$("#"+data.assinputid).html('');
+		//$("#"+data.assinputid).html('');
 		$(this).prop('required',true);	
+	}
+});
+
+//a data select is changed
+$(document).on('change', '#rectDataset', function() {
+	var selectedDataset=$(this);
+	var rectId = $(this).data('rectid');
+	var rectName='rect'+rectId;
+	var rectObj=project.rect[rectName];
+
+	//console.log('rectDs',selectedDataset.val(), selectedDataset);
+
+	//if no dataset selected toggle
+	if(selectedDataset.val()===""){
+		
+		$(".rectSelect").hide();
+	}
+	else{
+		ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
+		$(".rectSelect").show();
+	}
+
+	function getScalesCallback(data){
+		//remove previous
+		$('.rectScaleSelect').html('');
+
+		//add new
+		for(var i=0;i<data.length;i++){
+			//add header once
+			if(i===0){
+				$('.rectScaleSelect').append($('<option>', { 
+			        value:'',
+			        text : 'No scale' 
+			    }));
+			}
+		    $('.rectScaleSelect').append($('<option>', { 
+		        value: data[i].idScales,
+		        text : data[i].scale_name 
+		    }));
+
+		}
+		$('#rectWidthScale').val(rectObj.widthScaleId);
+		$('#rectWidthScale').trigger("change");
+	    $('#rectHeightScale').val(rectObj.heightScaleId);
+	    $('#rectHeightScale').trigger("change");
+	    
+	    $('#rectXScale').val(rectObj.xPosScaleId);
+	    $('#rectYScale').val(rectObj.yPosScaleId);
+	    
+	   
+	    
 	}
 });
 

@@ -188,7 +188,7 @@ class datasetController extends Controller
 
 		} catch (Exception $e) {
 
-		    $message='Error:'.$e->getMessage();
+		    $message['error']=$e->getMessage();
 		    return $message;
 
 		}

@@ -222,6 +222,8 @@ $('#addCircleModal').on('show.bs.modal', function(e) {
 	var circleName='circle'+circleId;
 	var circleObj=project.circle[circleName];
 	$("#circleId").val(circleId);           					//to be referenced in update clicked
+	$('#circleDataset').attr('data-circleid',circleId);
+	$(".circleLengths").attr("data-circleid",circleId);                //to be used in change dataset
 
 	//console.log('circle', circleObj);
 
@@ -235,64 +237,7 @@ $('#addCircleModal').on('show.bs.modal', function(e) {
     $(e.currentTarget).find('#circleOpacityOutput').val(circleObj.opacity);
     $(e.currentTarget).find('#circleDataset').val(circleObj.id_dataset);
 
-        //a data select is changed
-	$(document).on('change', '#circleDataset', function() {
-		var selectedDataset=$(this);
 
-		//console.log('circleDs',selectedDataset.val(), selectedDataset);
-
-		//if no dataset selected toggle
-		if(selectedDataset.val()===""){
-			
-			$(".circleSelect").hide();
-		}
-		else{
-			ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
-			$(".circleSelect").show();
-		}
-
-		function getScalesCallback(data){
-			//remove previous
-			$('.circleScaleSelect').html('');
-
-			//add new
-			for(var i=0;i<data.length;i++){
-				//add header once
-				if(i===0){
-					$('.circleScaleSelect').append($('<option>', { 
-				        value:'',
-				        text : 'No scale' 
-				    }));
-				}
-			    $('.circleScaleSelect').append($('<option>', { 
-			        value: data[i].idScales,
-			        text : data[i].scale_name 
-			    }));
-
-			}
-			if(circleObj.radiusScaleId){
-				$(e.currentTarget).find('#circleRadiusScale').val(circleObj.radiusScaleId);
-			}
-			else{
-				$(e.currentTarget).find('#circleRadiusScale').val('');
-			}
-			if(circleObj.xPosScaleId){
-				$(e.currentTarget).find('#circleXScale').val(circleObj.xPosScaleId);
-			}
-			else{
-				$(e.currentTarget).find('#circleXScale').val('');
-			}
-		    if(circleObj.yPosScaleId){
-		    	$(e.currentTarget).find('#circleYScale').val(circleObj.yPosScaleId);
-		    }
-		    else{
-		    	$(e.currentTarget).find('#circleYScale').val('');
-		    }
-		    
-		   
-		    
-		}
-	});
 	$(e.currentTarget).find('#circleDataset').trigger("change"); 
     
    
@@ -334,4 +279,112 @@ function updateCircleCallback(data){
 	updatedCircle.updateCircle();
 
 }
+
+//change events
+//a data select is changed
+
+//circleScale select is changed
+$(document).on('change','.circleLengths',function(){
+	var circleId = $(this).data('circleid');
+	var circleName='circle'+circleId;
+	var circleObj=project.circle[circleName];
+	var data=$(this).data();
+
+	console.log('val ',$(this).val());
+	if($(this).val()===""){
+		//$("#"+data.assinputid).val("");
+		console.log('disabled');
+		$("#"+data.assinputid).prop("disabled",false);
+		$("#"+data.assinputid).prop('required',true);
+
+		$(this).prop('required',false);
+	}
+	else{
+		//$("#"+data.assinputid).val('');
+		$("#"+data.assinputid).prop("disabled",true);
+		$("#"+data.assinputid).prop('required',false);
+		//$("#"+data.assinputid).html('');
+		$(this).prop('required',true);	
+	}
+});
+
+$(document).on('change', '#circleDataset', function() {
+	var selectedDataset=$(this);
+	var circleId = $(this).data('circleid');
+	var circleName='circle'+circleId;
+	var circleObj=project.circle[circleName];
+
+	//console.log('circleDs',selectedDataset.val(), selectedDataset);
+
+	//if no dataset selected toggle
+	if(selectedDataset.val()===""){
+		
+		$(".circleSelect").hide();
+	}
+	else{
+		ajaxCall('get','dataset/scales/'+selectedDataset.val(),'','json',getScalesCallback);
+		$(".circleSelect").show();
+	}
+
+	function getScalesCallback(data){
+		//remove previous
+		$('.circleScaleSelect').html('');
+
+		//add new
+		for(var i=0;i<data.length;i++){
+	        //add header once
+	        if(i===0){
+	          //Linear + ordinal scales
+	          $('.circleScaleSelect').append($('<option>', { 
+	                value:'',
+	                text : 'No scale' 
+	            }));
+	          //only Linear scales
+	          $('.circleLinearScaleSelect').append($('<option>', { 
+	                value:'',
+	                text : 'No scale' 
+	          }));
+	        }
+	          //Linear + ordinal scales
+	          $('.circleScaleSelect').append($('<option>', { 
+	              value: data[i].idScales,
+	              text : data[i].scale_name 
+	          }));
+
+	          //Linear  scales
+	          if(data[i].type==="Linear"){ //only add Linear scales
+	            $('.circleLinearScaleSelect').append($('<option>', { 
+	              value: data[i].idScales,
+	              text : data[i].scale_name 
+	            }));
+	          }
+
+
+		}
+		if(circleObj.radiusScaleId){
+			$('#circleRadiusScale').val(circleObj.radiusScaleId);
+
+		}
+		else{
+			$('#circleRadiusScale').val('');
+		}
+		if(circleObj.xPosScaleId){
+			$('#circleXScale').val(circleObj.xPosScaleId);
+		}
+		else{
+			$('#circleXScale').val('');
+		}
+	    if(circleObj.yPosScaleId){
+	    	$('#circleYScale').val(circleObj.yPosScaleId);
+	    }
+	    else{
+	    	$('#circleYScale').val('');
+	    }
+
+	    $('#circleRadiusScale').trigger("change");
+	    
+	   
+	    
+	}
+});
 

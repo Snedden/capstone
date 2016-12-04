@@ -57,10 +57,10 @@ class rectController extends Controller
    		$rect->Opacity=$rectData['opacity'];
    		$rect->color=$rectData['color'];
    		$rect->pid=$rectData['pid'];
-   		$rect->Offset_X=$rectData['xOffset'];
-   		$rect->Offset_Y=$rectData['yOffset'];
-   		$rect->X_pos=$rectData['xPos'];
+   	   $rect->X_pos=$rectData['xPos'];
    		$rect->Y_pos=$rectData['yPos'];
+         $rect->width=$rectData['width'];
+         $rect->height=$rectData['height'];
    		if(strlen($rectData['dataset'])==0){
    			$rect->iddata_sets=null;
    		}
@@ -71,20 +71,20 @@ class rectController extends Controller
    		
    		//check if corresponding scales are selected
    		if($rectData['widthScale']!=""){
-   			$rect->Width=null;					
+   								
    			$rect->widthScale=$rectData['widthScale'];
    		}
    		else{
-   			$rect->Width=$rectData['width'];
+   			
    			$rect->widthScale=null;
    		}
 
    		if($rectData['heightScale']!=""){
-   			$rect->Height=null;
+   		
    			$rect->heightScale=$rectData['heightScale'];
    		}
    		else{
-   			$rect->Height=$rectData['height'];
+   		
    			$rect->heightScale=null;
    		}
    		if($rectData['xPosScale']==""){
