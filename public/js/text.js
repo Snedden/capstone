@@ -275,9 +275,9 @@ $('#addTextModal').on('show.bs.modal', function(e) {
     }
     else{
       $(e.currentTarget).find('#textName').val(defaultName);
-      $(e.currentTarget).find('#textText').val("");
+ 
       $(e.currentTarget).find('#textSize').val(18);
-      $(e.currentTarget).find('#textText').val("");
+   
       $(e.currentTarget).find('#textX').val(600);
       $(e.currentTarget).find('#textY').val(200);
       $(e.currentTarget).find('#textColor').val("#000000");

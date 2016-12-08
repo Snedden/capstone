@@ -105,7 +105,7 @@ Circle.prototype={
     			.enter().append("circle") //add new circle
 				 	.attr("r", function(d){
 				 		if(self.radiusScale){
-							return   self.radiusScale.d3ScaleLateral(d[self.radiusScale.dataCol.name])/12;   //reducing by  factor 10 to fit on screen
+							return   10 + self.radiusScale.d3ScaleLateral(d[self.radiusScale.dataCol.name])/12;   //reducing by  factor 10 to fit on screen
 						}
 				 		else{
 				 			return self.radius;
@@ -116,7 +116,16 @@ Circle.prototype={
 					.attr("fill-opacity",(0.01*this.opacity))
 					.attr("cx", function(d) { 
 						if(self.xPosScale){
-							return (self.xPosScale.d3ScaleLateral.bandwidth()/2)+ self.xPosScale.d3ScaleLateral(d[self.xPosScale.dataCol.name]);  //adding the half of bandwith so center coincides with the scale band
+							if(self.xPosScale.type==="Ordinal"){
+								return (self.xPosScale.d3ScaleLateral.bandwidth()/2)+ self.xPosScale.d3ScaleLateral(d[self.xPosScale.dataCol.name]);  //adding the half of bandwith so center coincides with the scale band
+							}
+							else if((self.xPosScale.type==="Linear")){
+								return (self.xPosScale.d3ScaleLateral(d[self.xPosScale.dataCol.name]));
+							}
+							else{
+								console.error("Invalid scale type");
+							}
+							
 						}
 						else{
 							return null;
@@ -329,6 +338,8 @@ $(document).on('change', '#circleDataset', function() {
 	function getScalesCallback(data){
 		//remove previous
 		$('.circleScaleSelect').html('');
+		$('.circleLinearScaleSelect').html('');
+
 
 		//add new
 		for(var i=0;i<data.length;i++){

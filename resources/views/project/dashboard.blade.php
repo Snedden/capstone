@@ -85,6 +85,10 @@
     width: 100%;
 }
 
+.stageAxis{
+  display: none;
+}
+
 .column {
     float: left;
     
@@ -166,6 +170,7 @@ ul {
   <button type="button" class="btn  menuBtn" data-toggle="modal" data-target="#fileUploadModal" >Add Data</button>
   <button type="button" class="btn  menuBtn" data-toggle="modal" data-target="#embedModal" >Embed</button>
   <button type="button" class="btn  menuBtn" data-toggle="modal" data-target="#exportModal" >Export</button>
+  <button type="button" class="btn  menuBtn" id="showHideRulerBtn" >Show Rulers</button>
 
 </div>  
 
@@ -413,62 +418,62 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="dataScaleName">Name:</label>
               <div class="col-sm-10">
-                <input  class="form-control" required name="dataScaleName" disabled="true" id="dataScaleName"  />
+                <input title="Name of the scale"  class="form-control" required name="dataScaleName" disabled="true" id="dataScaleName"  />
               </div>
             </div>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="dataColtype">Type:</label>
               <div class="col-sm-10">
-                <input  class="form-control" name="dataColtype" required value="Linear" disabled="true" id="dataColtype"  />
+                <input title="Linear for Numeric data ,Ordinal for non-numeric data" class="form-control" name="dataColtype" required value="Linear" disabled="true" id="dataColtype"  />
               </div>
             </div>
 
              <div class="form-group linearScaleInput">
               <label class="control-label col-sm-2" for="dataColDomainFrom">Domain From:</label>
               <div class="col-sm-10">
-                <input  class="form-control " name="dataColDomainFrom"  disabled="true" required id="dataColDomainFrom" value="12"  id="domain_from"  />
+                <input title="data source to map from, lower limit"  class="form-control " name="dataColDomainFrom"  disabled="true" required id="dataColDomainFrom" value="12"  id="domain_from"  />
               </div>
             </div>
 
              <div class="form-group linearScaleInput">
               <label class="control-label col-sm-2" for="dataColDomainTo">Domain To:</label>
               <div class="col-sm-10">
-                <input  class="form-control " type="number" name="dataColDomainTo"  required disabled="true"  id="dataColDomainTo"  value=560  />
+                <input title="data source to map from, upper limit"  class="form-control " type="number" name="dataColDomainTo"  required disabled="true"  id="dataColDomainTo"  value=560  />
               </div>
             </div>
 
             <div class="form-group linearScaleInput">
               <label class="control-label col-sm-2" for="range_from">Range From:</label>
               <div class="col-sm-10"> 
-                <input  class="form-control " id="range_from" name="range_from" disabled="true" value="0" min=0 max=600 required type="number"   placeholder="start range">
+                <input title="map to screen, lower limit"  class="form-control " id="range_from" name="range_from" disabled="true" value="0" min=0 max=600 required type="number"   placeholder="start range">
               </div>
             </div>
 
              <div class="form-group linearScaleInput">
               <label class="control-label col-sm-2" for="range_to">Range To:</label>
               <div class="col-sm-10">
-                <input  class="form-control " name="range_to" id="range_to" value="500" min=0 max=600 required type="number" onblur="validateRangeTo(this)" placeholder="end range">
+                <input title="map to screen, upper limit" class="form-control " name="range_to" id="range_to" value="500" min=0 max=600 required type="number" onblur="validateRangeTo(this)" placeholder="end range">
               </div>
             </div>
             <div class="form-group ordinalScaleInput">
               <label class="control-label col-sm-2" for="domainOrdinal">Domain:</label>
               <div class="col-sm-10">
-                <input  class="form-control "  disabled="true" required id="domainOrdinal" value="12"   />
+                <input title="data source to map from"  class="form-control "  disabled="true" required id="domainOrdinal" value="12"   />
               </div>
             </div>
 
             <div class="form-group ordinalScaleInput">
               <label class="control-label col-sm-2" for="scaleWidthOrdinal">Width:</label>
               <div class="col-sm-10">
-                <input  class="form-control" type="number" value="500" name="scaleWidthOrdinal"  min=1 required id="scaleWidthOrdinal" placeholder="scaleWidth"    />
+                <input title="width for scale"  class="form-control" type="number" value="500" name="scaleWidthOrdinal"  min=1 required id="scaleWidthOrdinal" placeholder="scaleWidth"    />
               </div>
             </div>
 
             <div class="form-group ordinalScaleInput">
               <label class="control-label col-sm-2" for="scaleBandPaddingOrdinal">Band Padding:</label>
               <div class="col-xs-3">
-                <input  class="form-control col-xs-3 " value=10  type="range" oninput="setOutput(this,'scaleBandPaddingOrdinalOutput')" min=0 max=100 required id="scaleBandPaddingOrdinal" placeholder="scaleWidth"   />
+                <input  title="padding between succesive entry in a scale" class="form-control col-xs-3 " value=10  type="range" oninput="setOutput(this,'scaleBandPaddingOrdinalOutput')" min=0 max=100 required id="scaleBandPaddingOrdinal" placeholder="scaleWidth"   />
               </div>  
               <div class="col-xs-3">
                 <input type="text" class="form-control " id="scaleBandPaddingOrdinalOutput" disabled="true" value="">
@@ -513,14 +518,14 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="axesName" >Name:</label>
               <div class="col-sm-10">
-                <input  class="form-control" required name="axesName" placeholder="Axes Name"  id="axesName"  />
+                <input title="name of the axes"  class="form-control" required name="axesName" placeholder="Axes Name"  id="axesName"  />
               </div>
             </div>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="axesScale">Scale:</label>
               <div class="col-sm-10">
-                <select name="axesScale" id="axesScale" required>
+                <select title="Associated scale " name="axesScale" id="axesScale" required>
                   <option value="">select</option>
                 <!--  populated in addscale prototype -->
                 </select>
@@ -530,8 +535,8 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="axesOrient">Orient:</label>
               <div class="col-sm-10">
-                <select name="axesOrient" id="axesOrient">
-                <option value="Bottom">Bottom</option>
+                <select title="Axes orient on the screen" name="axesOrient" id="axesOrient">
+                <option value="Bottom" selected>Bottom</option>
                   <option value="Top">Top</option>
                   <option value="Right">Right</option>
                   <option value="Left">Left</option>
@@ -542,14 +547,14 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="axesLabelAngle">Label Angle:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number" value=0 min=-180 max=180  required name="axesLabelAngle" placeholder="" id="axesLabelAngle"  />
+                <input title="Angle of the labels on the axes" class="form-control" type="number" value=45 min=-180 max=180  required name="axesLabelAngle" placeholder="" id="axesLabelAngle"  />
               </div>
             </div>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="axesLabelAnchor">Label Anchor:</label>
               <div class="col-sm-5">
-                <select name="axesLabelAnchor" id="axesLabelAnchor">
+                <select title="Anchor for the labels on the axes" name="axesLabelAnchor" id="axesLabelAnchor">
                   <option value="start">start</option>
                   <option value="middle">middle</option>
                   <option value="end">end</option>
@@ -560,21 +565,21 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="axesX">X:</label>
               <div class="col-sm-10">
-                <input  class="form-control" type="number"  required name="axesX" placeholder="X position" id="axesX"  />
+                <input title="X  position of the axes"  class="form-control" type="number" value=100 required name="axesX" placeholder="X position" id="axesX"  />
               </div>
             </div>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="axesY" >Y:</label>
               <div class="col-sm-10">
-                <input  class="form-control" type="number"  required name="axesY" placeholder="Y position"  id="axesY"  />
+                <input title="Y position of the axes"  class="form-control" type="number" value=50  required name="axesY" placeholder="Y position"  id="axesY"  />
               </div>
             </div>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="axesTicks">Ticks:</label>
               <div class="col-sm-10">
-                <input  class="form-control" required type="number" placeholder="number of ticks" min=1 max=30 name="axesTicks"  id="axesTicks"  />
+                <input title="Number of ticks on the axes"  class="form-control" required type="number" placeholder="number of ticks" min=1 max=30 name="axesTicks" value=10  id="axesTicks"  />
               </div>
             </div>
 
@@ -609,14 +614,14 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="rectName" >Name:</label>
               <div class="col-sm-10">
-                <input  class="form-control" required name="rectName" placeholder="Rectangle Name"  id="rectName"  />
+                <input title="Name of the rectangle" class="form-control" required name="rectName" placeholder="Rectangle Name"  id="rectName"  />
               </div>
             </div>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="rectDataset">Dataset:</label>
               <div class="col-sm-10">
-                <select name="rectDataset" id="rectDataset">
+                <select title="Associated Dataset" name="rectDataset" id="rectDataset">
                   <option value="">No dataset</option>
 <!--                   @forelse ($project->datasets as $dataset)
                     <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
@@ -631,11 +636,11 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="rectHeight">Height:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="rectHeight" placeholder="" id="rectHeight"  />
+                <input title="Height of the rectangle" class="form-control" type="number"  required name="rectHeight" placeholder="" id="rectHeight"  />
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectHeightScale">Height Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectHeightScale" class="rectScaleSelect rectLengths" data-assinputid="rectHeight" id="rectHeightScale" >
+                <select name="rectHeightScale" title="Associated scale" class="rectScaleSelect rectLengths" data-assinputid="rectHeight" id="rectHeightScale" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
@@ -644,11 +649,11 @@ ul {
              <div class="form-group">
               <label class="control-label col-sm-2 " for="rectWidth">Width:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="rectWidth" placeholder="" id="rectWidth"  />
+                <input title="Width of the rectangle" class="form-control" type="number"  required name="rectWidth" placeholder="" id="rectWidth"  />
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectWidthScale">Width Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectWidthScale" class="rectScaleSelect rectLengths" data-assinputid="rectWidth" id="rectWidthScale" >
+                <select title="Associated scale" name="rectWidthScale" class="rectScaleSelect rectLengths" data-assinputid="rectWidth" id="rectWidthScale" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
@@ -657,11 +662,11 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="rectX">X:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="rectX" placeholder="" id="rectX"  />
+                <input title="X position of the rectangle" class="form-control" type="number"  required name="rectX" placeholder="" id="rectX"  />
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectXScale">X Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectXScale" class="rectScaleSelect " id="rectXScale" data-assinputid="rectX" >
+                <select title="Associated scale" name="rectXScale" class="rectScaleSelect " id="rectXScale" data-assinputid="rectX" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
@@ -670,41 +675,29 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2 " for="rectY">Y:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="rectY" placeholder="" id="rectY"  />
+                <input title="Y position of the rectangle" class="form-control" type="number"  required name="rectY" placeholder="" id="rectY"  />
               </div>
               <label class="control-label col-sm-3 rectSelect" for="rectYScale">Y Scale:</label>
                <div class="col-sm-3 rectSelect">
-                <select name="rectYScale" id="rectYScale" class="rectScaleSelect" data-assinputid="rectY" >
+                <select title="Associated scale"  name="rectYScale" id="rectYScale" class="rectScaleSelect" data-assinputid="rectY" >
                    <!-- populated in rectagle.js getAxesCallback -->
                 </select>
               </div>
             </div>
 
-            <!-- <div class="form-group">
-              <label class="control-label col-sm-2" for="rectXOffset">Offset X:</label>
-              <div class="col-sm-10">
-                <input  class="form-control" value=0 required type="number" placeholder="Offset to X"  name="rectXOffset"  id="rectXOffset"  />
-              </div>
-            </div>
 
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="rectYOffset">Offset Y:</label>
-              <div class="col-sm-10">
-                <input  class="form-control" required type="number" value=0 placeholder="Offset to Y" name="rectYOffset"  id="rectYOffset"  />
-              </div>
-            </div> -->
 
              <div class="form-group">
               <label class="control-label col-sm-2" for="rectColor">Color</label>
               <div class="col-sm-2">
-                <input  class="form-control" required type="color" placeholder="Color"  name="rectColor"  id="rectColor"  />
+                <input title="Color of the rectangle" class="form-control" required type="color" placeholder="Color"  name="rectColor"  id="rectColor"  />
               </div>
             </div>
 
             <div class="form-group ">
               <label class="control-label col-sm-2" for="rectOpacityOutput">Opacity:</label>
               <div class="col-xs-3">
-                <input  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'rectOpacityOutput')" min=0 max=100 required id="rectOpacityInput" placeholder="Opacity"   />
+                <input title="Opacity of the rectangle"  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'rectOpacityOutput')" min=0 max=100 required id="rectOpacityInput" placeholder="Opacity"   />
               </div>  
               <div class="col-xs-3">
                 <input type="text" class="form-control " id="rectOpacityOutput" disabled="true" value="1">
@@ -745,21 +738,15 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="circleName" >Name:</label>
               <div class="col-sm-10">
-                <input  class="form-control" required name="circleName" placeholder="Circle Name"  id="circleName"  />
+                <input title="Name of the circle"  class="form-control" required name="circleName" placeholder="Circle Name"  id="circleName"  />
               </div>
             </div>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="circleDataset">Dataset:</label>
               <div class="col-sm-10">
-                <select name="circleDataset" id="circleDataset">
+                <select title="Associated dataset" name="circleDataset" id="circleDataset">
                   <option value="">No dataset</option>
-<!--                   @forelse ($project->datasets as $dataset)
-                    <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
-                  @empty
-                  @endforelse  -->  
-
-                  
                 </select>
               </div>
             </div>
@@ -767,11 +754,11 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="circleRadius">Radius:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="circleRadius" placeholder="" id="circleRadius"  />
+                <input title="Radius of the circle" class="form-control" type="number"  required name="circleRadius" placeholder="" id="circleRadius"  />
               </div>
               <label class="control-label col-sm-3 circleSelect" for="circleRadiusScale">Radius Scale:</label>
                <div class="col-sm-3 circleSelect">
-                <select name="circleRadiusScale" class="circleLinearScaleSelect circleLengths" data-assinputid="circleRadius" id="circleRadiusScale" >
+                <select title="Associated scale" name="circleRadiusScale" class="circleLinearScaleSelect circleLengths" data-assinputid="circleRadius" id="circleRadiusScale" >
                    <!-- populated in circle.js getAxesCallback -->
                 </select>
               </div>
@@ -780,11 +767,11 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="circleX">X:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="circleX" placeholder="" id="circleX"  />
+                <input title="X position of the circle"  class="form-control" type="number"  required name="circleX" placeholder="" id="circleX"  />
               </div>
               <label class="control-label col-sm-3 circleSelect" for="circleXScale">X Scale:</label>
                <div class="col-sm-3 circleSelect">
-                <select name="circleXScale" class="circleScaleSelect " id="circleXScale" data-assinputid="circleX" >
+                <select title="Associated scale" name="circleXScale" class="circleScaleSelect " id="circleXScale" data-assinputid="circleX" >
                    <!-- populated in circlee.js getAxesCallback -->
                 </select>
               </div>
@@ -793,11 +780,11 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2 " for="circleY">Y:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="circleY" placeholder="" id="circleY"  />
+                <input title="Y position of the circle"  class="form-control" type="number"  required name="circleY" placeholder="" id="circleY"  />
               </div>
               <label class="control-label col-sm-3 circleSelect" for="circleYScale">Y Scale:</label>
                <div class="col-sm-3 circleSelect">
-                <select name="circleYScale" id="circleYScale" class="circleScaleSelect" data-assinputid="circleY" >
+                <select title="Associated scale" name="circleYScale" id="circleYScale" class="circleScaleSelect" data-assinputid="circleY" >
                    <!-- populated in circle.js getAxesCallback -->
                 </select>
               </div>
@@ -807,14 +794,14 @@ ul {
              <div class="form-group">
               <label class="control-label col-sm-2" for="circleColor">Color</label>
               <div class="col-sm-2">
-                <input  class="form-control" required type="color" placeholder="Color"  name="circleColor"  id="circleColor"  />
+                <input title="Color of the rectangle"  class="form-control" required type="color" placeholder="Color"  name="circleColor"  id="circleColor"  />
               </div>
             </div>
 
             <div class="form-group ">
               <label class="control-label col-sm-2" for="circleOpacityOutput">Opacity:</label>
               <div class="col-xs-3">
-                <input  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'circleOpacityOutput')" min=0 max=100 required id="circleOpacityInput" placeholder="Opacity"   />
+                <input title="Opacity of the circle"  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'circleOpacityOutput')" min=0 max=100 required id="circleOpacityInput" placeholder="Opacity"   />
               </div>  
               <div class="col-xs-3">
                 <input type="text" class="form-control " id="circleOpacityOutput" disabled="true" value="1">
@@ -853,7 +840,7 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="pieName" >Name:</label>
               <div class="col-sm-8">
-                <input  class="form-control" required name="pieName" placeholder="Pie Name"  id="pieName"  />
+                <input title="Name of the pie"  class="form-control" required name="pieName"  placeholder="Pie Name"  id="pieName"  />
               </div>
             </div>
 
@@ -861,13 +848,7 @@ ul {
               <label class="control-label col-sm-2" for="pieDataset">Dataset:</label>
               <div class="col-sm-10">
                 <select name="pieDataset" id="pieDataset" required>
-                  <option value="">No dataset</option>
-<!--                   @forelse ($project->datasets as $dataset)
-                    <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
-                  @empty
-                  @endforelse  -->  
-
-                  
+                  <option value="">No dataset</option>         
                 </select>
               </div>
             </div>
@@ -875,22 +856,16 @@ ul {
             <div class="form-group selectPieDiv">
               <label class="control-label col-sm-2" for="pieLabels">Pie Labels:</label>
               <div class="col-sm-10">
-                <select name="pieLabels" class="pieSelects" id="pieLabels" required>
-                  <option value=""></option>
-                  
-
-                  
+                <select title="Linked dataset columns for pie labels" name="pieLabels" class="pieSelects" id="pieLabels" required>
+                  <option value=""></option> 
                 </select>
               </div>
             </div>
             <div class="form-group selectPieDiv" >
               <label class="control-label col-sm-2" for="pieValues">Pie values:</label>
               <div class="col-sm-10">
-                <select name="pieValues" id="pieValues" class="pieSelects" required>
-                  <option value=""></option>
-                  
-
-                  
+                <select title="Linked dataset columns for pie values" name="pieValues" id="pieValues" class="pieSelects" required>
+                  <option value=""></option>  
                 </select>
               </div>
             </div>
@@ -898,7 +873,7 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="pieInnerRadius">Inner Radius:</label>
               <div class="col-sm-4">
-                <input  class="form-control" type="number" value=0 min=0 max=300  required name="pieInnerRadius" placeholder="" id="pieInnerRadius"  />
+                <input title="Inner Radius of the pie" class="form-control" type="number" value=0 min=0 max=300  required name="pieInnerRadius" placeholder="" id="pieInnerRadius"  />
               </div>
 
             </div>
@@ -906,7 +881,7 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="pieOuterRadius">Outer Radius:</label>
               <div class="col-sm-4">
-                <input  class="form-control" type="number" min=0 max=320 required name="pieOuterRadius" placeholder="" id="pieOuterRadius"  />
+                <input  class="form-control" type="number" min=0 max=320 required name="pieOuterRadius" value=120 id="pieOuterRadius"  />
               </div>
 
             </div>
@@ -914,7 +889,7 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="pieLabelRadius">Label Radius:</label>
               <div class="col-sm-4">
-                <input  class="form-control" type="number" min=0 max=320  required name="pieLabelRadius" placeholder="" id="pieLabelRadius"  />
+                <input title="Radius for the pie labels" class="form-control" type="number" value=125 min=0 max=320  required name="pieLabelRadius" placeholder="" id="pieLabelRadius"  />
               </div>
 
             </div>
@@ -922,7 +897,7 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="pieCornerRadius">Corner Radius:</label>
               <div class="col-sm-4">
-                <input  class="form-control" type="number" value=0 min=0 max=300  required name="pieCornerRadius" placeholder="" id="pieCornerRadius"  />
+                <input title="corner radius for each arc of the pie"  class="form-control" type="number" value=0 min=0 max=300  required name="pieCornerRadius" placeholder="" id="pieCornerRadius"  />
               </div>
 
             </div>
@@ -930,7 +905,7 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="pieX">X:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="pieX" placeholder="" id="pieX"  />
+                <input title="X position of the pie" class="form-control" type="number" value=300  required name="pieX" placeholder="" id="pieX"  />
               </div>
 
             </div>
@@ -938,14 +913,14 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2 " for="pieY">Y:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number"  required name="pieY" placeholder="" id="pieY"  />
+                <input title="Y position of the pie" class="form-control" type="number" value="200"  required name="pieY" placeholder="" id="pieY"  />
               </div>
             </div>
 
             <div class="form-group ">
               <label class="control-label col-sm-2" for="pieOpacityOutput">Opacity:</label>
               <div class="col-xs-3">
-                <input  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'pieOpacityOutput')" min=0 max=100 required id="pieOpacityInput" placeholder="Opacity"   />
+                <input title="Opacity of the pie" class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'pieOpacityOutput')" min=0 max=100 required id="pieOpacityInput" placeholder="Opacity"   />
               </div>  
               <div class="col-xs-3">
                 <input type="text" class="form-control " id="pieOpacityOutput" disabled="true" value="1">
@@ -955,10 +930,10 @@ ul {
             <div class="form-group ">
               <label class="control-label col-sm-2" for="piePaddingOutput">Padding:</label>
               <div class="col-xs-3">
-                <input  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'piePaddingOutput')" min=0 max=100 required id="piePaddingInput" placeholder="padding angle"   />
+                <input title="Padding between each arc of the pie"   class="form-control col-xs-3 " value=0  type="range" oninput="setOutput(this,'piePaddingOutput')" min=0 max=100 required id="piePaddingInput" placeholder="padding angle"   />
               </div>  
               <div class="col-xs-3">
-                <input type="text" class="form-control " id="piePaddingOutput" disabled="true" value="1">
+                <input type="text" class="form-control " id="piePaddingOutput" disabled="true" value="0">
               </div>
             </div>
           </div>  
@@ -994,21 +969,15 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="textName" >Name:</label>
               <div class="col-sm-10">
-                <input  class="form-control" required name="textName" placeholder="Textangle Name"  id="textName"  />
+                <input title="Name of the text"  class="form-control" required name="textName" placeholder="Textangle Name"  id="textName"  />
               </div>
             </div>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="textDataset">Dataset:</label>
               <div class="col-sm-10">
-                <select name="textDataset" id="textDataset">
-                  <option value="">No dataset</option>
-<!--                   @forelse ($project->datasets as $dataset)
-                    <option value="{{$dataset->iddata_sets}}">{{$dataset->name}}</option>
-                  @empty
-                  @endforelse    -->
-
-                  
+                <select title="Associated dataset" name="textDataset" id="textDataset">
+                  <option value="">No dataset</option>                 
                 </select>
               </div>
             </div>
@@ -1016,11 +985,11 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="textHeight">Text:</label>
               <div class="col-sm-4">
-                <input  class="form-control"   required name="textText" placeholder="Enter Text" id="textText"  />
+                <input title="Actual text of the Text entity" class="form-control" value="Sample Text"  required name="textText" placeholder="Enter Text" id="textText"  />
               </div>
               <label class="control-label col-sm-2 textSelect" for="textTextScale">Text Scale:</label>
                <div class="col-sm-3 textSelect">
-                <select name="textTextScale" class="textScaleSelect textLengths" data-assinputid="textText" id="textTextScale" >
+                <select title="Associated Scale" name="textTextScale" class="textScaleSelect textLengths" data-assinputid="textText" id="textTextScale" >
                    <!-- populated in text.js getAxesCallback -->
                 </select>
               </div>
@@ -1034,7 +1003,7 @@ ul {
               </div>
               <label class="control-label col-sm-4 textSelect" for="textSizeScale">Size Scale:</label>
                <div class="col-sm-3 textSelect">
-                <select name="textSizeScale" class="textLinearScaleSelect textLengths" data-assinputid="textSize" id="textSizeScale" >
+                <select title="Associated Scale" name="textSizeScale" class="textLinearScaleSelect textLengths" data-assinputid="textSize" id="textSizeScale" >
                    <!-- populated in text.js getAxesCallback -->
                 </select>
               </div>
@@ -1045,11 +1014,11 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2" for="textX">X:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number" value=600 required name="textX" placeholder="" id="textX"  />
+                <input title="X position of the text" class="form-control" type="number" value=300 required name="textX" placeholder="" id="textX"  />
               </div>
               <label class="control-label col-sm-4 textSelect" for="textXScale">X Scale:</label>
                <div class="col-sm-3 textSelect">
-                <select name="textXScale" class="textScaleSelect " id="textXScale" data-assinputid="textX" >
+                <select title="Associated Scale" name="textXScale" class="textScaleSelect " id="textXScale" data-assinputid="textX" >
                    <!-- populated in textagle.js getAxesCallback -->
                 </select>
               </div>
@@ -1058,11 +1027,11 @@ ul {
             <div class="form-group">
               <label class="control-label col-sm-2 " for="textY">Y:</label>
               <div class="col-sm-2">
-                <input  class="form-control" type="number" value=200 required name="textY" placeholder="" id="textY"  />
+                <input title="Y position of the text"  class="form-control" type="number" value=200 required name="textY" placeholder="" id="textY"  />
               </div>
               <label class="control-label col-sm-4 textSelect" for="textYScale">Y Scale:</label>
                <div class="col-sm-3 textSelect">
-                <select name="textYScale" id="textYScale" class="textScaleSelect" data-assinputid="textY" >
+                <select title="Associated Scale" name="textYScale" id="textYScale" class="textScaleSelect" data-assinputid="textY" >
                    <!-- populated in textagle.js getAxesCallback -->
                 </select>
               </div>
@@ -1075,12 +1044,12 @@ ul {
              <div class="form-group">
               <label class="control-label col-sm-2" for="textColor">Color</label>
               <div class="col-sm-2">
-                <input  class="form-control" required type="color" placeholder="Color"  name="textColor"  id="textColor"  />
+                <input title="Color of the text"  class="form-control" required type="color" placeholder="Color"  name="textColor"  id="textColor"  />
               </div>
             </div>
 
             <div class="form-group">
-              <label class="control-label col-sm-2" for="textAngle">Angle</label>
+              <label title="Angle of the text" class="control-label col-sm-2" for="textAngle">Angle</label>
               <div class="col-sm-2">
                 <input  class="form-control" required type="number" min=-360 max=360 value=0  name="textColor"  id="textAngle"  />
               </div>
@@ -1091,7 +1060,7 @@ ul {
             <div class="form-group ">
               <label class="control-label col-sm-2" for="textOpacityOutput">Opacity:</label>
               <div class="col-xs-3">
-                <input  class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'textOpacityOutput')" min=0 max=100 required id="textOpacityInput" placeholder="Opacity"   />
+                <input title="Opacity of the text" class="form-control col-xs-3 " value=100  type="range" oninput="setOutput(this,'textOpacityOutput')" min=0 max=100 required id="textOpacityInput" placeholder="Opacity"   />
               </div>  
               <div class="col-xs-3">
                 <input type="text" class="form-control " id="textOpacityOutput" disabled="true" value="1">

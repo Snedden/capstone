@@ -283,6 +283,19 @@ $(document).on('click','.groupItem',function(){
 	
 });
 
+//show hide rulers
+$('#showHideRulerBtn').click(function(){
+	
+	if($(this).text()==="Hide Rulers"){
+		$(this).text("Show Rulers");
+		$(".stageAxis").hide();
+	}
+	else if($(this).text()==="Show Rulers"){
+		$(this).text("Hide Rulers");
+		$(".stageAxis").show();	
+	}
+})
+
 function deselectEntities(){
 	$('.groupItem').css('background-color',''); //remove previous(all) backgroud selected
 	$(".d3Entity").attr("stroke",""); //clear previous stroke	
