@@ -305,6 +305,35 @@ ul {
             <input type="hidden" name="_token" value="{{csrf_token()}}">  
             <input type="file" name="csv" id="csv" value="" accept=".csv,.json" />
             <input type="submit" value="Upload File">
+            <br/><span style="color:green" id="ajaxFeedback">Json and CSV file format excepted,<a id="showHideJsonStrucBtn"href="#">Show</a> excepted json structure <span/> 
+            <pre id="jsonDemoStruc" style="display: none">
+              [
+                {
+                  "Column1": "Row1 Column1 data",
+                  "Column2": "Row1 Column2 data",
+                  .
+                  .
+                  "ColumnN": "Row1 columnN data"
+                },
+                {
+                  "Column1": "Row2 Column1 data",
+                  "Column2": "Row2 Column1 data",
+                  .
+                  .
+                  "ColumnN": "Row2 columnN data"
+                },
+                .
+                .
+                {
+                  "Column1": "RowN Column1 data",
+                  "Column2": "RowN Column1 data",
+                  .
+                  .
+                  "ColumnN": "RowN columnN data"
+                }
+              ] 
+            </pre>
+            
             <br/><span style="color:red" id="ajaxFeedback"><span>   
 
           </form>
@@ -339,6 +368,7 @@ ul {
         <div class="modal-footer">
           <button type="button" id="closefileUpBtn" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
+
       
       </div>
  

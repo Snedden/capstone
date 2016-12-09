@@ -277,10 +277,6 @@ $(document).on('click','.groupItem',function(){
 	
 	selectEntity(entityId,entityType);
 
-	
-	
-
-	
 });
 
 //show hide rulers
@@ -295,6 +291,17 @@ $('#showHideRulerBtn').click(function(){
 		$(".stageAxis").show();	
 	}
 })
+//show hide json structure in file upload
+$("#showHideJsonStrucBtn").click(function(){
+	if($(this).text()==="Show"){
+		$(this).text("Hide");
+		$("#jsonDemoStruc").show();
+	}
+	else if($(this).text()==="Hide"){
+		$(this).text("Show");
+		$("#jsonDemoStruc").hide();	
+	}
+});
 
 function deselectEntities(){
 	$('.groupItem').css('background-color',''); //remove previous(all) backgroud selected
