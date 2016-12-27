@@ -32,6 +32,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 	this.stageYScale;
 	this.setStageScales(); //set scales and axis of the stage;
 	
+	
 
 	this.getStageX=function(xPos){
 		

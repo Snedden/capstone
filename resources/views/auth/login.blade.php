@@ -59,12 +59,21 @@
                                     <i class="fa fa-btn fa-sign-in"></i> Guest
                                 </button>
                                
-                                <br/>
-                                <a  style="display:none" class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
+                                
+                                <a   class="btn btn-link" href="{{ url('/register') }}">Not a member yet?</a>
                             </div>
                         </div>
                     </form>
+
                 </div>
+
+            </div>
+            <div style="display:block; width:365px; inherit;margin:0 auto" >
+                <h2 style="color:#337ab7">Visualize data into Graphics</h2>
+                <p>Create highly customizable graphs <span style="color: green" class="glyphicon glyphicon-ok"></span></p>
+                <p>Supports JSON and CSV data formats <span style="color: green" class="glyphicon glyphicon-ok"></span></p> 
+                <p>Export your graphs into embedable code or image <span style="color: green" class="glyphicon glyphicon-ok"></span></p> 
+                <p>Share your work with other members <span style="color: green" class="glyphicon glyphicon-ok"></span></p>  
             </div>
         </div>
     </div>

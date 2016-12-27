@@ -228,16 +228,20 @@ Scale.prototype={
 
 	addScale:function(){ //scale is Scale object
 		var scaleName="scale"+this.scaleId;
+		var addEntityhelper;    //add entity helper once a scale is added to your project
 		//add to memory
 		project.scales[scaleName]=this;
-		//add to screen
 
+		//add to screen
 		//scale  list in main screen
 		var scaleLiM="<div id=scale"+this.scaleId+"Li><li style='width:125px;overflow:hidden'  class='scales listItem' data-col-id="+this.dataColId+" data-scale-id="+this.scaleId+" data-toggle='modal' data-action='update'  data-target='#addScaleModal' data-datasetcol-name="+this.colName+" data-dataset-name="+this.datasetName+".csv   >"+this.name+"</li> <button style='float:right;font-size:9px'  class='btn btn-xs btn-primary scaleDelBtn'  data-col-id="+this.dataColId+"    data-scale-id="+this.scaleId+" data-scale-name="+this.name+">Delete</button> </div> ";
 		$("#scaleUl").append(scaleLiM);
 		//scale list in add scale modal
 		var scaleOpA="<option id=scale"+this.scaleId+"Op value="+this.scaleId+">"+this.name+"</option>";
 		$("#axesScale").append(scaleOpA);
+
+		//add entity helper
+     	addEntityhelper=new Helpers('addEEntityGotIt',"addEntityHelperModal","addEntityGotItBtn");
 
 		
 		

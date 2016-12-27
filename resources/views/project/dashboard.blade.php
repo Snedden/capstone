@@ -17,6 +17,9 @@
       project=new Project(svrProject.pid,svrProject.iduser,svrProject.name,svrDataSets,svrScales,svrAxes,svrRects,svrCircles,svrPies,svrText); //global object
       
 
+      //add data helper
+      var addDatahelper=new Helpers('addDataGotIt',"addDataHelperModal","addDataGotItBtn");
+
     }
    
 </script>       
@@ -1111,6 +1114,80 @@ ul {
     </div>
   </div>
   <!-- Text Modal End -->
+
+  <!-- helper  Modals -->
+  <!--Add data helper Modal  -->
+  <div class="modal fade helper" id="addDataHelperModal" role="dialog">
+    <div class="modal-dialog" style="width: 900px">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add data using local files to your project</h4>
+        </div>
+        <div class="modal-body">
+          <img src="../gifs/addData.gif" alt="add Data helper">
+        </div>  
+          
+        <div class="modal-footer">
+           <label style="float:left;font-weight: 500"><input type="checkbox" class="doNotShowHelperCheckbox" value="">Don't show me helpers</label>
+          <button type="button" id="addDataGotItBtn" class="btn btn-default" data-dismiss="modal" >Got it</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Add data helper Modal End -->
+
+  <!--Add Scale helper Modal  -->
+  <div class="modal fade helper" id="addScaleHelperModal" role="dialog">
+    <div class="modal-dialog" style="width: 1150px">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add scale using the data columns previously added to your project</h4>
+        </div>
+        <div class="modal-body">
+          <img src="../gifs/addScale.gif" alt="add Scale helper">
+        </div>  
+          
+        <div class="modal-footer">
+           <label style="float:left;font-weight: 500"><input type="checkbox" class="doNotShowHelperCheckbox" value="">Don't show me helpers</label>
+          <button type="button" id="addScaleGotItBtn" class="btn btn-default" data-dismiss="modal" >Got it</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Add scale helper Modal End -->
+
+  <!--Add Entity helper Modal  -->
+  <div class="modal fade helper" id="addEntityHelperModal" role="dialog">
+    <div class="modal-dialog" style="width: 1150px">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add entitties to your project using previsouly added scales</h4>
+        </div>
+        <div class="modal-body">
+          <img src="../gifs/addEntity.gif" alt="add Entity helper">
+        </div>  
+          
+        <div class="modal-footer">
+           <label style="float:left;font-weight: 500"><input type="checkbox" class="doNotShowHelperCheckbox" value="">Don't show me helpers</label>
+          <button type="button" id="addEntityGotItBtn" class="btn btn-default" data-dismiss="modal" >Got it</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Add scale helper Modal End -->
 </div>
+
 
 @endsection

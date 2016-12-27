@@ -1,4 +1,25 @@
 @extends('layouts.app')
+<script>
+
+  function init(){//function in global scope
+/*    var newProjectGotItClicked=window.sessionStorage.getItem("newProjectGotIt"); //'Got it' was clicked in this session
+    
+    //show helper if got it was not clicked
+    if(!newProjectGotItClicked){
+      $('#newProjectHelperModal').modal('show');  
+    }
+    
+    //new project Got it clicked
+    $("#newProjectGotItBtn").click(function(){
+        var newProjectGotIt=true;
+        window.sessionStorage.setItem("newProjectGotIt", newProjectGotIt); 
+    });*/
+
+    
+    //add new project helper
+    var newProjecthelper=new Helpers('newProjectGotIt',"newProjectHelperModal","newProjectGotItBtn");
+  }
+</script>
 
 
 @section('content')
@@ -71,6 +92,29 @@
     </div>
 
    
+</div>
+
+<!-- helper  Modal -->
+<div class="modal fade helper" id="newProjectHelperModal" role="dialog">
+  <div class="modal-dialog" style="width: 900px">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Create a New Project</h4>
+      </div>
+      <div class="modal-body">
+        <img src="gifs/newProject.gif" alt="newProject helper">
+      </div>  
+        
+      <div class="modal-footer">
+        <label style="float:left;font-weight: 500"><input type="checkbox" class="doNotShowHelperCheckbox" value="">Don't show me helpers</label>
+        <button type="button" id="newProjectGotItBtn" class="btn btn-default" data-dismiss="modal" >Got it</button>
+
+      </div>
+    </div>
+  </div>
 </div>
 
  

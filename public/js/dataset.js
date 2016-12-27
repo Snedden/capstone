@@ -133,9 +133,13 @@ Dataset.prototype={
 		ajaxCall('get','dataset/columns/'+this.id,'','json',getDataColsCallback);
 		var self=this;
 		function getDataColsCallback(data){
+			var addScalehelper;   //add scale helper should show up once the dataaset is added
 			self.dataColumns=data;
 			self.addFileData(this.pid);
 			self.addToStage(this.pid); 
+
+			//add data helper
+     		addScalehelper=new Helpers('addScaleGotIt',"addScaleHelperModal","addScaleGotItBtn");
 		}
 	}
 }
@@ -186,7 +190,7 @@ $("#datasetUploadForm").submit(function(e){
     $.ajax({
 
         type: 'POST',
-        //url: window.location.origin+'/projectFirst/public/'+url,
+        //url: window.location.origin+'/projectFirst/public/'+'dataset/create/'+project.pid,
         url: window.location.origin+'/'+'dataset/create/'+project.pid,
         data:formData,
        
