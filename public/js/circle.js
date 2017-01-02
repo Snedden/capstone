@@ -170,6 +170,7 @@ Circle.prototype={
 		var circleObject=this;
 		console.log('delete ', circleObject);
 		ajaxCall('post','circle/delete',this.id,'text',circleDelCallback);
+		ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 
 		function circleDelCallback(data){
 			var circleTobeDeleted='circle'+circleObject.id;
@@ -203,6 +204,7 @@ $("#addCircleBtn").click(function(){
 		pid:project.pid
 	};
 	ajaxCall('post','circle/create',circleData,'json',addCircleCallback);
+	ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 
 	function addCircleCallback(data){
 		console.debug('opacity ',data.opacity);
@@ -277,6 +279,7 @@ $("#circleForm").submit(function(e){
 	};
 	console.log('circleData ',circleData );
 	ajaxCall('post','circle/update/'+circleId,circleData,'json',updateCircleCallback);
+	ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 	$("#addCircleModal").modal('hide');//close modal dialog
 	
 });

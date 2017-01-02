@@ -84,6 +84,7 @@ Rectangle.prototype={
 		var rectObject=this;
 		console.log('delete ', rectObject);
 		ajaxCall('post','rect/delete',this.id,'text',rectDelCallback);
+		ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 
 		function rectDelCallback(data){
 			var rectTobeDeleted='rect'+rectObject.id;
@@ -244,6 +245,7 @@ $("#addRectBtn").click(function(){
 		pid:project.pid
 	};
 	ajaxCall('post','rect/create',rectData,'json',addRectCallback);
+	ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 
 	function addRectCallback(data){
 		console.debug('opacity ',data.opacity);
@@ -291,6 +293,7 @@ $("#rectForm").submit(function(e){
 	};
 
 	ajaxCall('post','rect/update/'+rectId,rectData,'json',updateRectCallback);
+	ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 	$("#addRectModal").modal('hide');//close modal dialog
 	
 });

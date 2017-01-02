@@ -70,6 +70,7 @@ $("#scaleForm").submit(function(e){
 	e.stopImmediatePropagation();
 	if(action==="Add"){
 		ajaxCall('post','scale/create',scaleData,'json',scaleAddCallback);
+
 	}
 	else if(action==="Update"){
 		console.log(action);
@@ -78,6 +79,7 @@ $("#scaleForm").submit(function(e){
 	else{
 		console.error('Invalid action type ',action);
 	}
+	ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 	 
 	
 
@@ -295,6 +297,7 @@ Scale.prototype={
 				};
 
 				ajaxCall('post','rect/update/'+project.rect[key].id,rectData,'json',updateRectCallback);
+
 			}
 
 		
@@ -353,6 +356,7 @@ Scale.prototype={
 		var scaleObject=this; //cache this as it is a lost in the call back funciton call
 		var axisId,axisToBeDeleted;
 		ajaxCall('post','scale/delete',this.scaleId,'text',scaleDelCallback);
+		ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 
 		function scaleDelCallback(data){
 			var rectChanged,circleChanged;

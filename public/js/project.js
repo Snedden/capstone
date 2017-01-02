@@ -25,14 +25,18 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 	this.textNum=0;
 	this.pieNum=0;
 	this.dataColsNum=0;
+
 	//set in setStageScales
 	this.stage;
 	this.stageEntities;
 	this.stageXScale;
 	this.stageYScale;
 	this.setStageScales(); //set scales and axis of the stage;
-	
-	
+
+
+
+
+	this.checkIfShared(); //checks if the project is shared and starts watching for changes if so
 
 	this.getStageX=function(xPos){
 		
@@ -105,6 +109,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 		}
 	}
 
+
 	/**
 	*@desc:Loads circle object which are fetched form the DB to the client side of the project
 	*/
@@ -129,7 +134,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 		}
 	}
 
-			/**
+	/**
 	*@desc:Loads text object which are fetched form the DB to the client side of the project
 	*/
 	function loadTextsDBToMem(){
@@ -140,6 +145,11 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 
 		}
 	}
+
+
+
+
+
 
 
 	
@@ -169,97 +179,7 @@ function Project(pid,puid,pname,pdataSets,pScales,pAxes,pRects,pCircles,pPies,pT
 	  $(this).find('li').toggle();
 	});
 
-	//dataset modle open
-/*	//triggered when modal is about to be shown
-	$('#datasetModal').on('show.bs.modal', function(e) {
-	    $("#dataSetColsList").empty(); //clear previous
-	    //get data-id attribute of the clicked element
-	    var datasetId = $(e.relatedTarget).data('dataset-id');
-	    var datasetName = $(e.relatedTarget).data('dataset-name');
-	    var pid = $(e.relatedTarget).data('project-id');
 
-	    //populate the textbox
-	    $(e.currentTarget).find('#datasetName').html(datasetName);
-	    $(e.currentTarget).find('#deleteDatasetBtn').attr('data-id',datasetId);
-	    $(e.currentTarget).find('#deleteDatasetBtn').attr('data-pid',pid);
-
-	    
-	    ajaxCall('get','dataset/columns/'+datasetId,null,'json',datasetColumnCallback); 
-	});
-
-	function datasetColumnCallback(data){
-
-		 for (col in data){
-
-		    $("#dataSetColsList").append('<li>'+
-		                                    '<input type="text" id="col_name" placeholder="columnname" value="'+data[col].col_name+'"></input>'+ 
-		                                    '<select >'+
-		                                      '<option value="String" '+isString(data[col].col_type)+'>String</option>'+
-		                                      '<option value="Number" '+isNumber(data[col].col_type)+'>Number</option>'+
-		                                    '</select>'+
-		                                    '<input type="hidden" id="col_id" placeholder="columnname" value="'+data[col].col_Id+'"></input>'+ 
-		                                    '</li>');
-
-		 }
-
-	  //functions to see if its type number or string in dataset columns
-	  function isString(type){
-	    if(type=="String")
-	    {
-	      return 'selected';
-	    }
-	    
-	  }
-	  function isNumber(type){
-	    if(type=="Number"){
-	      return 'selected';
-	    }
-	    
-	  }
-	}
-
-	//Update dataset column button clicked
-	$(document).on('click','#updateDatasetBtn',function(){
-	  var dataCols=[];
-
-	  $("#dataSetColsList li").each(function(index){
-	    console.log($(this).find('#col_name').val());
-	    var col={
-	      col_name:$(this).find('#col_name').val(),
-	      col_type:$(this).find('select').val(),
-	      col_id:$(this).find('#col_id').val()
-
-	    };
-	    
-	    dataCols.push(col);
-	  });  
-
-	  //update in database
-	  ajaxCall('post','datasetColumns/update',dataCols,'text',datasetColumnUpdateCallback); 
-	});
-
-	function datasetColumnUpdateCallback(data){
-	  console.log(data);
-	}
-
-	//delete dataset button click
-	$(document).on('click','#deleteDatasetBtn',function(){
-	  console.log($(this).attr('data-id'));
-	  var postData={
-	    iddata_sets:$(this).attr('data-id'),
-	    pid:$(this).attr('data-pid')
-	  };
-	  console.log(postData);
-	  ajaxCall('post','dataset/delete',postData,'text',deleteDataSetCallBack); 
-	});
-
-	function deleteDataSetCallBack(data){
-	  
-	  location.reload();
-	}*/
-
-
-	///Data set event listeners end
      
 
 }
@@ -386,6 +306,10 @@ $('#exportModal').on('show.bs.modal', function(e) {
 
 });
 
+function updateProjectCallback(data){
+	console.log(data);
+}
+
 
 Project.prototype={
 		constructor:Project,
@@ -460,5 +384,64 @@ Project.prototype={
 				console.error("invalid axis orient");
 			}
 			
+		},
+		checkIfBeingEdited:function(){
+			var self=this;
+			console.log("checking..");
+			setTimeout(self.checkIfBeingEdited,3000);
+		},
+
+		checkIfShared:function(){
+		var isShared;
+		var self=this;
+		ajaxCall('get','projects/isShared/'+this.pid,'','text',isSharedCallback);
+		
+		function isSharedCallback(data){
+			console.log(data);
+			self.isShared=(data==="true")?true:false;
+			var timer;
+			var refresh=false;
+			
+			//start heart beat if project is shared
+			if(self.isShared){
+				checkIfBeingEdited();
+
+				function checkIfBeingEdited(){
+					ajaxCall('get','projects/checkForEdits/'+self.pid,'','text',checkIfBeingEditedCallback,true);
+					console.log("checking for edits..");
+					timer=setTimeout(checkIfBeingEdited,3000);
+				}
+
+				function checkIfBeingEditedCallback(editInfo){
+
+					var editInfo=JSON.parse(editInfo);
+					var editDiff=editInfo.secondsSinceLastEdit;
+					var editBy=editInfo.editedByName;
+					var editById=editInfo.editedById;
+					var currentUser=editInfo.currentUser;
+					var overlayText=editBy+" is editing the project";
+					//console.log("difference ",editInfo.secondsSinceLastEdit);
+
+					//some one recently made an edit in past 10 seconds and that someone is not not me
+					if(editDiff<10 && editById != currentUser){
+						//block screen
+						$("#sharedEdit").css("display", "block");
+
+						$("#editByOverlayText").html(overlayText);
+						refresh=true;
+					}
+					else{
+						//unblock screen and refresh to show changes 
+						$("#sharedEdit").css("display", "none");//not really required as we reload anyways
+						if(refresh){
+							window.location.reload();
+						}
+						
+					}
+				}
+			}
 		}
+		
+		
+	}
 }

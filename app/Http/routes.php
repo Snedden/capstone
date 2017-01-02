@@ -20,9 +20,13 @@ Route::post('users/add','usersController@store')->middleware('admin');
 
 Route::post('projects/add','projectsController@create')->middleware('auth');
 Route::get('projects/{id}','projectsController@index')->middleware(['auth', 'project:{id}']);
+Route::post('projects/update/{pid}','projectsController@updateProjectBy')->middleware('auth');
+Route::get('projects/isShared/{pid}','projectsController@isShared')->middleware('auth');
+Route::get('projects/checkForEdits/{pid}','projectsController@checkForEditsByOthers')->middleware('auth');
 
 Route::post('projects/shareProject','shareProjectsController@createShareProject')->middleware('auth');
 Route::post('projects/unshareProject','shareProjectsController@deleteShareProject')->middleware('auth');
+
 
 Route::post('dataset/create/{pid}','datasetController@create')->middleware('auth');
 Route::post('dataset/delete','datasetController@delete')->middleware('auth');

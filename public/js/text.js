@@ -85,6 +85,7 @@ Text.prototype={
     var textObject=this;
     console.log('delete ', textObject);
     ajaxCall('post','text/delete',this.id,'text',textDelCallback);
+    ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 
     function textDelCallback(data){
       var textTobeDeleted='text'+textObject.id;
@@ -330,6 +331,7 @@ $("#textForm").submit(function(e){
 
   if(action==="Add"){
     ajaxCall('post','text/create',textData,'json',addTextCallback);
+
   }
   else if(action==="Update"){
     ajaxCall('post','text/update/'+textId,textData,'json',updateTextCallback);
@@ -337,6 +339,7 @@ $("#textForm").submit(function(e){
   else{
     console.error("Invalid action");
   }
+  ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
   
   
 

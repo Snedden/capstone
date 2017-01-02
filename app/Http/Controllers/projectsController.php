@@ -11,6 +11,7 @@ use App\Project;
 use App\User;
 use App\SharedProject;
 use App\Scale;
+use Carbon\Carbon ;
 use DB;
 
 
@@ -65,5 +66,38 @@ class projectsController extends Controller
             
     }
 
+    function updateProjectBy($pid){
+        $project=Project::findOrFail($pid);
+        
+        $project->updatedby=Auth::user()->iduser;
+        $project->updated_at=Carbon::now()->toDateTimeString();
+        $project->save();
+        return 'updated';
+    }
+
+    function isShared($pid){
+        $sharedByCount=SharedProject::where('pid', $pid)->count();
+        if($sharedByCount>1){
+            return "true";
+        }
+
+        return "false";
+    }
+
+     /*
+    *Check if this shared project is edited by more than one person more or less at the same time 
+    */
+    function checkForEditsByOthers($pid){
+        $project=Project::findOrFail($pid);
+
+        $updatedAtUnixTime=strtotime($project->updated_at);
+        $editInfo=new \stdClass();
+        $editInfo->secondsSinceLastEdit=(time()-$updatedAtUnixTime); //currenttime - lastupdatetime
+        $editInfo->editedById=$project->updatedby;
+        $editInfo->editedByName=User::findOrFail($project->updatedby)->firstname;
+        $editInfo->currentUser=Auth::user()->iduser;
+        return json_encode($editInfo);
+        
+    }
     
 }

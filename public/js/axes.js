@@ -62,7 +62,7 @@ $("#axesForm").submit(function(e){
 	else{
 		console.error("invalid action for modify axes");
 	}
-	
+	ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 
 	
 	
@@ -180,6 +180,7 @@ Axes.prototype={
 	deleteAxes:function(baseScaleDeleted){
 		var axesObject=this; 						//cache this as it is a lost in the call back funciton call
 		ajaxCall('post','axes/delete',this.id,'text',axesDelCallback);
+		ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 
 		function axesDelCallback(data){
 			var axesTobeDeleted='axes'+axesObject.id;

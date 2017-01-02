@@ -183,6 +183,10 @@ ul {
 <div class="container" style="width:98%">
   <div id="wait" style="display:none;width:100%;height:100%;position:absolute;top:50%;left:50%;"><img src='../Loading_icon.gif' width="64" height="64" alt="loading..." /><br>Loading..
   </div>
+  <div id="sharedEdit" style="text-align: center;display:none;">
+      <div id="editByOverlayDiv" style="background-color:black;opacity:0.2;width:100%;height:100%;position:absolute;" ></div>
+       <span id="editByOverlayText" style="color:red; display: inline-block;position:relative">Someone is editing the project</span><br>
+  </div>
   <div>
            
          

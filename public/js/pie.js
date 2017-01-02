@@ -73,6 +73,7 @@ Pie.prototype={
 		var pieObject=this;
 		console.log('delete ', pieObject);
 		ajaxCall('post','pie/delete',this.id,'text',pieDelCallback);
+		ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 
 		function pieDelCallback(data){
 			var pieTobeDeleted='pie'+pieObject.id;
@@ -304,7 +305,7 @@ $("#pieForm").submit(function(e){
 	else{
 		console.error("Invalid action");
 	}
-	
+	ajaxCall('post','projects/update/'+project.pid,'text',updateProjectCallback); //update project 
 	
 
 	$("#addPieModal").modal('hide');//close modal dialog
