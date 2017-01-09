@@ -168,7 +168,13 @@ Rectangle.prototype={
 							return   self.widthScale.d3ScaleLateral(d[self.widthScale.dataCol.name]);   
 						}
 				 		if(self.xPosScale){
-				 			return self.xPosScale.d3ScaleLateral.bandwidth();
+				 			if(self.xPosScale.type == "Ordinal"){
+				 				return self.xPosScale.d3ScaleLateral.bandwidth();
+				 			}
+				 			else if(self.xPosScale.type == "Linear"){
+				 				return self.width;
+				 			}
+				 			
 				 			
 				 		}
 				 		else{
@@ -181,7 +187,13 @@ Rectangle.prototype={
 							return   self.heightScale.d3ScaleLateral(d[self.heightScale.dataCol.name]) ;   //since the bot is excluded from height,think about it can't explain
 						}
 				 		if(self.yPosScale){
-				 			return self.yPosScale.d3ScaleVertical.bandwidth();
+				 			if(xPosScale.type == "Ordinal"){
+				 				return self.yPosScale.d3ScaleVertical.bandwidth();
+				 			}
+				 			else if(xPosScale.type == "Linear"){
+				 				return self.height;
+				 			}
+				 			
 				 		}
 				 		else{
 				 			return self.height;
