@@ -6,7 +6,8 @@
 
 	<form method="POST" action="{{url('users/edit/'.$user->iduser)}}" accept-charset="UTF-8" style="width:70%;margin:0 auto">
 	
-		@include('user.partials.userForm')
+		@include('user.partials.userForm', ['action'=>'edit'])
+
 	  	
 	  	<div id="createCancelButtons" style="margin:0 auto;display:table">
 			<button type="submit"  class="btn btn-default form-control" style="width: 100px;margin:10px">Edit</button>

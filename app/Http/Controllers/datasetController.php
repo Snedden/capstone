@@ -19,33 +19,47 @@ class datasetController extends Controller
     //Create a dataset
     */
     function create($pid){
-
-    	$tmpName = $_FILES['file']['tmp_name'];
-    	$file = file($tmpName);
-    	$fileName=($_FILES['file']['name']);
-    	$fileExt=explode(".",$fileName)[1];
-
-    	//doing it here as temp file is deleted after upload
-    	if($fileExt=='json'){
-    		$fileString = file_get_contents($tmpName);
-			$fileAsArray = json_decode($fileString, true);
-    	}
-    	else if($fileExt=='csv'){
-    		$fileAsArray = array_map('str_getcsv', $file);
-    	}
-
-		
-		
-		
-		
-		//uploading a file
+    	//uploading a file
 		try {
+			
+			if(!array_key_exists('file', $_FILES)){
+				
+				throw new Exception('No file sent');
+			}
+	    	$tmpName = $_FILES['file']['tmp_name'];
+	    	$file = file($tmpName);
+	    	$fileName=($_FILES['file']['name']);
+	    	$fileExt=explode(".",$fileName)[1];
+
+	    	//doing it here as temp file is deleted after upload
+	    	if($fileExt=='json'){
+	    		$fileString = file_get_contents($tmpName);
+				$fileAsArray = json_decode($fileString, true);
+
+				//check if json is in valid format
+
+	        	$validJson=$this->isValidFormat($fileAsArray);
+	       		if(!$validJson){
+	       			throw new Exception('Please have valid json format, i.e. array of objects.');
+
+	       		}
+	    	}
+	    	else if($fileExt=='csv'){
+	    		$fileAsArray = array_map('str_getcsv', $file);
+	    	}
+
+		
+		
+		
+		
+	
 		    
 		    // Undefined | Multiple Files | $_FILES Corruption Attack
 		    // If this request falls under any of them, treat it invalid.
 		/*	if(!isset($_FILES['file']) || !is_uploaded_file($_FILES['file']['tmp_name'][0])){
    				throw new Exception('File missing');
 			}*/
+
 
 		    if (
 		        !isset($_FILES['file']['error']) ||
@@ -144,13 +158,7 @@ class datasetController extends Controller
 	        }
 	        else if($fileExt=='json'){
 	        	
-	        	//check if json is in valid format
 
-	        	$validJson=$this->isValidFormat($fileAsArray);
-	       		if(!$validJson){
-	       			throw new Exception('Please have valid json format, i.e. array of objects.');
-
-	       		}
 
 	       		foreach ($fileAsArray as $key => $L1val) { //level one of json
 	       			$counter=0;

@@ -312,7 +312,8 @@ ul {
             <input type="hidden" name="_token" value="{{csrf_token()}}">  
             <input type="file" name="csv" id="csv" value="" accept=".csv,.json" />
             <input type="submit" value="Upload File">
-            <br/><span style="color:green" id="ajaxFeedback">Json and CSV file format excepted,<a id="showHideJsonStrucBtn"href="#">Show</a> excepted json structure <span/> 
+            <br/><span style="color:green" >Json and CSV file format excepted,<a id="showHideJsonStrucBtn"href="#">Show</a> excepted json structure <span/> 
+
             <pre id="jsonDemoStruc" style="display: none">
               [
                 {

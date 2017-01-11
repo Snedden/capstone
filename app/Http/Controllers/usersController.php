@@ -34,7 +34,7 @@ class usersController extends Controller
         $user=User::findOrFail($id);
         return view('user.edit',compact('user'));
     }
-     /*
+    /*
     *update user
     */
      function update($id){
@@ -48,7 +48,7 @@ class usersController extends Controller
             'firstname'             => 'required',                        // just a normal required validation
             'lastname'         => 'required',                        // just a normal required validation
             'email'            => 'required|email',                  // required and must be unique in the users table
-            'password'         => 'required',
+            
             
         );
         $validationResponse=$this->validateForm($input,$rules);

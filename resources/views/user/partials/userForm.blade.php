@@ -21,7 +21,12 @@
 	  	</div>
 		<div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
 		    <label for="pwd">Password:</label>
-		    <input type="password" name="password" class="form-control" id="password" required pattern=".{6,}" title="minimum 6 characters">
+		    @if($action == 'create')
+		    	<input type="password" name="password" class="form-control" id="password" required pattern=".{6,}" title="minimum 6 characters">
+		    @endif
+		    @if($action == 'edit')
+		    	<input type="password" name="password" class="form-control" id="password"  pattern=".{6,}" title="minimum 6 characters">
+		    @endif	
 		</div>
 		<div class="form-group">
 		    <label for="pwd"><input type="checkbox" id="isAdmin" value="" name="isAdmin"  >   Admin </label>
