@@ -16,7 +16,7 @@ class AddScaleFkToAxesAndTicksCol extends Migration
          Schema::table('axes', function( Blueprint $table) {
             $table->integer('idScales')->length(10)->unsigned(); //add idScales reference collumn to table
             //add project foreign key to  table
-            $table->foreign('idScales')->references('idScales')->on('scales')->onDelete('cascade')->onUpdate('cascade');   
+            $table->foreign('idScales')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');   
         });
     }
 

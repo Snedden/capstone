@@ -18,7 +18,7 @@ class CreateRectangleScaleTable extends Migration
             $table->integer('idRectangle')->length(10)->unsigned();
             $table->integer('idScales')->length(10)->unsigned();
 
-            $table->foreign('idScales')->references('idScales')->on('scales')->onDelete('cascade')->onUpdate('cascade'); 
+            $table->foreign('idScales')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade'); 
             $table->foreign('idRectangle')->references('idRectangle')->on('Rectangle')->onDelete('cascade')->onUpdate('cascade'); 
         });
     }

@@ -14,7 +14,7 @@ class AddWidthToScales extends Migration
     {
         //
          //
-        Schema::table('scales', function($table) {
+        Schema::table('Scales', function($table) {
             $table->integer('width')->length(5)->unsigned();
            
         });
