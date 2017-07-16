@@ -12,7 +12,7 @@ class CreateRectangleTable extends Migration
      */
     public function up()
     {
-        Schema::create('Rectangle', function (Blueprint $table) {
+        Schema::create('rectangle', function (Blueprint $table) {
             $table->increments('idRectangle');
             $table->string('rect_name', 100)->nullable();
             $table->integer('X_pos')->default(0);
@@ -28,9 +28,9 @@ class CreateRectangleTable extends Migration
             $table->integer('idColorScale')->nullable()->length(10)->unsigned();
             $table->timestamps();
 
-            $table->foreign('idScale')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('idEntities')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('idColorScale')->references('idScales')->on('Scales')->onDelete('no action')->onUpdate('no action');
+            $table->foreign('idScale')->references('idScales')->on('scales')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntities')->references('idEntities')->on('entities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idColorScale')->references('idScales')->on('scales')->onDelete('no action')->onUpdate('no action');
         });
     }
 
@@ -41,12 +41,12 @@ class CreateRectangleTable extends Migration
      */
     public function down()
     {
-        Schema::table('Rectangle', function (Blueprint $table) {
+        Schema::table('rectangle', function (Blueprint $table) {
             $table->dropForeign(['idScale']);
             $table->dropForeign(['idEntities']);
             $table->dropForeign(['idColorScale']);
         });
 
-        Schema::drop('Rectangle');
+        Schema::drop('rectangle');
     }
 }

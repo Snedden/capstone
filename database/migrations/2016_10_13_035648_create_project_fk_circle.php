@@ -13,7 +13,7 @@ class CreateProjectFkCircle extends Migration
     public function up()
     {
         //drop entity foreign key from  circle table
-        Schema::table('Circle', function( Blueprint $table) {
+        Schema::table('circle', function( Blueprint $table) {
             
             $table->dropForeign(['idEntity']);            //drop fk 
             $table->dropColumn('idEntity');               //drop fk column 
@@ -31,12 +31,12 @@ class CreateProjectFkCircle extends Migration
     public function down()
     {
         //add entity reference to rectangle table and drop project reference 
-        Schema::table('Circle', function(Blueprint $table) {
+        Schema::table('circle', function(Blueprint $table) {
             $table->dropForeign(['pid']);            //drop fk 
             $table->dropColumn('pid');                      //drop fk column 
             $table->integer('idEntity')->length(10)->unsigned(); //add pid reference collumn to table
             //add idEntities foreign key to  table
-            $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntity')->references('idEntities')->on('entities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 }

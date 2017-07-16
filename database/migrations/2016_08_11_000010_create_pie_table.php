@@ -27,8 +27,8 @@ class CreatePieTable extends Migration
 
             $table->foreign('LabelCol')->references('col_Id')->on('data_sets_columns')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('valueCol')->references('col_Id')->on('data_sets_columns')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('Color')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('Color')->references('idScales')->on('scales')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntity')->references('idEntities')->on('entities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

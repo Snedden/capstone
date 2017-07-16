@@ -13,7 +13,7 @@ class DropTableEntity extends Migration
     public function up()
     {
         //drop entity table 
-        Schema::drop('Entities');
+        Schema::drop('entities');
     }
 
     /**
@@ -23,7 +23,7 @@ class DropTableEntity extends Migration
      */
     public function down()
     {
-         Schema::create('Entities', function (Blueprint $table) {
+         Schema::create('entities', function (Blueprint $table) {
             $table->increments('idEntities');
             $table->string('entity_name', 100)->nullable();
             $table->string('entity_type', 45)->nullable();

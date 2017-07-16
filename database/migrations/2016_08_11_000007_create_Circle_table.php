@@ -12,7 +12,7 @@ class CreateCircleTable extends Migration
      */
     public function up()
     {
-        Schema::create('Circle', function (Blueprint $table) {
+        Schema::create('circle', function (Blueprint $table) {
             $table->increments('idCircle');
             $table->string('cir_name', 100)->nullable();
             $table->integer('X_pos')->default(100);
@@ -25,9 +25,9 @@ class CreateCircleTable extends Migration
             $table->integer('idEntity')->length(10)->unsigned();
             $table->timestamps();
 
-            $table->foreign('idScale')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('idColorScale')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idScale')->references('idScales')->on('scales')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntity')->references('idEntities')->on('entities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idColorScale')->references('idScales')->on('scales')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -38,12 +38,12 @@ class CreateCircleTable extends Migration
      */
     public function down()
     {
-        Schema::table('Circle', function (Blueprint $table) {
+        Schema::table('circle', function (Blueprint $table) {
             $table->dropForeign(['idScale']);
             $table->dropForeign(['idEntity']);
             $table->dropForeign(['idColorScale']);
         });
 
-        Schema::drop('Circle');
+        Schema::drop('circle');
     }
 }

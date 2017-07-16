@@ -13,7 +13,7 @@ class DropScaleToRectOneToManyRelation extends Migration
     public function up(){
         //
         //drop entity foreign key from  rectangle table
-        Schema::table('Rectangle', function( Blueprint $table) {
+        Schema::table('rectangle', function( Blueprint $table) {
             
             $table->dropForeign(['idScale']);            //drop fk 
             $table->dropColumn('idScale');               //drop fk column 
@@ -29,7 +29,7 @@ class DropScaleToRectOneToManyRelation extends Migration
     public function down(){
         Schema::table('circle', function($table) {
             $table->integer('idScale')->length(10)->unsigned();
-            $table->foreign('idScale')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idScale')->references('idScales')->on('scales')->onDelete('cascade')->onUpdate('cascade');
         });
      
     }

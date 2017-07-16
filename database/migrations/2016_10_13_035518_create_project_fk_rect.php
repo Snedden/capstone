@@ -13,7 +13,7 @@ class CreateProjectFkRect extends Migration
     public function up()
     {
         //drop entity foreign key from  rectangle table
-        Schema::table('Rectangle', function( Blueprint $table) {
+        Schema::table('rectangle', function( Blueprint $table) {
             
             $table->dropForeign(['idEntities']);            //drop fk 
             $table->dropColumn('idEntities');               //drop fk column 
@@ -31,12 +31,12 @@ class CreateProjectFkRect extends Migration
     public function down()
     {
         //add entity reference to rectangle table and drop project reference 
-        Schema::table('Rectangle', function(Blueprint $table) {
+        Schema::table('rectangle', function(Blueprint $table) {
             $table->dropForeign(['pid']);            //drop fk 
             $table->dropColumn('pid');                      //drop fk column 
             $table->integer('idEntities')->length(10)->unsigned(); //add pid reference collumn to table
             //add idEntities foreign key to  table
-            $table->foreign('idEntities')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntities')->references('idEntities')->on('entities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 }

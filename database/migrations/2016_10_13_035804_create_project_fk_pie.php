@@ -36,7 +36,7 @@ class CreateProjectFkPie extends Migration
             $table->dropColumn('pid');                      //drop fk column 
             $table->integer('idEntity')->length(10)->unsigned(); //add pid reference collumn to table
             //add idEntities foreign key to  table
-            $table->foreign('idEntity')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntity')->references('idEntities')->on('entities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 }

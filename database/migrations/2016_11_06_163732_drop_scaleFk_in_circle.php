@@ -32,7 +32,7 @@ class DropScaleFkInCircle extends Migration
     {
         Schema::table('circle', function($table) {
             $table->integer('idScale')->length(10)->unsigned();
-            $table->foreign('idScale')->references('idScales')->on('Scales')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idScale')->references('idScales')->on('scales')->onDelete('cascade')->onUpdate('cascade');
         });
      
     }

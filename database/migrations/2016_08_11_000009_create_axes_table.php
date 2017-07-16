@@ -23,7 +23,7 @@ class CreateAxesTable extends Migration
             $table->integer('idEntities')->length(10)->unsigned();
             $table->timestamps();
 
-            $table->foreign('idEntities')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntities')->references('idEntities')->on('entities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

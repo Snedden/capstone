@@ -13,7 +13,7 @@ class MakeScalesBandpaddingDecimal extends Migration
     public function up()
     {
         //
-        Schema::table('Scales', function($table) {
+        Schema::table('scales', function($table) {
            
             $table->decimal('bandpadding', 2, 2)->change(); //scale 2 precision 2
            

@@ -20,7 +20,7 @@ class CreateManyTomanyAxesToRectTable extends Migration
             $table->string('rectCol', 100);
 
             $table->foreign('idaxes')->references('idaxes')->on('axes')->onDelete('cascade')->onUpdate('cascade'); 
-            $table->foreign('idRectangle')->references('idRectangle')->on('Rectangle')->onDelete('cascade')->onUpdate('cascade'); 
+            $table->foreign('idRectangle')->references('idRectangle')->on('rectangle')->onDelete('cascade')->onUpdate('cascade'); 
         });
     }
 

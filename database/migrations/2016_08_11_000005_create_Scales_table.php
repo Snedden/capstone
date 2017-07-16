@@ -12,7 +12,7 @@ class CreateScalesTable extends Migration
      */
     public function up()
     {
-        Schema::create('Scales', function (Blueprint $table) {
+        Schema::create('scales', function (Blueprint $table) {
             $table->increments('idScales');
             $table->string('scale_name', 100)->nullable();
             $table->integer('pid')->nullable()->length(10)->unsigned();
@@ -35,11 +35,11 @@ class CreateScalesTable extends Migration
      */
     public function down()
     {
-        Schema::table('Scales', function (Blueprint $table) {
+        Schema::table('scales', function (Blueprint $table) {
             $table->dropForeign(['pid']);
             $table->dropForeign(['col_Id']);
         });
 
-        Schema::drop('Scales');
+        Schema::drop('scales');
     }
 }

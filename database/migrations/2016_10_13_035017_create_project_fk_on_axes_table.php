@@ -36,7 +36,7 @@ class CreateProjectFkOnAxesTable extends Migration
             $table->dropColumn('pid');                      //drop fk column 
             $table->integer('idEntities')->length(10)->unsigned(); //add pid reference collumn to table
             //add idEntities foreign key to  table
-            $table->foreign('idEntities')->references('idEntities')->on('Entities')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idEntities')->references('idEntities')->on('entities')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 }
